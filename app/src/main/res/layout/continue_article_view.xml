@@ -2,14 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/continue_view"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="184dp"
-    android:background="@mipmap/ic_continue_article_bg">
+    android:layout_height="208dp"
+    android:background="@android:color/white">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/hh_background_light"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:weightSum="2">
 
         <TextView
@@ -43,11 +49,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/continue_article_pager"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/continue_recycler_list"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginStart="6dp"
-        android:layout_gravity="top|center" />
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"/>
 
 </LinearLayout>

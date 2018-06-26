@@ -14,6 +14,7 @@ import in.healthhunt.R;
 import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.articles.commonResponse.CurrentUser;
+import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.myHuntPresenter.myHuntArticlesPresenter.IMyHuntsArticlesPresenter;
 
 /**
@@ -56,8 +57,13 @@ public class MyHuntsArticleHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.my_hunts_article_item_view)
     void onItemClick(View view) {
-        if(mClickListener != null) {
-            mClickListener.ItemClicked(view, getAdapterPosition());
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            if(mClickListener != null) {
+                mClickListener.ItemClicked(view, getAdapterPosition());
+            }
+        }
+        else {
+            IMyHuntsArticlePresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
         }
     }
 
@@ -72,17 +78,20 @@ public class MyHuntsArticleHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.my_hunts_article_bookmark)
     void onBookMark(){
-        ArticlePostItem postsItem = IMyHuntsArticlePresenter.getArticle(getAdapterPosition());
-        String id = String.valueOf(postsItem.getArticle_Id());
-        CurrentUser currentUser = postsItem.getCurrent_user();
-        if(currentUser != null) {
-            if(!currentUser.isBookmarked()){
-                IMyHuntsArticlePresenter.bookmark(id, ArticleParams.ARTICLE);
-            }
-            else {
-                IMyHuntsArticlePresenter.unBookmark(id, ArticleParams.ARTICLE);
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            ArticlePostItem postsItem = IMyHuntsArticlePresenter.getArticle(getAdapterPosition());
+            String id = String.valueOf(postsItem.getArticle_Id());
+            CurrentUser currentUser = postsItem.getCurrent_user();
+            if (currentUser != null) {
+                if (!currentUser.isBookmarked()) {
+                    IMyHuntsArticlePresenter.bookmark(id, ArticleParams.ARTICLE);
+                } else {
+                    IMyHuntsArticlePresenter.unBookmark(id, ArticleParams.ARTICLE);
+                }
             }
         }
+        else {
+            IMyHuntsArticlePresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
+        }
     }
-
 }

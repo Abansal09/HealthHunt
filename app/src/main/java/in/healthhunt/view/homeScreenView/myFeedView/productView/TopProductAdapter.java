@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,14 +38,14 @@ import in.healthhunt.presenter.homeScreenPresenter.myFeedPresenter.productPresen
 
 public class TopProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private IProductPresenter ITopProductPresenter;
+    private IProductPresenter IProductPresenter;
     private Context mContext;
     private ClickListener mClickListener;
 
 
     public TopProductAdapter(Context context, IProductPresenter topProductPresenter) {
         mContext = context;
-        ITopProductPresenter = topProductPresenter;
+        IProductPresenter = topProductPresenter;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class TopProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return ITopProductPresenter.getCount();
+        return IProductPresenter.getCount();
     }
 
     @Override
@@ -78,7 +80,7 @@ public class TopProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void setContent(TopProductItemViewHolder holder, int pos) {
 
-        ProductPostItem postsItem = ITopProductPresenter.getProduct(pos);
+        ProductPostItem postsItem = IProductPresenter.getProduct(pos);
         if(postsItem != null) {
             String url = null;
             List<MediaItem> mediaItems = postsItem.getMedia();
@@ -139,7 +141,13 @@ public class TopProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 String price = postsItem.getPost_price();
                 if (price != null) {
                     String postQuantity = postsItem.getPost_quantity();
-                    String rs = mContext.getString(R.string.rs);
+                    String rs = postsItem.getPost_currency();
+                    if(rs == null){
+                        rs = "";
+                    }
+                    Spanned spanned = Html.fromHtml(rs) ;
+                    rs = spanned.toString();
+
                     price = HealthHuntUtility.addSeparator(price);
                     rs = rs + " " + price + "/" + postQuantity;
                     holder.mProductPrice.setText(rs);
@@ -196,25 +204,34 @@ public class TopProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @OnClick(R.id.top_product_item_view)
         void onClick(View view) {
-            if(mClickListener != null) {
-                mClickListener.ItemClicked(view, getAdapterPosition());
+            if (HealthHuntUtility.checkInternetConnection(mContext)) {
+                if(mClickListener != null) {
+                    mClickListener.ItemClicked(view, getAdapterPosition());
+                }
+
+            } else {
+                IProductPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
             }
         }
 
         @OnClick(R.id.product_bookmark)
         void onBookMark(){
-            ProductPostItem postsItem = ITopProductPresenter.getProduct(getAdapterPosition());
-            String id = String.valueOf(postsItem.getProduct_id());
-            CurrentUser currentUser = postsItem.getCurrent_user();
-            if(currentUser != null) {
-                if(!currentUser.isBookmarked()){
-                    ITopProductPresenter.bookmark(id, ArticleParams.TOP_PRODUCTS);
+            if (HealthHuntUtility.checkInternetConnection(mContext)) {
+                ProductPostItem postsItem = IProductPresenter.getProduct(getAdapterPosition());
+                String id = String.valueOf(postsItem.getProduct_id());
+                CurrentUser currentUser = postsItem.getCurrent_user();
+                if(currentUser != null) {
+                    if(!currentUser.isBookmarked()){
+                        IProductPresenter.bookmark(id, ArticleParams.TOP_PRODUCTS);
+                    }
+                    else {
+                        IProductPresenter.unBookmark(id, ArticleParams.TOP_PRODUCTS);
+                    }
                 }
-                else {
-                    ITopProductPresenter.unBookmark(id, ArticleParams.TOP_PRODUCTS);
-                }
+
+            } else {
+                IProductPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
             }
         }
-
     }
 }

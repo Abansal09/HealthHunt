@@ -33,6 +33,11 @@ public class SpaceDecoration extends RecyclerView.ItemDecoration {
           outRect.bottom = spacing;
           break;
 
+      case HORIZONTAL:
+        //if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1)
+          outRect.right = spacing;
+        break;
+
           case GRID:
             RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
             int itemCount = state.getItemCount();

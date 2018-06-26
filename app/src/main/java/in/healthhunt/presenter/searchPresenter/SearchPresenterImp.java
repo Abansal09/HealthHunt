@@ -65,7 +65,7 @@ public class SearchPresenterImp implements ISearchPresenter, IArticleInteractor.
 
         map.put(ArticleParams.SEARCH, searchStr);
         map.put(ArticleParams.QTRANSLANG, ArticleParams.ENGLISH_LAN);
-       // map.put(ArticleParams.APP, String.valueOf(1));
+        // map.put(ArticleParams.APP, String.valueOf(1));
         IArticleInteractor.fetchArticle(mContext, ArticleParams.ARTICLE, map,this);
     }
 
@@ -123,6 +123,14 @@ public class SearchPresenterImp implements ISearchPresenter, IArticleInteractor.
     }
 
     @Override
+    public void onBookMarkError(RestError errorInfo) {
+        ISearch.hideProgress();
+        if(errorInfo != null){
+            ISearch.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onArticleSuccess(List<ArticlePostItem> items, int type) {
         Log.i("TAGITEMSDATA", "Search Data " + items);
         ISearch.hideProgress();
@@ -134,5 +142,8 @@ public class SearchPresenterImp implements ISearchPresenter, IArticleInteractor.
     @Override
     public void onError(RestError errorInfo) {
         ISearch.hideProgress();
+        if(errorInfo != null){
+            ISearch.showAlert(errorInfo.getMessage());
+        }
     }
 }

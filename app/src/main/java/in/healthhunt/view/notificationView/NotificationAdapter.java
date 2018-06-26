@@ -2,15 +2,21 @@ package in.healthhunt.view.notificationView;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import in.healthhunt.R;
+import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.notification.NotificationsItem;
 import in.healthhunt.presenter.notificationPresenter.INotificationPresenter;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -55,21 +61,41 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         .into(holder.mPic);
             }
 
-            String name = notificationsItem.getUser_name();
-            if(name != null) {
-                holder.mName.setText(name);
-            }
-            else {
-                holder.mName.setText("");
+            String thumbnailImage = notificationsItem.getVideo_thumbnail_image();
+            if(thumbnailImage == null || thumbnailImage.isEmpty()){
+                thumbnailImage = notificationsItem.getPost_image_url();
             }
 
-            String category = notificationsItem.getCategory();
-            if(category != null){
-                holder.mCategory.setText(category);
+            if(thumbnailImage != null) {
+
+                String postType = notificationsItem.getPost_type();
+                int placeHolder = R.drawable.artical;
+                if(postType != null && postType.equalsIgnoreCase(ArticleParams.MARKET)){
+                    placeHolder = R.drawable.top_products;
+                }
+
+                Glide.with(mContext)
+                        .load(thumbnailImage)
+                        .placeholder(placeHolder)
+                        .dontAnimate()
+                        .into(holder.mNotificationItemImage);
             }
-            else {
-                holder.mCategory.setText("");
+
+            String name = notificationsItem.getUser_name();
+            if(name != null) {
+                String action = notificationsItem.getEvent_type();
+                if(action != null){
+                    action = getActionType(action);
+                }
+
+                Spannable spannable = getSpannable(name, action);
+                holder.mName.setText(spannable, TextView.BufferType.SPANNABLE);
             }
+            /*else {
+                holder.mName.setText("");
+            }*/
+
+
 
             String date = notificationsItem.getEvent_time();
             if(date != null) {
@@ -100,5 +126,31 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public interface ClickListener {
         void ItemClicked(View v, int position);
+    }
+
+    private String getActionType(String str){
+
+        String action = mContext.getString(R.string.card_like);
+        if(str != null){
+            if(str.contains("comment")){
+                action = mContext.getString(R.string.card_comment);
+            }
+            else if(str.contains("share")){
+                action = mContext.getString(R.string.card_share);
+            }
+        }
+
+        return action;
+    }
+
+    private Spannable getSpannable(String name , String action) {
+
+        String str = name + " "  +  action;
+        Spannable spannable = new SpannableString(str);
+
+        spannable.setSpan(new ForegroundColorSpan(ActivityCompat.getColor(mContext, R.color.hh_edittext_hint_color)),
+                name.length() + 1 , str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannable;
     }
 }

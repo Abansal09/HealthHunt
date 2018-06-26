@@ -158,8 +158,12 @@ public class FilterFragment extends Fragment implements IFilterView, ProductAdap
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filter, container, false);
         mUnbinder = ButterKnife.bind(this, view);
+
+        IHomeView.hideKeyboardIfOpen();
+        IHomeView.showActionBar();
         IHomeView.hideDrawerMenu();
         IHomeView.hideSearchView();
+        IHomeView.updateTitle(getString(R.string.filter));
         mProductSearch.setHint(R.string.search_by_product_type);
         mBrandSearch.setHint(R.string.search_by_brand_name);
 
@@ -413,6 +417,11 @@ public class FilterFragment extends Fragment implements IFilterView, ProductAdap
     @Override
     public void hideProgress() {
         IHomeView.hideProgress();
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
     }
 
     @Override

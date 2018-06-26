@@ -13,7 +13,7 @@ public interface IBookMarkInteractor {
 
     interface OnFinishListener {
         void onBookMarkSuccess(BookMarkData markResponse);
-        void onError(RestError errorInfo);
+        void onBookMarkError(RestError errorInfo);
     }
 
     void bookmark(Context context, String id, int type, OnFinishListener finishListener);

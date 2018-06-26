@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import framework.retrofit.RestError;
+import in.healthhunt.R;
 import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.articles.productResponse.ProductPostItem;
@@ -24,13 +26,15 @@ import in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView;
  * Created by abhishekkumar on 4/23/18.
  */
 
-public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.OnArticleFinishListener, IProductInteractor.OnProductFinishListener{
+public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.OnArticleFinishListener,
+        IProductInteractor.OnProductFinishListener/*, IArticleInteractor.OnFullViewFinishListener*/{
 
     private String TAG = MyFeedPresenterImp.class.getSimpleName();
     private IMyFeedView IMyFeedView;
     private Context mContext;
     //private IMyFeedInteractor IMyFeedInteractor;
     private List<ArticlePostItem> mTagArticles;
+    private List<ArticlePostItem> mContinueArticles;
     private List<ArticlePostItem> mTrendingArticles;
     private List<ArticlePostItem> mLatestArticles;
     private List<ArticlePostItem> mSponsoredArticles;
@@ -66,9 +70,9 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     @Override
     public void fetchTagsArticle(int offset, int limit) {
 
-        if(mTagArticles != null){
+        /*if(mTagArticles != null){
             mTagArticles.clear();
-        }
+        }*/
         /*Set<String> tagIds = HealthHuntPreference.getSet(mContext, Constants.SELECTED_TAGS_KEY);
         String tags = "";
         Iterator iterator = tagIds.iterator();
@@ -102,12 +106,51 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     }
 
     @Override
+    public void fetchContinueArticles(String continueList) {
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(ArticleParams.APP, String.valueOf(1));
+        map.put(ArticleParams.INCLUDE, continueList);
+        IArticleInteractor.fetchArticle(mContext, ArticleParams.CONTINUE_ARTICLES, map, this);
+
+    }
+
+    @Override
+    public void addContinueArticle(ArticlePostItem postItem) {
+        if(mContinueArticles == null){
+            mContinueArticles = new ArrayList<ArticlePostItem>();
+        }
+
+        removeContinueArticle(postItem);  // to update the position of previous articles.
+        mContinueArticles.add(0, postItem);  // always add to first position if new article come.
+    }
+
+    @Override
+    public void removeContinueArticle(ArticlePostItem postItem) {
+
+        for(int i=0; i<mContinueArticles.size(); i++){
+            ArticlePostItem articlePostItem = mContinueArticles.get(i);
+            if(articlePostItem.getArticle_Id().equalsIgnoreCase(postItem.getArticle_Id())){
+                mContinueArticles.remove(i);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void updateContinueArticles() {
+        mArticlesType.clear();
+        buildMap();
+        IMyFeedView.updateAdapter();
+    }
+
+    @Override
     public void fetchTrendingArticle(int offset, int limit) {
         //  String filter = ArticleParams.FILTER + "[" + ArticleParams.FORMAT + "]";
 
-        if(mTrendingArticles != null){
+       /* if(mTrendingArticles != null){
             mTrendingArticles.clear();
-        }
+        }*/
 
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.TRENDING, String.valueOf(1));
@@ -122,14 +165,17 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     @Override
     public void fetchLatestArticle(int offset, int limit) {
 
-        if(mLatestArticles != null){
+        /*if(mLatestArticles != null){
             mLatestArticles.clear();
-        }
+        }*/
 
         String filter = ArticleParams.FILTER + "[" + ArticleParams.FORMAT + "]";
 
         Map<String, String> map = new HashMap<String, String>();
-        map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
+        //map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
+
+        map.put(ArticleParams.ORDER, ArticleParams.DESC);
+        map.put(ArticleParams.ORDER_BY, ArticleParams.DATE/*ArticleParams.ID*/);
         map.put(filter, ArticleParams.POST_FORMAT_IMAGE);
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(offset));
@@ -147,9 +193,9 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     @Override
     public void fetchSponsoredArticle(String type, int offset, int limit) {
 
-        if(mSponsoredArticles != null){
+        /*if(mSponsoredArticles != null){
             mSponsoredArticles.clear();
-        }
+        }*/
 
         String filter = ArticleParams.FILTER + "[" + ArticleParams.FORMAT + "]";
         Map<String, String> map = new HashMap<String, String>();
@@ -164,9 +210,9 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     @Override
     public void fetchTopProduct(int offset, int limit) {
 
-        if(mTopProduct != null){
+        /*if(mTopProduct != null){
             mTopProduct.clear();
-        }
+        }*/
 
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
@@ -181,20 +227,44 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     @Override
     public void fetchLatestProduct(int offset, int limit) {
 
-        if(mLatestProduct != null){
+        /*if(mLatestProduct != null){
             mLatestProduct.clear();
-        }
+        }*/
 
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-        map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
+        //map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(offset));
         map.put(ArticleParams.LIMIT, String.valueOf(limit));
-        map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
+        map.put(ArticleParams.ORDER, ArticleParams.DESC);
+        map.put(ArticleParams.ORDER_BY, ArticleParams.DATE/*ArticleParams.ID*/);
+
+        //map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
         IProductInteractor.fetchProduct(mContext, ArticleParams.LATEST_PRODUCTS, map, this);
 
     }
+
+    /*@Override
+    public void addContinueArticle(String id) {
+        boolean isContain = false;
+        if(mContinueArticles != null && !mContinueArticles.isEmpty()){
+            for(ArticlePostItem postItem: mContinueArticles){
+                if(postItem.getArticle_Id().equalsIgnoreCase(id)){
+                    isContain = true;
+                    mContinueArticles.remove(postItem);
+                    mContinueArticles.add(0, postItem);
+                    IMyFeedView.updateAdapter();
+                    break;
+                }
+            }
+        }
+
+        if(!isContain){
+            IArticleInteractor.fetchFullArticle(mContext, id, this);
+        }
+
+    }*/
 
     @Override
     public List<ArticlePostItem> getTagArticles() {
@@ -217,6 +287,11 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     }
 
     @Override
+    public List<ArticlePostItem> getContinueArticles() {
+        return mContinueArticles;
+    }
+
+    @Override
     public List<ProductPostItem> getTopProducts() {
         return mTopProduct;
     }
@@ -235,13 +310,24 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     public void fetchData() {
         IMyFeedView.showProgress();
         mArticlesType.clear();
-        fetchCount = 6;
+
+        User user = User.getCurrentUser();
+        String continueList = user.getContinueList();
+        if(continueList != null && !continueList.isEmpty()) {
+            fetchCount = 7;
+            fetchContinueArticles(continueList);
+        }
+        else {
+            fetchCount = 6;
+        }
+
         fetchTagsArticle(0, 5);
         fetchTrendingArticle(0, 2);
         fetchLatestArticle(0, 5);
         fetchSponsoredArticle(ArticleParams.POST_FORMAT_IMAGE, 0, 2);
         fetchTopProduct(0, 2);
         fetchLatestProduct(0, 5);
+
     }
 
     @Override
@@ -257,8 +343,10 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     }
 
     @Override
-    public void addContinueArticles() {
-        updateMapWithAdded(1, ArticleParams.CONTINUE_ARTICLES);
+    public void addArticleType(int pos, int type) {
+        if(mArticlesType != null && pos < mArticlesType.size()) {
+            updateMapWithAdded(pos, type);
+        }
     }
 
     @Override
@@ -284,9 +372,14 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
                 mSponsoredArticles = items;
                 fetchCount--;
                 break;
+
+            case ArticleParams.CONTINUE_ARTICLES:
+                mContinueArticles = items;
+                fetchCount--;
+                break;
         }
 
-        if(fetchCount == 0) {
+        if(fetchCount == 0/*  && continueCount == 0*/) {
             buildMap();
             IMyFeedView.hideProgress();
             IMyFeedView.updateAdapter();
@@ -307,20 +400,44 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
                 break;
         }
 
-        if(fetchCount == 0) {
+        if(fetchCount == 0/* && continueCount == 0*/) {
             buildMap();
             IMyFeedView.hideProgress();
             IMyFeedView.updateAdapter();
         }
     }
 
+    /*@Override
+    public void onArticleSuccess(ArticlePostItem item) {    // Will call for only continue articles
+        continueCount--;
+        if(mContinueArticles == null){
+            mContinueArticles = new ArrayList<ArticlePostItem>();
+        }
+
+        if(item != null){
+            String id = item.getArticle_Id();
+            if(id != null) {
+                mContinueArticles.add(item);
+            }
+        }
+
+        if(fetchCount == 0  && continueCount == 0) {
+            sortContinueArticles();
+            buildMap();
+            IMyFeedView.hideProgress();
+            IMyFeedView.updateAdapter();
+        }
+    }*/
+
+
     @Override
     public void onError(RestError errorInfo) {
-        String msg = "Server error";
+        IMyFeedView.hideProgress();
+        String msg = mContext.getString(R.string.server_error);
         if(errorInfo != null && errorInfo.getMessage() != null) {
             msg = errorInfo.getMessage();
         }
-        IMyFeedView.showAlert(msg);
+        IMyFeedView.showHomeAlert(msg);
     }
 
     private void buildMap() {
@@ -329,6 +446,15 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
 
         if(mTagArticles != null && !mTagArticles.isEmpty()){
             mArticlesType.put(index, ArticleParams.BASED_ON_TAGS);
+            index++;
+        }
+
+        if(mContinueArticles != null) {
+            Log.i("TAGCONITNUE", "Continue " + mContinueArticles.size());
+        }
+
+        if(mContinueArticles != null && !mContinueArticles.isEmpty()){
+            mArticlesType.put(index, ArticleParams.CONTINUE_ARTICLES);
             index++;
         }
 
@@ -373,4 +499,6 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
         }
         mArticlesType.put(pos,articleType);
     }
+
+
 }

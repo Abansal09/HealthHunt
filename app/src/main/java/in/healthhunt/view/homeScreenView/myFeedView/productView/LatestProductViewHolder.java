@@ -39,6 +39,9 @@ public class LatestProductViewHolder extends RecyclerView.ViewHolder implements 
     @BindView(R.id.latest_product_article_pager)
     ViewPager mLatestArticlePager;
 
+    @BindView(R.id.latest_product_view)
+    LinearLayout mView;
+
 
     private IProductPresenter IProductPresenter;
     private in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView IMyFeedView;
@@ -61,7 +64,27 @@ public class LatestProductViewHolder extends RecyclerView.ViewHolder implements 
         mLatestArticlePager.setAdapter(productAdapter);
         mLatestArticlePager.setClipToPadding(false);
         mLatestArticlePager.setPadding(0, 0, HealthHuntUtility.dpToPx(100, mContext),0);
-        mLatestArticlePager.setPageMargin(HealthHuntUtility.dpToPx(8, mContext));
+        mLatestArticlePager.setPageMargin(HealthHuntUtility.dpToPx(6, mContext));
+
+        /*mLatestArticlePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                if(position == IProductPresenter.getCount() - 1){
+                    mLatestArticlePager.setPadding(HealthHuntUtility.dpToPx(100, mContext), 0, 0,0);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });*/
     }
 
     @Override
@@ -71,12 +94,23 @@ public class LatestProductViewHolder extends RecyclerView.ViewHolder implements 
 
     @Override
     public void loadFragment(String fragmentName, Bundle bundle) {
-            IMyFeedView.loadNonFooterFragment(fragmentName, bundle);
+        IMyFeedView.loadNonFooterFragment(fragmentName, bundle);
     }
 
     @Override
     public void updateAdapter() {
         mLatestArticlePager.getAdapter().notifyDataSetChanged();
+        updateViewAllVisibility();
+    }
+
+    private void updateViewAllVisibility(){
+        int count = IProductPresenter.getCount();
+        if(count < 5){
+            mViewAll.setVisibility(View.GONE);
+        }
+        else {
+            mViewAll.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -105,6 +139,11 @@ public class LatestProductViewHolder extends RecyclerView.ViewHolder implements 
     }
 
     @Override
+    public void showAlert(String msg) {
+        IMyFeedView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IMyFeedView.updateBottomNavigation();
     }
@@ -121,19 +160,30 @@ public class LatestProductViewHolder extends RecyclerView.ViewHolder implements 
 
     @OnClick(R.id.view_all)
     void onViewAll(){
-        Bundle bundle = new Bundle();
-        bundle.putString("article_name", "Latest products");
-        IMyFeedView.onClickViewAll(ViewAllFragment.class.getSimpleName(), bundle);
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            openViewAllFragment();
+        }
+        else {
+            showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
+        }
     }
 
     private void openViewAllFragment() {
-        IMyFeedView.updateBottomNavigation();
         Bundle bundle = new Bundle();
         bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.LATEST_PRODUCTS);
-        IMyFeedView.onClickViewAll(ViewAllFragment.class.getSimpleName(), bundle);
+        IProductPresenter.updateBottomNavigation();
+        IProductPresenter.loadFragment(ViewAllFragment.class.getSimpleName(), bundle);
     }
 
     public void notifyDataChanged() {
         mLatestArticlePager.getAdapter().notifyDataSetChanged();
+    }
+
+    public void hideView(){
+        mView.setVisibility(View.GONE);
+    }
+
+    public void showView(){
+        mView.setVisibility(View.VISIBLE);
     }
 }

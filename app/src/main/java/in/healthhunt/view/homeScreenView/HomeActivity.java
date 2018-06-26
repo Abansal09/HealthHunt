@@ -104,7 +104,6 @@ public class HomeActivity extends BaseActivity implements IHomeView{
     @BindView(R.id.horizontalScrollView)
     HorizontalScrollView mHorizontalScrollView;
 
-
     //@BindView(R.id.my_feed_frame)
     //FrameLayout mFeedLayout;
 
@@ -194,7 +193,8 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                     if(fragment == null){
                         IHomePresenter.loadFooterFragment(MyFeedFragment.class.getSimpleName(), null);
                     }
-                    updateCategoryVisibility();
+                    updateCategoryIfNeeded();
+                    updateMyFeedOfContinue();
                     //mHorizontalScrollView.setVisibility(View.VISIBLE);
                     //mCategoryViewer.setVisibility(View.VISIBLE);
                 }
@@ -216,7 +216,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                     if(fragment == null){
                         IHomePresenter.loadFooterFragment(WatchFragment.class.getSimpleName(), null);
                     }
-                    updateCategoryVisibility();
+                    updateCategoryIfNeeded();
                 }
                 else if(item.getItemId() == R.id.navigation_shop) {
                     mCurrentItem = Constants.FRAGMENT_SHOP;
@@ -250,7 +250,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                 super.onDrawerOpened(drawerView);
                 if(mDrawerFragment != null){
                     mDrawerFragment.updateUserData();
-                    mDrawerFragment.updateCategory();
+                    //mDrawerFragment.updateCategory();
                 }
             }
 
@@ -260,10 +260,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                 Fragment fragment = mFragmentManager.findFragmentById(R.id.main_frame);
                 Log.i("TAGFRAG", "fragment " + fragment);
                 if(fragment == null && !isUpdateCategory()) {
-                    updateCategoryList();
-                    updateMyFeed();
-                    updateWatch();
-                    updateCategoryView();
+                    updateDataBasedOnCategory();
                 }
             }
         };
@@ -275,6 +272,13 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         fragmentTransaction.replace(R.id.drawer_frame, mDrawerFragment);
         fragmentTransaction.commit();
 
+    }
+
+    private void updateDataBasedOnCategory(){
+        updateCategoryList();
+        updateMyFeed();
+        updateWatch();
+        updateCategoryView();
     }
 
     private void updateFragVisible(int pos){
@@ -525,10 +529,13 @@ public class HomeActivity extends BaseActivity implements IHomeView{
     @Override
     public void updateCategoryList() {
         List<TagItem> tagItemList = IHomePresenter.getSelectedCategoryList();
-        mCategoryList.clear();
 
-        for(TagItem tagItem: tagItemList){
-            mCategoryList.add(String.valueOf(tagItem.getId()));
+        if(tagItemList != null) {
+            mCategoryList.clear();
+
+            for (TagItem tagItem : tagItemList) {
+                mCategoryList.add(String.valueOf(tagItem.getId()));
+            }
         }
     }
 
@@ -543,6 +550,28 @@ public class HomeActivity extends BaseActivity implements IHomeView{
     public void showSearchView() {
         if(mSearchAction != null) {
             mSearchAction.setVisible(true);
+        }
+    }
+
+    @Override
+    public void hideNotificationView() {
+        if(mNotificationAction != null){
+            mNotificationAction.setVisible(false);
+        }
+    }
+
+    @Override
+    public void showNotificationView() {
+        if(mNotificationAction != null){
+            mNotificationAction.setVisible(true);
+        }
+    }
+
+    @Override
+    public void addContinueArticle(ArticlePostItem postItem, boolean needToAdd) {
+        Fragment fragment = mFragment[Constants.FRAGMENT_MY_FEED];
+        if(fragment instanceof MyFeedFragment){
+            ((MyFeedFragment)fragment).addContinueArticle(postItem, needToAdd);
         }
     }
 
@@ -671,12 +700,13 @@ public class HomeActivity extends BaseActivity implements IHomeView{
 
         if (!((Activity) this).isFinishing()) {
 
+            mAlertDialog.setCancelable(false);
             TextView message = mAlertDialog.findViewById(R.id.alert_message);
             message.setText(msg);
 
+            String str = getResources().getString(R.string.alert);
             TextView title = mAlertDialog.findViewById(R.id.alert_title);
-            title.setVisibility(View.GONE);
-
+            title.setText(str);
 
             Button okButton = mAlertDialog.findViewById(R.id.action_button);
             okButton.setText(android.R.string.ok);
@@ -685,6 +715,30 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                 public void onClick(View view) {
                     mAlertDialog.dismiss();
                     finishActivity();
+                }
+            });
+            mAlertDialog.show();
+        }
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        if (!((Activity) this).isFinishing()) {
+
+            mAlertDialog.setCancelable(false);
+            TextView message = mAlertDialog.findViewById(R.id.alert_message);
+            message.setText(msg);
+
+            String str = getResources().getString(R.string.alert);
+            TextView title = mAlertDialog.findViewById(R.id.alert_title);
+            title.setText(str);
+
+            Button okButton = mAlertDialog.findViewById(R.id.action_button);
+            okButton.setText(android.R.string.ok);
+            okButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mAlertDialog.dismiss();
                 }
             });
             mAlertDialog.show();
@@ -707,11 +761,20 @@ public class HomeActivity extends BaseActivity implements IHomeView{
             Fragment fragment = mFragmentManager.findFragmentById(R.id.main_frame);    // When we press back button of full video screen.
             if(fragment instanceof YoutubeFragment){
                 YoutubeFragment youtubeFragment = (YoutubeFragment)fragment;
-                if(youtubeFragment.isFullScreen()){
-                    youtubeFragment.setFullScreen(false);
+                boolean isBack = youtubeFragment.onBackPressed();
+                if(isBack){
                     return;
                 }
             }
+            else if(fragment instanceof FullArticleFragment){
+                FullArticleFragment fullArticleFragment = (FullArticleFragment) fragment;
+                boolean isBack = fullArticleFragment.onBackPressed();
+                if(isBack){
+                    return;
+                }
+            }
+
+
             Log.i("TAGCOUNTfragment", "fragment " + fragment);
 
 
@@ -719,6 +782,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
             Log.i("TAGCOUNT", "count " + count);
             if(count == 1){ //when comes back to home screen
                 updateHomeScreen();
+                updateCategoryIfNeeded();
             }
             super.onBackPressed();
         }
@@ -728,6 +792,15 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         if (value == Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }*/
+    }
+
+    private void updateCategoryIfNeeded() {
+        if(mCurrentItem == Constants.FRAGMENT_MY_FEED || mCurrentItem == Constants.FRAGMENT_WATCH){
+            updateCategoryVisibility();
+            if(!isUpdateCategory()) {
+                updateDataBasedOnCategory();
+            }
+        }
     }
 
     @Override
@@ -789,6 +862,15 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         else {
             hideDrawerMenu();
         }
+
+        updateMyFeedOfContinue();
+    }
+
+    private void updateMyFeedOfContinue() {
+        Fragment fragment = mFragment[Constants.FRAGMENT_MY_FEED];
+        if(fragment != null && fragment instanceof MyFeedFragment){
+            ((MyFeedFragment)fragment).updateContinueArticles();
+        }
     }
 
     private void updateTitleWithFooter(int pos){
@@ -826,7 +908,13 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         int id = item.getItemId();
         switch (id) {
             case R.id.notification_id:
-                IHomePresenter.loadNonFooterFragment(NotificationFragment.class.getSimpleName(), null);
+                if(HealthHuntUtility.checkInternetConnection(getApplicationContext())) {
+                    hideKeyboardIfOpen();
+                    IHomePresenter.loadNonFooterFragment(NotificationFragment.class.getSimpleName(), null);
+                }
+                else {
+                    showAlert(getString(R.string.please_check_internet_connectivity_status));
+                }
                 return true;
             case R.id.article_search:
                 handleMenuSearch();
@@ -861,17 +949,29 @@ public class HomeActivity extends BaseActivity implements IHomeView{
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(edtSeach.getWindowToken(), 0);
 
-                    Fragment fragment = mFragmentManager.findFragmentById(R.id.main_frame);
-                    if(fragment instanceof SearchFragment){
-                        ((SearchFragment)fragment).updateData(v.getText().toString());
+                    if(HealthHuntUtility.checkInternetConnection(getApplicationContext())) {
+                        String searchStr = v.getText().toString();
+
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(edtSeach.getWindowToken(), 0);
+
+                        if(searchStr.isEmpty()){
+                            showToast(getString(R.string.search_validation));
+                            return false;
+                        }
+
+                        Fragment fragment = mFragmentManager.findFragmentById(R.id.main_frame);
+                        if (fragment instanceof SearchFragment) {
+                            ((SearchFragment) fragment).updateData(searchStr);
+                        } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Constants.SEARCH_TEXT_KEY, searchStr);
+                            IHomePresenter.loadNonFooterFragment(SearchFragment.class.getSimpleName(), bundle);
+                        }
                     }
                     else {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.SEARCH_TEXT_KEY, v.getText().toString());
-                        IHomePresenter.loadNonFooterFragment(SearchFragment.class.getSimpleName(), bundle);
+                        showAlert(getString(R.string.please_check_internet_connectivity_status));
                     }
 
                     return true;
@@ -921,6 +1021,14 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         mSearchAction = menu.findItem(R.id.article_search);
         mNotificationAction = menu.findItem(R.id.notification_id);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void hideKeyboardIfOpen() {
+        View view = findViewById(android.R.id.content);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(view != null){
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void updateCategoryView() {
@@ -1016,6 +1124,11 @@ public class HomeActivity extends BaseActivity implements IHomeView{
 
         List<TagItem> catergory = IHomePresenter.getSelectedCategoryList();
         List<String> prevCategory = mCategoryList;
+
+        if(catergory == null || prevCategory == null){
+            Log.i("TAGTAG", "category is null");
+            return false;
+        }
 
         int count = catergory.size();
         int prevCount = prevCategory.size();

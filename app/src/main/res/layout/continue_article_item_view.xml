@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/article_item_view"
     android:layout_height="120dp">
 
         <FrameLayout
@@ -8,21 +9,34 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/artccal_image"
+                android:id="@+id/article_image"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_gravity="left"
-                android:background="@drawable/continue_article" />
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:scaleType="centerCrop"
+                />
+
+            <ImageView
+                android:id="@+id/play_icon"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:src="@mipmap/ic_play_icon"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:scaleType="center" />
 
             <View
-                android:layout_width="136dp"
+                android:id="@+id/read_progress_green_view"
+                android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:alpha=".60"
+                android:layout_marginStart="2dp"
                 android:background="@color/hh_green_light2"/>
 
-
             <TextView
-                android:id="@+id/artical_content"
+                android:id="@+id/article_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -31,7 +45,7 @@
                 android:fontFamily="@string/font_family_regular"
                 android:gravity="left|top|center"
                 android:maxLines="3"
-                android:text="HH JJ  vv  nbvbnvbvbv nvn vnvnvn bvnvv  n nn H JJ  vv  nbvbnvbvbv nvn vnvnvn bvnvv  n nn "
+                android:ellipsize="end"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
@@ -51,18 +65,16 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/font_family_regular"
                 android:gravity="left|bottom"
-                android:text="23 mnh 12"
                 android:textColor="@color/hh_text_color1"
                 android:textSize="12sp"
                 android:layout_weight="1"/>
 
             <TextView
-                android:id="@+id/artical_date"
+                android:id="@+id/article_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/font_family_regular"
                 android:gravity="right|center"
-                android:text="12 ghg 67"
                 android:textColor="@color/hh_text_color1"
                 android:textSize="12sp"
                 android:layout_weight="1"/>

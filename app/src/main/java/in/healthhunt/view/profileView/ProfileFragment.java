@@ -208,7 +208,7 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
 
     @Override
     public void showAlert(String msg) {
-
+        IHomeView.showAlert(msg);
     }
 
     @Override
@@ -448,15 +448,15 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
     void onClickCheckBox(){
         boolean isSelect = mSelectAllCheck.isChecked();
         TagAdapter tagAdapter = (TagAdapter) mTagViewer.getAdapter();
-        if(!isSelect){
+        if(isSelect){
             ITagPresenter.selectAll();
             tagAdapter.setSelectAll(true);
-            mSelectAllCheck.setChecked(true);
+            //mSelectAllCheck.setChecked(true);
         }
         else {
             ITagPresenter.unSelectAll();
             tagAdapter.setSelectAll(false);
-            mSelectAllCheck.setChecked(false);
+            //mSelectAllCheck.setChecked(false);
         }
         updateTagCount();
 

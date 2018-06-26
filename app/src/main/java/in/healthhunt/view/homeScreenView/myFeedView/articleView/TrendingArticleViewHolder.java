@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -35,6 +36,10 @@ public class TrendingArticleViewHolder extends RecyclerView.ViewHolder implement
 
     @BindView(R.id.trending_recycler_list)
     public RecyclerView mTrendingViewer;
+
+    @BindView(R.id.trending_view)
+    LinearLayout mView;
+
 
     private IArticlePresenter IArticlePresenter;
     private in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView IMyFeedView;
@@ -101,6 +106,11 @@ public class TrendingArticleViewHolder extends RecyclerView.ViewHolder implement
     }
 
     @Override
+    public void showAlert(String msg) {
+        IMyFeedView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IMyFeedView.updateBottomNavigation();
     }
@@ -148,4 +158,13 @@ public class TrendingArticleViewHolder extends RecyclerView.ViewHolder implement
             mTrendingViewer.getAdapter().notifyDataSetChanged();
         }
     }
+
+    public void hideView(){
+        mView.setVisibility(View.GONE);
+    }
+
+    public void showView(){
+        mView.setVisibility(View.VISIBLE);
+    }
+
 }

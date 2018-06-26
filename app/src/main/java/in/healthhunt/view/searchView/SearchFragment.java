@@ -116,6 +116,11 @@ public class SearchFragment extends Fragment implements SearchAdapter.ClickListe
     }
 
     @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    @Override
     public int getType() {
         return 0;
     }

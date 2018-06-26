@@ -114,6 +114,11 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
     }
 
     @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IHomeView.hideBottomNavigationSelection();
     }
@@ -139,11 +144,6 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
             mNoRecords.setVisibility(View.GONE);
             mShopViewer.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void showAlert(String msg) {
-
     }
 
     @Override

@@ -225,23 +225,33 @@ public class TrendingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @OnClick(R.id.article_item_view)
         void onClick(View view) {
-            if(mClickListener != null) {
-                mClickListener.ItemClicked(view, getAdapterPosition());
+
+            if(HealthHuntUtility.checkInternetConnection(mContext)) {
+                if (mClickListener != null) {
+                    mClickListener.ItemClicked(view, getAdapterPosition());
+                }
+            }
+            else {
+                IArticlePresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
             }
         }
 
         @OnClick(R.id.article_bookmark)
-        void onBookMark(){
-            ArticlePostItem postsItem = IArticlePresenter.getArticle(getAdapterPosition());
-            String id = String.valueOf(postsItem.getArticle_Id());
-            CurrentUser currentUser = postsItem.getCurrent_user();
-            if(currentUser != null) {
-                if(!currentUser.isBookmarked()){
-                    IArticlePresenter.bookmark(id, ArticleParams.TRENDING_ARTICLES);
+        void onBookMark() {
+
+            if (HealthHuntUtility.checkInternetConnection(mContext)) {
+                ArticlePostItem postsItem = IArticlePresenter.getArticle(getAdapterPosition());
+                String id = String.valueOf(postsItem.getArticle_Id());
+                CurrentUser currentUser = postsItem.getCurrent_user();
+                if (currentUser != null) {
+                    if (!currentUser.isBookmarked()) {
+                        IArticlePresenter.bookmark(id, ArticleParams.TRENDING_ARTICLES);
+                    } else {
+                        IArticlePresenter.unBookmark(id, ArticleParams.TRENDING_ARTICLES);
+                    }
                 }
-                else {
-                    IArticlePresenter.unBookmark(id, ArticleParams.TRENDING_ARTICLES);
-                }
+            } else {
+                IArticlePresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
             }
         }
     }

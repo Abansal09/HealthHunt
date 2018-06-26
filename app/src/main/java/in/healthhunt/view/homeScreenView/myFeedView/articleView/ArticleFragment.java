@@ -116,15 +116,15 @@ public class ArticleFragment extends Fragment {
                 mArticlePostItem = IArticlePresenter.getArticle(mPos);
             }
 
-            if(!isLast) {
-                mTagItemView.setVisibility(View.VISIBLE);
-                mViewAll.setVisibility(View.GONE);
-                setContent();
-            }
+            //if(!isLast) {
+            mTagItemView.setVisibility(View.VISIBLE);
+            // mViewAll.setVisibility(View.GONE);
+            setContent();
+           /* }
             else {
                 mTagItemView.setVisibility(View.GONE);
                 mViewAll.setVisibility(View.VISIBLE);
-            }
+            }*/
         }
         return view;
     }
@@ -140,7 +140,13 @@ public class ArticleFragment extends Fragment {
 
     @OnClick(R.id.tags_article_view_item)
     void onArticleClick(){
-        openFullView();
+
+        if(HealthHuntUtility.checkInternetConnection(getContext())) {
+            openFullView();
+        }
+        else {
+            IArticlePresenter.showAlert(getString(R.string.please_check_internet_connectivity_status));
+        }
     }
 
     @OnClick(R.id.last_page_view_all)
@@ -164,18 +170,20 @@ public class ArticleFragment extends Fragment {
 
     @OnClick(R.id.article_bookmark)
     void onBookMark(){
-        Log.i("TAGBOOK","On Bookmark Click");
-        String id = String.valueOf(mArticlePostItem.getArticle_Id());
-        CurrentUser currentUser = mArticlePostItem.getCurrent_user();
-        Log.i("TAGBOOK","currentUser " + currentUser);
-        if(currentUser != null) {
-            if(!currentUser.isBookmarked()){
-                Log.i("TAGBOOK","Bookmark");
-                IArticlePresenter.bookmark(id, mType);
+
+        if (HealthHuntUtility.checkInternetConnection(getContext())) {
+            String id = String.valueOf(mArticlePostItem.getArticle_Id());
+            CurrentUser currentUser = mArticlePostItem.getCurrent_user();
+            if (currentUser != null) {
+                if (!currentUser.isBookmarked()) {
+                    IArticlePresenter.bookmark(id, mType);
+                } else {
+                    IArticlePresenter.unBookmark(id, mType);
+                }
             }
-            else {
-                IArticlePresenter.unBookmark(id, mType);
-            }
+        }
+        else {
+            IArticlePresenter.showAlert(getString(R.string.please_check_internet_connectivity_status));
         }
     }
 

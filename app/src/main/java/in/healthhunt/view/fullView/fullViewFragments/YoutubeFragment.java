@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -41,6 +42,9 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,6 +69,7 @@ import in.healthhunt.model.articles.productResponse.ProductPostItem;
 import in.healthhunt.model.beans.Constants;
 import in.healthhunt.model.beans.SpaceDecoration;
 import in.healthhunt.model.comment.CommentsItem;
+import in.healthhunt.model.login.User;
 import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.model.utility.URLImageParser;
 import in.healthhunt.presenter.fullPresenter.FullPresenterImp;
@@ -179,6 +184,8 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     private String mId;
     private boolean isFullScreen;
     private TextToSpeech mTextToSpeech;
+    private long mStartTime;
+    private boolean isBackPressed;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -192,8 +199,109 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
 
         IFullPresenter = new FullPresenterImp(getContext(), this);
         mTextToSpeech = new TextToSpeech(getContext(),this);
+        //addToContinueList();
         // playbackEventListener = new MyPlaybackEventListener();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            //mTextToSpeech.shutdown();
+        }
+
+        if(!isBackPressed) {
+            isBackPressed = false;
+            addToContinueList();
+        }
+    }
+
+    public long getMinute() {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        long diff = currentTime - mStartTime;
+        long minute = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(diff);
+        return minute;
+    }
+
+    private void addToContinueList() {
+
+        String articleTime = IFullPresenter.getArticle().getRead_time();
+        if(articleTime == null || articleTime.isEmpty()){
+            Log.i("TAGTAGCONTINUE", "Reading time is empty ");
+            return;
+        }
+
+
+        long minute = getMinute();
+        long actualReadTime = Long.valueOf(articleTime);
+        boolean isAdd = false;
+
+
+        Log.i("TAGTAGCONTINUE", "Minute " + minute);
+
+
+        User user = User.getCurrentUser();
+        String continueList = user.getContinueList();
+
+        Log.i("TAGTAGCONTINUE", "Before List " + continueList);
+
+        if(continueList == null || continueList.isEmpty()){
+            continueList = mId;
+            isAdd = true;
+        }
+        else {
+            String[] itemArray = continueList.split(Constants.SEPARATOR);
+
+            List<String> list = new ArrayList<String>(Arrays.asList(itemArray));
+            if(list.contains(mId)){
+                list.remove(mId);
+            }
+
+            if(list.size() >= 20) {    // maximum 20 articles
+                list.remove(list.size() - 1);
+            }
+
+
+            if(minute<=actualReadTime) {
+                isAdd = true;
+                list.add(0, mId);
+            }
+
+            continueList = createStringFromList(list);
+        }
+
+        Log.i("TAGTAGCONTINUE", "After List " + continueList);
+        user.setContinueList(continueList);
+        user.save();
+
+        IHomeView.addContinueArticle(IFullPresenter.getArticle(), isAdd);
+    }
+
+    private String createStringFromList(List list) {
+
+        int size = list.size();
+        String continueList = "";
+        for(int i=0; i<size; i++){
+
+            String id = (String) list.get(i);
+
+            if(i < size - 1){
+                continueList = continueList + id + Constants.SEPARATOR;
+            }
+            else {
+                continueList = continueList + id;
+            }
+        }
+
+        return continueList;
+    }
+
 
     private void fetchVideoFromDataBase(String id) {
         FetchVideoTask productsTask = new FetchVideoTask(id);
@@ -202,6 +310,9 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mStartTime = Calendar.getInstance().getTimeInMillis();
+
         View rootView = inflater.inflate(R.layout.fragment_full_video_view, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
 
@@ -315,7 +426,7 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
 
                     //If you want to control the full screen event you can uncomment the below code
                     //Tell the player you want to control the fullscreen change
-                   // mYouTubePlayer.setFullscreenControlFlags(0);
+                    // mYouTubePlayer.setFullscreenControlFlags(0);
                     //Tell the player how to control the change
                     mYouTubePlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
                         @Override
@@ -403,6 +514,39 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     public void hideProgress() {
         IHomeView.hideProgress();
     }
+
+    @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    /*@Override
+    public void showFullViewAlert(String msg) {
+        final Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialog_view);
+        dialog.setCancelable(false);
+        //dialog.
+
+        TextView message = dialog.findViewById(R.id.alert_message);
+        message.setText(msg);
+
+        String str = getResources().getString(R.string.alert);
+        TextView title = dialog.findViewById(R.id.alert_title);
+        title.setText(str);
+
+        Button okButton = dialog.findViewById(R.id.action_button);
+        okButton.setText(android.R.string.ok);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                IHomeView.popTopBackStack();
+            }
+        });
+        dialog.show();
+    }*/
 
     @Override
     public void setContent() {
@@ -521,9 +665,15 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     @Override
     public void updateLike() {
         CurrentUser currentUser =  IFullPresenter.getArticle().getCurrent_user();
+        Likes likes = IFullPresenter.getArticle().getLikes();
         if(currentUser != null) {
             int like = currentUser.getLike();
-            int count = Integer.parseInt(mLikesCount.getText().toString());
+            long count = 0;
+
+            if(likes != null){
+                count = Long.parseLong(likes.getLikes());
+            }
+
             if (like > 0) {
                 updateLikeIcon(true);
                 count++;
@@ -534,10 +684,10 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
                 }
             }
 
-            ArticlePostItem article = IFullPresenter.getArticle();
-            if(article != null && article.getLikes() != null){
-                article.getLikes().setLikes(String.valueOf(count));
-                mLikesCount.setText(String.valueOf(count));
+            if(likes != null){
+                likes.setLikes(String.valueOf(count));
+                String likesCount = HealthHuntUtility.formatNumber(count);
+                mLikesCount.setText(likesCount);
             }
         }
     }
@@ -673,8 +823,9 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     private void setCommentContent(ArticlePostItem articlePost) {
         String commentCount = articlePost.getComments();
         if(commentCount != null){
-            int count = Integer.parseInt(commentCount);
+            long count = Long.parseLong(commentCount);
             if(count > 0){
+                commentCount = HealthHuntUtility.formatNumber(count);
                 mCommentCount.setText(commentCount);
             }
             else {
@@ -777,6 +928,7 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
         if(likes != null){
             String likeCount = likes.getLikes();
             if(likeCount != null){
+                likeCount = HealthHuntUtility.formatNumber(Long.parseLong(likeCount));
                 mLikesCount.setText(likeCount);
             }
         }
@@ -1193,11 +1345,45 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     @OnClick(R.id.listen_view)
     void onListen(){
 
-        if(!mTextToSpeech.isSpeaking()) {
+        boolean isStopOtherAudio = isStopOtherAudio();
+        Log.i("TAGListe", "isStopOtherAudio " + isStopOtherAudio);
+
+        if(!mTextToSpeech.isSpeaking() && isStopOtherAudio) {
             speakOut();
         }
         else {
             mTextToSpeech.stop();
         }
+    }
+
+    public boolean isStopOtherAudio(){
+        AudioManager am = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        int result = am.requestAudioFocus(new AudioManager.OnAudioFocusChangeListener() {
+                                              @Override
+                                              public void onAudioFocusChange(int i) {
+
+                                              }
+                                          },
+// Use the music stream.
+                AudioManager.STREAM_MUSIC,
+// Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN);
+
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onBackPressed(){
+        if(isFullScreen()){
+            setFullScreen(false);
+            return true;
+        }
+
+        isBackPressed  = true;
+        addToContinueList();
+        return false;
     }
 }

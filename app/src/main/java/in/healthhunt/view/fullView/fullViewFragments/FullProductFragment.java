@@ -137,9 +137,9 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
     @BindView(R.id.buy_product_price)
     TextView mBuyProductPrice;
 
-    @BindView(R.id.top_product_unit)
-    TextView mBuyProductUnit;
-
+    /* @BindView(R.id.top_product_unit)
+     TextView mBuyProductUnit;
+ */
     @BindView(R.id.related_product_recycler_list)
     RecyclerView mRelatedProductViewer;
 
@@ -224,6 +224,39 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
     public void hideProgress() {
         IHomeView.hideProgress();
     }
+
+    @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    /*@Override
+    public void showFullViewAlert(String msg) {
+        final Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialog_view);
+        dialog.setCancelable(false);
+        //dialog.
+
+        TextView message = dialog.findViewById(R.id.alert_message);
+        message.setText(msg);
+
+        String str = getResources().getString(R.string.alert);
+        TextView title = dialog.findViewById(R.id.alert_title);
+        title.setText(str);
+
+        Button okButton = dialog.findViewById(R.id.action_button);
+        okButton.setText(android.R.string.ok);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                IHomeView.popTopBackStack();
+            }
+        });
+        dialog.show();
+    }*/
 
     @Override
     public void setContent() {
@@ -318,9 +351,14 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
     @Override
     public void updateLike() {
         CurrentUser currentUser =  IFullPresenter.getProduct().getCurrent_user();
+        Likes likes = IFullPresenter.getProduct().getLikes();
         if(currentUser != null) {
             int like = currentUser.getLike();
-            int count = Integer.parseInt(mLikesCount.getText().toString());
+            long count = 0;
+            if(likes != null){
+                count = Long.parseLong(likes.getLikes());
+            }
+
             if (like > 0) {
                 updateLikeIcon(true);
                 count++;
@@ -331,10 +369,10 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
                 }
             }
 
-            ProductPostItem productPost = IFullPresenter.getProduct();
-            if(productPost != null && productPost.getLikes() != null){
-                productPost.getLikes().setLikes(String.valueOf(count));
-                mLikesCount.setText(String.valueOf(count));
+            if(likes != null){
+                likes.setLikes(String.valueOf(count));
+                String likeCount = HealthHuntUtility.formatNumber(count);
+                mLikesCount.setText(likeCount);
             }
         }
     }
@@ -472,8 +510,9 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
     private void setCommentContent(ProductPostItem productPost) {
         String commentCount = productPost .getComments();
         if(commentCount != null){
-            int count = Integer.parseInt(commentCount);
+            long count = Long.parseLong(commentCount);
             if(count > 0){
+                commentCount = HealthHuntUtility.formatNumber(count);
                 mCommentCount.setText(commentCount);
             }
             else {
@@ -531,16 +570,31 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         String price = productPost.getPost_price();
         if(price != null) {
             String postQuantity = productPost.getPost_quantity();
-            String rs = getContext().getString(R.string.rs);
+            String rs = productPost.getPost_currency();
+            if(rs == null){
+                rs = "";
+            }
+            Spanned spanned = Html.fromHtml(rs) ;
+            rs = spanned.toString();
+
             price = HealthHuntUtility.addSeparator(price);
             rs = rs + " " + price + "/" + postQuantity;
+            rs.trim();
+
+            String postUnit = productPost.getPost_unit();
+            if(postUnit != null) {
+                rs = rs + postUnit;
+            }
+
             mBuyProductPrice.setText(rs);
         }
 
-        String postUnit = productPost.getPost_unit();
+        /*String postUnit = productPost.getPost_unit();
+        Log.i("TAGTAGUNIT", "unit "+ postUnit);
         if(postUnit != null) {
+            postUnit.trim();
             mBuyProductUnit.setText(postUnit);
-        }
+        }*/
     }
 
     private void setEmailInfo(ProductPostItem productPost) {
@@ -588,6 +642,7 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         if(likes != null){
             String likeCount = likes.getLikes();
             if(likeCount != null){
+                likeCount = HealthHuntUtility.formatNumber(Long.valueOf(likeCount));
                 mLikesCount.setText(likeCount);
             }
         }
@@ -1012,7 +1067,7 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         IHomeView.showToast(str);
     }
 
-   // @OnClick(R.id.listen_view)
+    // @OnClick(R.id.listen_view)
     void onListen(){
 
         if(!mTextToSpeech.isSpeaking()) {

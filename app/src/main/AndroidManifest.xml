@@ -4,28 +4,37 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".view.HealthHuntApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/hh_app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/hh_app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="in.healthhunt.view.loginView.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+        <activity
+            android:name="in.healthhunt.view.splashScreen.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+        <activity android:name="in.healthhunt.view.loginView.LoginActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>-->
+        </activity>
+
         <activity android:name=".view.tagView.TagActivity"
             android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".view.onBoardingView.OnBoardingActivity"/>
+        <activity android:name=".view.onBoardingView.OnBoardingActivity" android:theme="@style/onBoardingTheme"/>
 
         <activity android:name=".view.homeScreenView.HomeActivity" android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -34,7 +43,6 @@
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/FullyTranslucent11"
             tools:replace="android:theme"/>
@@ -63,8 +71,26 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <meta-data android:name="AA_DB_NAME" android:value="MyDatabase.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="2" />
+        <meta-data android:name="AA_DB_NAME" android:value="HHDatabase.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+
+        <!--<meta-data android:name="AA_MODELS"
+            android:value=
+                "in.healthhunt.model.login.User,
+               in.healthhunt.model.articles.commonResponse.MediaItem,
+              in.healthhunt.model.articles.articleResponse.ArticlePostItem,
+              in.healthhunt.model.articles.productResponse.ProductPostItem,
+              in.healthhunt.model.articles.commonResponse.Content,
+              in.healthhunt.model.articles.commonResponse.Title,
+              in.healthhunt.model.articles.commonResponse.CategoriesItem,
+              in.healthhunt.model.articles.commonResponse.Author,
+              in.healthhunt.model.articles.commonResponse.CurrentUser,
+              in.healthhunt.model.articles.commonResponse.Excerpt,
+              in.healthhunt.model.articles.commonResponse.Likes,
+              in.healthhunt.model.articles.commonResponse.Synopsis,
+              in.healthhunt.model.articles.commonResponse.TagsItem,
+              in.healthhunt.model.articles.commonResponse.Collections"
+              />-->
 
         <!-- <meta-data android:name="AA_SERIALIZERS"
              android:value="in.healthhunt.model.articles.commonResponse.MediaItem" />-->
@@ -74,6 +100,12 @@
             android:value="4934d7737b18862483c13a9075abe05005637917"
             />
 
+        <provider
+            android:name=".model.database.HHContentProvider"
+            android:authorities="in.healthhunt"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>

@@ -59,9 +59,12 @@ public class FilterPresenterImp implements IFilterPresenter, IFilterInteractor.O
     }
 
     @Override
-    public void onError(RestError errorInfo) {
+    public void onFilterError(RestError errorInfo) {
         Log.i("TAGERROR", "ERRO " + errorInfo );
         IFilterView.hideProgress();
+        if(errorInfo != null){
+            IFilterView.showAlert(errorInfo.getMessage());
+        }
     }
 
     @Override

@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -173,11 +171,15 @@ public class DrawerFragment extends Fragment implements IEditProfileView, Catego
         setUserInfo();
     }
 
+    @Override
+    public void showAlert(String msg) {
+    }
+
     public void updateUserData(){
         IUserPresenter.fetchCurrentUser();
     }
 
-    public void updateCategory(){
+    /*public void updateCategory(){
         List<String> categoryList = IHomeView.getCategories();
 
         List<TagItem> prevCategory = IHomePresenter.getSelectedCategoryList();
@@ -195,5 +197,5 @@ public class DrawerFragment extends Fragment implements IEditProfileView, Catego
         }
 
         updateAdapter();
-    }
+    }*/
 }

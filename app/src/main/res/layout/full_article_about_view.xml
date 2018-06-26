@@ -48,7 +48,7 @@
             android:fontFamily="@string/font_family_regular"
             android:textSize="16sp"
             android:gravity="left"
-            android:layout_gravity="center"
+            android:layout_gravity="left|center"
             android:textColor="@color/hh_edittext_text_color"
             app:trimLines="6"
             />

@@ -274,6 +274,11 @@ public class FullVideoActivity extends YouTubeBaseActivity implements IFullFragm
     }
 
     @Override
+    public void showAlert(String msg) {
+
+    }
+
+    @Override
     public void setContent() {
         ArticlePostItem articlePost = IFullPresenter.getArticle();
 

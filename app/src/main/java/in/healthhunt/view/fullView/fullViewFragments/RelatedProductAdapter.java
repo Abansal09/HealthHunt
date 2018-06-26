@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,7 +128,13 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             String price = postsItem.getPost_price();
             if(price != null) {
                 String postQuantity = postsItem.getPost_quantity();
-                String rs = mContext.getString(R.string.rs);
+                String rs = postsItem.getPost_currency();
+                if(rs == null){
+                    rs = "";
+                }
+                Spanned spanned = Html.fromHtml(rs) ;
+                rs = spanned.toString();
+
                 rs = rs + " " + price + "/" + postQuantity;
                 holder.mProductPrice.setText(rs);
             }

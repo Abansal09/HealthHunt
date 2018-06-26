@@ -36,7 +36,7 @@ public class BookMarkInteractorImpl implements IBookMarkInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                finishListener.onError(error);
+                finishListener.onBookMarkError(error);
             }
         });
     }
@@ -57,7 +57,7 @@ public class BookMarkInteractorImpl implements IBookMarkInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                finishListener.onError(error);
+                finishListener.onBookMarkError(error);
             }
         });
     }

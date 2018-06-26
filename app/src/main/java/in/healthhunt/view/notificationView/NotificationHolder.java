@@ -27,12 +27,15 @@ public class NotificationHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.pic)
     ImageView mPic;
 
+    @BindView(R.id.notification_item_image)
+    ImageView mNotificationItemImage;
+
     @BindView(R.id.name)
     TextView mName;
 
-    @BindView(R.id.category)
-    TextView mCategory;
-
+   /* @BindView(R.id.action_type)
+    TextView mAction;
+*/
     @BindView(R.id.hour)
     TextView mHour;
 

@@ -16,7 +16,7 @@ public interface IFilterInteractor {
 
     interface OnFinishListener {
         void onSuccess(String type, List<DataItem> dataItems);
-        void onError(RestError errorInfo);
+        void onFilterError(RestError errorInfo);
     }
     void fetchFilters(Context context, String type, Map<String, String> queryMap, OnFinishListener finishListener);
 }

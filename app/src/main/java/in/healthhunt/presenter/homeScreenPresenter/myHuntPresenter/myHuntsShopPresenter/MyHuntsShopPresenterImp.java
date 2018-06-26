@@ -79,6 +79,14 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
     }
 
     @Override
+    public void onBookMarkError(RestError errorInfo) {
+        IMyHuntsView.hideProgress();
+        if(errorInfo != null) {
+            IMyHuntsView.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onProductSuccess(List<ProductPostItem> items, int type) {
         mProductCount--;
 
@@ -142,6 +150,11 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
     @Override
     public void updateBottomNavigation() {
 
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IMyHuntsView.showAlert(msg);
     }
 
     @Override
@@ -292,7 +305,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
         Map<String, String> map = new HashMap<String, String>();
 
         String filter = ArticleParams.FILTER + "[" + ArticleParams.COLLECTION + "]";
-      //  String author = ArticleParams.FILTER + "[" + ArticleParams.AUTHOR + "]";
+        //  String author = ArticleParams.FILTER + "[" + ArticleParams.AUTHOR + "]";
 
                 /*"'{"' +  + ArticleParams.COLLECTION + '"'
                 + ":" + '"' + ArticleParams.COLLECTION_SAVED + '"'
@@ -300,7 +313,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
                 + ":" + userId + "}";*/
 
         Log.i("TAGFILTER", "filter " + filter);
-       // map.put(author, userId);
+        // map.put(author, userId);
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
         map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
         map.put(filter, ArticleParams.COLLECTION_SAVED);
@@ -314,7 +327,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
         Map<String, String> map = new HashMap<String, String>();
 
         String filter = ArticleParams.FILTER + "[" + ArticleParams.COLLECTION + "]";
-       // String author = ArticleParams.FILTER + "[" + ArticleParams.AUTHOR + "]";
+        // String author = ArticleParams.FILTER + "[" + ArticleParams.AUTHOR + "]";
 
                 /*"'{"' +  + ArticleParams.COLLECTION + '"'
                 + ":" + '"' + ArticleParams.COLLECTION_SAVED + '"'
@@ -322,7 +335,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
                 + ":" + userId + "}";*/
 
         Log.i("TAGFILTER", "filter " + filter);
-       // map.put(author, userId);
+        // map.put(author, userId);
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
         map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
         map.put(filter, ArticleParams.COLLECTION_CREATED);
@@ -336,7 +349,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
         Map<String, String> map = new HashMap<String, String>();
 
         String filter = ArticleParams.FILTER + "[" + ArticleParams.COLLECTION + "]";
-       // String author = ArticleParams.FILTER + "[" + ArticleParams.AUTHOR + "]";
+        // String author = ArticleParams.FILTER + "[" + ArticleParams.AUTHOR + "]";
 
                 /*"'{"' +  + ArticleParams.COLLECTION + '"'
                 + ":" + '"' + ArticleParams.COLLECTION_SAVED + '"'
@@ -344,7 +357,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
                 + ":" + userId + "}";*/
 
         Log.i("TAGFILTER", "filter " + filter);
-       // map.put(author, userId);
+        // map.put(author, userId);
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
         map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
         map.put(filter, ArticleParams.COLLECTION_RECEIVED);

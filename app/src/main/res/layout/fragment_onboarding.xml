@@ -18,7 +18,7 @@
                 android:id="@+id/onboading_image"
                 android:layout_width="228dp"
                 android:src="@mipmap/ic_android_mockup"
-                android:layout_height="331dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 android:layout_marginStart="66dp"
                 android:layout_marginEnd="66dp"
@@ -40,13 +40,22 @@
                 android:background="?attr/actionBarItemBackground"
                 />
         </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        >
 
         <TextView
             android:id="@+id/on_board_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/explore_new_things"
-            android:layout_marginTop="75dp"
             android:layout_marginEnd="9dp"
             android:layout_marginStart="9dp"
             android:paddingStart="12dp"
@@ -65,7 +74,7 @@
             android:layout_marginStart="95dp"
             android:layout_marginEnd="95dp"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="64dp"
             android:background="@drawable/button_bg"
             android:text="@string/get_started"
             android:textColor="@android:color/white"
@@ -75,18 +84,15 @@
             android:layout_gravity="center"
             android:visibility="invisible"
             />
-    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_gravity="bottom"
-        android:fontFamily="@string/font_family_regular"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:text="@string/swipe_left_and_right"
-        android:textColor="@color/hh_grey_dark"
-        android:textSize="14sp"
-        android:gravity="left|top"
-        android:layout_marginBottom="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:fontFamily="@string/font_family_regular"
+            android:text="@string/swipe_left_and_right"
+            android:textColor="@color/hh_grey_dark"
+            android:textSize="14sp"
+            android:gravity="center" />
+    </LinearLayout>
 </RelativeLayout>

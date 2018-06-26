@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -39,6 +40,9 @@ import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.bumptech.glide.Glide;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,6 +67,7 @@ import in.healthhunt.model.articles.productResponse.ProductPostItem;
 import in.healthhunt.model.beans.Constants;
 import in.healthhunt.model.beans.SpaceDecoration;
 import in.healthhunt.model.comment.CommentsItem;
+import in.healthhunt.model.login.User;
 import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.model.utility.URLImageParser;
 import in.healthhunt.presenter.fullPresenter.FullPresenterImp;
@@ -184,6 +189,8 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     private String mId;
     private boolean scrollingToBottom;
     private TextToSpeech mTextToSpeech;
+    private long mStartTime;
+    private boolean isBackPressed;
 
 
     @Override
@@ -198,10 +205,121 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
         mTextToSpeech = new TextToSpeech(getContext(),this);
     }
 
-    private static void scrollRecyclerViewToBottom(RecyclerView recyclerView) {
-        RecyclerView.Adapter adapter = recyclerView.getAdapter();
-        if (adapter != null && adapter.getItemCount() > 0) {
-            recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.i("TAG1111", "onPause");
+        super.onPause();
+        Log.i("TAGPAUSE", "onPause");
+        if (mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            //mTextToSpeech.shutdown();
+        }
+
+
+        if(!isBackPressed) {
+            isBackPressed = false;
+            addToContinueList();
+        }
+    }
+
+    public long getMinute() {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        long diff = currentTime - mStartTime;
+        long minute = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(diff);
+        return minute;
+    }
+
+    private void addToContinueList() {
+
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+
+        if(postItem == null){
+            Log.i("TAGTAGCONTINUE", "Article is null ");
+            return;
+        }
+
+        String articleTime = postItem.getRead_time();
+        if(articleTime == null || articleTime.isEmpty()){
+            Log.i("TAGTAGCONTINUE", "Reading time is empty ");
+            return;
+        }
+
+
+        long minute = getMinute();
+        long actualReadTime = Long.valueOf(articleTime);
+        boolean isAdd = false;
+
+
+        Log.i("TAGTAGCONTINUE", "Minute " + minute);
+
+
+        User user = User.getCurrentUser();
+        String continueList = user.getContinueList();
+
+        Log.i("TAGTAGCONTINUE", "Before List " + continueList);
+
+        if(continueList == null || continueList.isEmpty()){
+            continueList = mId;
+            isAdd = true;
+        }
+        else {
+            String[] itemArray = continueList.split(Constants.SEPARATOR);
+
+            List<String> list = new ArrayList<String>(Arrays.asList(itemArray));
+            if(list.contains(mId)){
+                list.remove(mId);
+            }
+
+            if(list.size() >= 20) {    // maximum 20 articles
+                list.remove(list.size() - 1);
+            }
+
+
+            if(minute<actualReadTime) {
+                isAdd = true;
+                list.add(0, mId);
+            }
+
+            continueList = createStringFromList(list);
+        }
+
+        Log.i("TAGTAGCONTINUE", "After List " + continueList);
+        user.setContinueList(continueList);
+        user.save();
+
+        IHomeView.addContinueArticle(IFullPresenter.getArticle(), isAdd);
+    }
+
+    private String createStringFromList(List list) {
+
+        int size = list.size();
+        String continueList = "";
+        for(int i=0; i<size; i++){
+
+            String id = (String) list.get(i);
+
+            if(i < size - 1){
+                continueList = continueList + id + Constants.SEPARATOR;
+            }
+            else {
+                continueList = continueList + id;
+            }
+        }
+
+        return continueList;
+    }
+
+    private void scrollRecyclerViewToBottom(RecyclerView recyclerView) {
+        if(recyclerView != null) {
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+            if (adapter != null && adapter.getItemCount() > 0) {
+                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+            }
         }
     }
 
@@ -213,6 +331,9 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mStartTime = Calendar.getInstance().getTimeInMillis();
+
+        Log.i("TAGONCREAE", "onCreateView");
         final View view = inflater.inflate(R.layout.fragment_full_article_view, container, false);
         mUnbinder = ButterKnife.bind(this, view);
         IHomeView.setStatusBarTranslucent(true);
@@ -291,11 +412,45 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     }
 
     @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    /*@Override
+    public void showFullViewAlert(String msg) {
+        final Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialog_view);
+        dialog.setCancelable(false);
+        //dialog.
+
+        TextView message = dialog.findViewById(R.id.alert_message);
+        message.setText(msg);
+
+        String str = getResources().getString(R.string.alert);
+        TextView title = dialog.findViewById(R.id.alert_title);
+        title.setText(str);
+
+        Button okButton = dialog.findViewById(R.id.action_button);
+        okButton.setText(android.R.string.ok);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                IHomeView.popTopBackStack();
+            }
+        });
+        dialog.show();
+    }
+*/
+    @Override
     public void setContent() {
         ArticlePostItem articlePost = IFullPresenter.getArticle();
 
 
         if (articlePost != null) {
+            IHomeView.addContinueArticle(articlePost, true);
             setTopImageContent(articlePost);
             setArticleContent(articlePost);
             setAboutContent(articlePost);
@@ -425,9 +580,14 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     @Override
     public void updateLike() {
         CurrentUser currentUser =  IFullPresenter.getArticle().getCurrent_user();
+        Likes likes = IFullPresenter.getArticle().getLikes();
         if(currentUser != null) {
             int like = currentUser.getLike();
-            long count = Long.parseLong(mLikesCount.getText().toString());
+            long count = 0;
+            if(likes != null){
+                count   = Long.parseLong(likes.getLikes());
+            }
+
             if (like > 0) {
                 updateLikeIcon(true);
                 count++;
@@ -438,10 +598,10 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
                 }
             }
 
-            ArticlePostItem article = IFullPresenter.getArticle();
-            if(article != null && article.getLikes() != null){
-                article.getLikes().setLikes(String.valueOf(count));
-                mLikesCount.setText(String.valueOf(count));
+            if(likes != null){
+                likes.setLikes(String.valueOf(count));
+                String likeCount = HealthHuntUtility.formatNumber(count);
+                mLikesCount.setText(likeCount);
             }
         }
     }
@@ -577,8 +737,9 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     private void setCommentContent(ArticlePostItem articlePost) {
         String commentCount = articlePost.getComments();
         if(commentCount != null){
-            int count = Integer.parseInt(commentCount);
+            long count = Long.parseLong(commentCount);
             if(count > 0){
+                commentCount = HealthHuntUtility.formatNumber(count);
                 mCommentCount.setText(commentCount);
             }
             else {
@@ -686,6 +847,8 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
         if(likes != null){
             String likeCount = likes.getLikes();
             if(likeCount != null){
+                Log.i("TAGCOUNT", "Count " + likeCount);
+                likeCount = HealthHuntUtility.formatNumber(Long.valueOf(likeCount));
                 mLikesCount.setText(likeCount);
             }
         }
@@ -1021,7 +1184,7 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
             int maxLen = TextToSpeech.getMaxSpeechInputLength();
             int strLen = text.length();
 
-            if(strLen > maxLen){
+            if(strLen >= maxLen){
                 int subParts = strLen/maxLen;
                 Log.i("TAGLEN"," Len " + subParts);
                 int start = 0;
@@ -1119,14 +1282,103 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     }
 
     @OnClick(R.id.listen_view)
-    void onListen(){
+    void onListen() {
 
-        if(!mTextToSpeech.isSpeaking()) {
+        boolean isStopOtherAudio = isStopOtherAudio();
+        Log.i("TAGListe", "isStopOtherAudio " + isStopOtherAudio);
+
+        if (!mTextToSpeech.isSpeaking() && isStopOtherAudio) {
             speakOut();
-        }
-        else {
+        } else {
             mTextToSpeech.stop();
         }
     }
 
+    /*void listenText(){
+
+        ArticlePostItem postItem  = IFullPresenter.getArticle();
+        Content content = postItem.getContent();
+        Spanned spanned = Html.fromHtml(content.getRendered()) ;
+        String text = spanned.toString();
+
+
+        File soundFile = new File("ABBB");
+        if (soundFile.exists())
+            soundFile.delete();
+
+        TextToSpeech ttf =  new TextToSpeech(getContext(),this);
+        if(ttf.synthesizeToFile("TESTING TERING", null, soundFile, "0")== TextToSpeech.SUCCESS) {
+            Toast.makeText(getContext(),"Sound file created",Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            MediaPlayer player = new MediaPlayer();
+            player.setDataSource("ABBB");
+            player.prepare();
+            player.start();
+        }
+        catch(Exception e) {
+            Toast.makeText(getContext(),"Hmmmmm. Can't play file",Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }*/
+
+
+
+        /*Thread x =new Thread(){
+            public void run(){
+                try{
+                    String url1="http://www.translate.google.com/translate_tts?ie=UTF-8&q=" + "TEsting TEsting v TEsting TEsting" + "%0A&tl=" + "EN"  + "&prev=input";
+
+
+
+                    mediaPlayer=new MediaPlayer();
+                    mediaPlayer.reset();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setDataSource(url1);
+                    mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                    mediaPlayer.start();
+                } catch (IllegalArgumentException e) {
+                    mediaPlayer.reset();
+                } catch (IllegalStateException e) {
+                    mediaPlayer.reset();
+                } catch (IOException e) {
+                    mediaPlayer.reset();
+                }
+
+
+                finally{
+                    //  x.suspend();
+                }
+            }
+
+        };
+        x.start();
+}*/
+
+
+    public boolean isStopOtherAudio(){
+        AudioManager am = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        int result = am.requestAudioFocus(new AudioManager.OnAudioFocusChangeListener() {
+                                              @Override
+                                              public void onAudioFocusChange(int i) {
+
+                                              }
+                                          },
+// Use the music stream.
+                AudioManager.STREAM_MUSIC,
+// Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN);
+
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onBackPressed(){
+        isBackPressed  = true;
+        addToContinueList();
+        return false;
+    }
 }

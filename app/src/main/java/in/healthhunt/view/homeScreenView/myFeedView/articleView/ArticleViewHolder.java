@@ -20,6 +20,7 @@ import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.myFeedPresenter.articlePresenter.ArticlePresenterImp;
+import in.healthhunt.presenter.homeScreenPresenter.myFeedPresenter.articlePresenter.IArticlePresenter;
 import in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView;
 import in.healthhunt.view.viewAll.ViewAllFragment;
 
@@ -38,8 +39,12 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
     @BindView(R.id.article_pager)
     ViewPager mArticlePager;
 
+    @BindView(R.id.articles_view)
+    LinearLayout mView;
 
-    private ArticlePresenterImp mArticlePresenter;
+
+
+    private IArticlePresenter IArticlePresenter;
     private IMyFeedView IMyFeedView;
     private Context mContext;
     private FragmentManager mFragmentManager;
@@ -51,13 +56,13 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
         ButterKnife.bind(this, articleView);
         mFragmentManager = fragmentManager;
         IMyFeedView = feedView;
-        mArticlePresenter = new ArticlePresenterImp(mContext, this);
+        IArticlePresenter = new ArticlePresenterImp(mContext, this);
         setAdapter();
 
     }
 
     private void setAdapter() {
-        mArticleAdapter = new ArticleAdapter(mFragmentManager,  mArticlePresenter, ArticleParams.BASED_ON_TAGS);
+        mArticleAdapter = new ArticleAdapter(mFragmentManager,  IArticlePresenter, ArticleParams.BASED_ON_TAGS);
         mArticlePager.setAdapter(mArticleAdapter);
         mArticlePager.setClipToPadding(false);
         mArticlePager.setPadding(0, 0, HealthHuntUtility.dpToPx(100, mContext),0);
@@ -66,7 +71,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
 
     @Override
     public Fragment getFragmentArticleItem(int position) {
-        return new ArticleFragment(mArticlePresenter);
+        return new ArticleFragment(IArticlePresenter);
     }
 
     @Override
@@ -100,6 +105,11 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
     }
 
     @Override
+    public void showAlert(String msg) {
+        IMyFeedView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IMyFeedView.updateBottomNavigation();
     }
@@ -112,6 +122,17 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
     @Override
     public void updateAdapter() {
         mArticlePager.getAdapter().notifyDataSetChanged();
+        updateViewAllVisibility();
+    }
+
+    private void updateViewAllVisibility(){
+        int count = IArticlePresenter.getCount();
+        if(count < 5){
+            mViewAll.setVisibility(View.GONE);
+        }
+        else {
+            mViewAll.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -120,18 +141,33 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
     }
 
     private void openViewAllFragment() {
-        IMyFeedView.updateBottomNavigation();
         Bundle bundle = new Bundle();
         bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.BASED_ON_TAGS);
-        IMyFeedView.onClickViewAll(ViewAllFragment.class.getSimpleName(), bundle);
+        IArticlePresenter.updateBottomNavigation();
+        IArticlePresenter.loadFragment(ViewAllFragment.class.getSimpleName(), bundle);
     }
 
     @OnClick(R.id.view_all)
     void onViewAll(){
-        openViewAllFragment();
+
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            openViewAllFragment();
+        }
+        else {
+            showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
+        }
     }
 
     public void notifyDataChanged() {
         mArticleAdapter.notifyDataSetChanged();
     }
+
+    public void hideView(){
+        mView.setVisibility(View.GONE);
+    }
+
+    public void showView(){
+        mView.setVisibility(View.VISIBLE);
+    }
+
 }

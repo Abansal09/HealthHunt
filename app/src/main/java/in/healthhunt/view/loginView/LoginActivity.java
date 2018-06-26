@@ -169,7 +169,7 @@ public class LoginActivity extends BaseActivity implements ILoginView{
     }
 
     @Override
-    public void showLoginAlert(String msg) {
+    public void showAlert(String msg) {
         final Dialog dialog = new Dialog(this);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

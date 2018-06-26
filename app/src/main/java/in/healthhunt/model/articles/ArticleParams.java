@@ -91,6 +91,9 @@ public interface ArticleParams {
     String ORDER_BY = "orderby";
     String ORDER = "order";
     String DESC = "desc";
+    String DATE = "date";
+    String POST = "post";
+    String INCLUDE = "include";
 
     String PRODUCT_TYPE_ID = "productType";
     String BRAND = "brand";

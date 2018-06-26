@@ -14,6 +14,8 @@ import in.healthhunt.view.fullView.commentView.CommentViewHolder;
 public interface IFullFragment {
     void showProgress();
     void hideProgress();
+    void showAlert(String msg);
+    //void showFullViewAlert(String msg);
     void setContent();
     int getPostType();
     void updateBookMarkIcon();

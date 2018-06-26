@@ -78,6 +78,9 @@ public class NotificationPresenterImp implements INotificationPresenter, INotifi
 
     @Override
     public void onError(RestError errorInfo) {
-
+        INotificationView.hideProgress();
+        if(errorInfo != null){
+            INotificationView.showAlert(errorInfo.getMessage());
+        }
     }
 }

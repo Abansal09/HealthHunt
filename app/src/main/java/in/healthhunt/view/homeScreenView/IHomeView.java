@@ -15,6 +15,8 @@ import in.healthhunt.presenter.homeScreenPresenter.IHomePresenter;
 
 public interface IHomeView {
     void showHomeAlert(String msg);
+    void showAlert(String msg);
+
     void finishActivity();
     void setBottomNavigation();
     void updateTitle(String msg);
@@ -54,7 +56,13 @@ public interface IHomeView {
     List<String> getCategories();
     void updateCategoryList();
 
-
     void hideSearchView();
     void showSearchView();
+    void hideNotificationView();
+    void showNotificationView();
+
+
+    void addContinueArticle(ArticlePostItem postItem, boolean needToAdd);
+
+    void hideKeyboardIfOpen();
 }

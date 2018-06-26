@@ -146,11 +146,18 @@ public class SignUpFragment extends Fragment {
     private void addLink() {
         String part1 = getString(R.string.terms_and_conditions_part1);
         String part2 = getString(R.string.terms_and_conditions_part2);
-        String str = part1 + " " + part2;
+        String part3 = getString(R.string.privacy_policy);
+        String str = part1 + " " + part2 + " and " + part3;
 
         Spannable spannable = new SpannableString(str);
+
+        int len = part1.length() + 1  + part2.length();
         spannable.setSpan(new ForegroundColorSpan(ActivityCompat.getColor(getContext(), R.color.hh_text_color)),
-                part1.length() + 1 , str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                part1.length() + 1 , len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        len = part1.length() + 1 + part2.length() + " and ".length();
+        spannable.setSpan(new ForegroundColorSpan(ActivityCompat.getColor(getContext(), R.color.hh_text_color)),
+                len , str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         mTermAndConditions.setText(spannable, TextView.BufferType.SPANNABLE);
     }

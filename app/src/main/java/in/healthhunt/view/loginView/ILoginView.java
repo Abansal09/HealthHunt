@@ -15,7 +15,7 @@ public interface ILoginView {
     void onPasswordError();
     void showFragment(String tag, Bundle bundle);
     void showPasswordChangeAlert(Spannable spannable);
-    void showLoginAlert(String msg);
+    void showAlert(String msg);
     void showSignUpSuccessAlert(String msg);
     void showToast(String message);
     void startTagActivity();

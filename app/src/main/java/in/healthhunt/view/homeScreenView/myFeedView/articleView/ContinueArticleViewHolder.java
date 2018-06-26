@@ -4,11 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,35 +19,37 @@ import butterknife.OnClick;
 import in.healthhunt.R;
 import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
+import in.healthhunt.model.beans.SpaceDecoration;
+import in.healthhunt.model.login.User;
 import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.myFeedPresenter.articlePresenter.ArticlePresenterImp;
+import in.healthhunt.view.fullView.fullViewFragments.FullArticleFragment;
+import in.healthhunt.view.fullView.fullViewFragments.YoutubeFragment;
 import in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView;
 
 /**
  * Created by abhishekkumar on 4/23/18.
  */
 
-public class ContinueArticleViewHolder extends RecyclerView.ViewHolder implements IArticleView {
+public class ContinueArticleViewHolder extends RecyclerView.ViewHolder implements IArticleView, ContinueAdapter.ClickListener {
 
 
     @BindView(R.id.article_name)
     TextView mArticleName;
 
-    @BindView(R.id.continue_article_pager)
-    ViewPager mArticlePager;
+    @BindView(R.id.continue_recycler_list)
+    public RecyclerView mContinueViewer;
 
     @BindView(R.id.continue_cross_image)
     LinearLayout mCrossButton;
 
     @BindView(R.id.continue_view)
-    LinearLayout mContinueView;
+    LinearLayout mView;
 
-
-    private ArticlePresenterImp mArticlePresenter;
+    private ArticlePresenterImp IArticlePresenter;
     private in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView IMyFeedView;
     private Context mContext;
     private FragmentManager mFragmentManager;
-    private View mView;
     private int mIndex;
 
     public ContinueArticleViewHolder(View articleView, FragmentManager fragmentManager, IMyFeedView feedView, int index) {
@@ -53,35 +58,51 @@ public class ContinueArticleViewHolder extends RecyclerView.ViewHolder implement
         ButterKnife.bind(this, articleView);
         mFragmentManager = fragmentManager;
         IMyFeedView = feedView;
-        mView = articleView;
         mIndex = index;
-        mArticlePresenter = new ArticlePresenterImp(mContext, this);
+        IArticlePresenter = new ArticlePresenterImp(mContext, this);
         setAdapter();
 
     }
 
     private void setAdapter() {
-        ArticleAdapter articleAdapter = new ArticleAdapter(mFragmentManager,  mArticlePresenter, ArticleParams.CONTINUE_ARTICLES);
-        mArticlePager.setAdapter(articleAdapter);
-        mArticlePager.setClipToPadding(false);
-        mArticlePager.setPadding(0, 0, HealthHuntUtility.dpToPx(100, mContext),0);
-        mArticlePager.setPageMargin(HealthHuntUtility.dpToPx(8, mContext));
+        ContinueAdapter continueAdapter = new ContinueAdapter(mContext, IArticlePresenter);
+        continueAdapter.setClickListener(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        mContinueViewer.setLayoutManager(layoutManager);
+        mContinueViewer.addItemDecoration(new SpaceDecoration(HealthHuntUtility.dpToPx(6, mContext), SpaceDecoration.HORIZONTAL));
+        mContinueViewer.setAdapter(continueAdapter);
+        mContinueViewer.setFocusableInTouchMode(false);
     }
 
-    @Override
-    public Fragment getFragmentArticleItem(int position) {
-        return new ContinueArticleFragment();
-    }
 
     @Override
     public int getCount() {
-        return 5;
+        int count = 0;
+        List<ArticlePostItem> articlePostItems = IMyFeedView.getContinueArticles();
+        if(articlePostItems != null){
+            count = articlePostItems.size();
+        }
+
+        return count;
     }
 
 
     @Override
-    public ArticlePostItem getArticle(int pos) {
+    public Fragment getFragmentArticleItem(int position) {
         return null;
+    }
+
+    @Override
+    public ArticlePostItem getArticle(int pos) {
+        List<ArticlePostItem> articlePostItems = IMyFeedView.getContinueArticles();
+        Log.i("TAGTAGArticlePos", " Pos " + articlePostItems);
+        ArticlePostItem postItem = null;
+        if(articlePostItems != null && !articlePostItems.isEmpty()){
+            postItem = articlePostItems.get(pos);
+        }
+        return postItem;
     }
 
     @Override
@@ -95,18 +116,23 @@ public class ContinueArticleViewHolder extends RecyclerView.ViewHolder implement
     }
 
     @Override
+    public void showAlert(String msg) {
+        IMyFeedView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IMyFeedView.updateBottomNavigation();
     }
 
     @Override
     public void loadFragment(String fragmentName, Bundle bundle) {
-
+        IMyFeedView.loadNonFooterFragment(fragmentName, bundle);
     }
 
     @Override
     public void updateAdapter() {
-
+        mContinueViewer.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -116,14 +142,55 @@ public class ContinueArticleViewHolder extends RecyclerView.ViewHolder implement
 
     @OnClick(R.id.continue_cross_image)
     void onCrossClick() {
-        IMyFeedView.onClickCrossView(mIndex);
+        IMyFeedView.onClickCrossView(getAdapterPosition());
+        IMyFeedView.getContinueArticles().clear();
+        User user = User.getCurrentUser();
+        user.setContinueList("");
+        user.save();
     }
 
-    public void hideContinueView(){
-        mContinueView.setVisibility(View.GONE);
+    public void hideView(){
+        mView.setVisibility(View.GONE);
+        //mContinueViewer.setVisibility(View.GONE);
+        //mContinueView.setVisibility(View.GONE);
     }
 
-    public void showContinueView(){
-        mContinueView.setVisibility(View.VISIBLE);
+    public void showView(){
+        mView.setVisibility(View.VISIBLE);
+       // mContinueViewer.setVisibility(View.VISIBLE);
+        //mContinueView.setVisibility(View.VISIBLE);
     }
- }
+
+    public void notifyDataChanged(){
+        if(mContinueViewer != null && mContinueViewer.getAdapter() != null){
+            updateAdapter();
+        }
+    }
+
+    @Override
+    public void ItemClicked(View v, int position) {
+        ArticlePostItem postItem = IArticlePresenter.getArticle(position);
+
+        String thumbnailImage = postItem.getVideo_thumbnail();
+        if(thumbnailImage == null || thumbnailImage.isEmpty()){
+            openFullViewArticle(postItem.getArticle_Id());
+        }
+        else {
+            openFullViewVideo(postItem.getArticle_Id());
+        }
+    }
+
+    private void openFullViewArticle(String id){
+        Bundle bundle = new Bundle();
+        bundle.putString(ArticleParams.ID, id);
+        bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.ARTICLE);
+        IArticlePresenter.loadFragment(FullArticleFragment.class.getSimpleName(), bundle);
+    }
+
+    private void openFullViewVideo(String id){
+        Bundle bundle = new Bundle();
+        bundle.putString(ArticleParams.ID, id);
+        bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.VIDEO);
+        IArticlePresenter.loadFragment(YoutubeFragment.class.getSimpleName(), bundle);
+    }
+}

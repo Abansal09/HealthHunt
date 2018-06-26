@@ -9,4 +9,5 @@ public interface IPostPresenter {
     void bookmark(String id, int type);
     void unBookmark(String id, int type);
     void updateBottomNavigation();
+    void showAlert(String msg);
 }

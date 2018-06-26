@@ -112,6 +112,14 @@ public class MyHuntsArticlesPresenterImp implements IMyHuntsArticlesPresenter, I
     }
 
     @Override
+    public void onBookMarkError(RestError errorInfo) {
+        IMyHuntsView.hideProgress();
+        if(errorInfo != null) {
+            IMyHuntsView.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onDeleteArticleSuccess(ArticlePostItem item) {
         IMyHuntsView.hideProgress();
         IMyHuntsView.deletePost(item.getArticle_Id());
@@ -140,6 +148,11 @@ public class MyHuntsArticlesPresenterImp implements IMyHuntsArticlesPresenter, I
     @Override
     public void updateBottomNavigation() {
 
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IMyHuntsView.showAlert(msg);
     }
 
     @Override

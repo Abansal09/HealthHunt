@@ -45,25 +45,89 @@ public class MyFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if(holder != null && holder instanceof ArticleViewHolder) {
-            ((ArticleViewHolder) holder).notifyDataChanged();
+            ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
+            articleViewHolder.notifyDataChanged();
+            /*int count = articleViewHolder.getCount();
+            if(count == 0){
+                articleViewHolder.hideView();
+            }
+            else {
+                articleViewHolder.showView();
+                articleViewHolder.notifyDataChanged();
+            }*/
         }
         else if(holder != null && holder instanceof ContinueArticleViewHolder) {
-            ((ContinueArticleViewHolder) holder).hideContinueView();
+            ContinueArticleViewHolder continueArticleViewHolder = (ContinueArticleViewHolder) holder;
+            continueArticleViewHolder.notifyDataChanged();
+            /*int count = continueArticleViewHolder.getCount();
+            Log.i("TAGTAGCONTINUE", "Continue Count  "  + count);
+            if(count == 0){
+                continueArticleViewHolder.hideView();
+            }
+            else {
+                continueArticleViewHolder.showView();
+                continueArticleViewHolder.notifyDataChanged();
+            }*/
 
         }else if(holder != null && holder instanceof TrendingArticleViewHolder) {
-            ((TrendingArticleViewHolder) holder).notifyDataChanged();
+            TrendingArticleViewHolder trendingArticleViewHolder = (TrendingArticleViewHolder) holder;
+            trendingArticleViewHolder.notifyDataChanged();
+           /* int count = trendingArticleViewHolder.getCount();
+            if(count == 0){
+                trendingArticleViewHolder.hideView();
+            }
+            else {
+                trendingArticleViewHolder.showView();
+                trendingArticleViewHolder.notifyDataChanged();
+            }*/
         }
         else if(holder != null && holder instanceof SponsoredArticleViewHolder) {
-            ((SponsoredArticleViewHolder) holder).notifyDataChanged();
+            SponsoredArticleViewHolder sponsoredArticleViewHolder = (SponsoredArticleViewHolder) holder;
+            sponsoredArticleViewHolder.notifyDataChanged();
+            /*int count = sponsoredArticleViewHolder.getCount();
+            if(count == 0){
+                sponsoredArticleViewHolder.hideView();
+            }
+            else {
+                sponsoredArticleViewHolder.showView();
+                sponsoredArticleViewHolder.notifyDataChanged();
+            }*/
         }
         else if(holder != null && holder instanceof TopProductViewHolder) {
-            ((TopProductViewHolder) holder).notifyDataChanged();
+            TopProductViewHolder topProductViewHolder = (TopProductViewHolder) holder;
+            topProductViewHolder.notifyDataChanged();
+            /*int count = topProductViewHolder.getCount();
+            if(count == 0){
+                topProductViewHolder.hideView();
+            }
+            else {
+                topProductViewHolder.showView();
+                topProductViewHolder.notifyDataChanged();
+            }*/
         }
         else if(holder != null && holder instanceof LatestArticleViewHolder) {
-            ((LatestArticleViewHolder) holder).notifyDataChanged();
+            LatestArticleViewHolder latestArticleViewHolder = (LatestArticleViewHolder) holder;
+            latestArticleViewHolder.notifyDataChanged();
+            /*int count = latestArticleViewHolder.getCount();
+            if(count == 0){
+                latestArticleViewHolder.hideView();
+            }
+            else {
+                latestArticleViewHolder.showView();
+                latestArticleViewHolder.notifyDataChanged();
+            }*/
         }
         else if(holder != null && holder instanceof LatestProductViewHolder) {
-            ((LatestProductViewHolder) holder).notifyDataChanged();
+            LatestProductViewHolder latestProductViewHolder = (LatestProductViewHolder) holder;
+            latestProductViewHolder.notifyDataChanged();
+            /*int count = latestProductViewHolder.getCount();
+            if(count == 0){
+                latestProductViewHolder.hideView();
+            }
+            else {
+                latestProductViewHolder.showView();
+                latestProductViewHolder.notifyDataChanged();
+            }*/
         }
     }
 
@@ -98,5 +162,9 @@ public class MyFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void deleteItem(int index) {
         notifyItemRemoved(index);
+    }
+
+    public void addItem(int index) {
+        notifyItemInserted(index);
     }
 }

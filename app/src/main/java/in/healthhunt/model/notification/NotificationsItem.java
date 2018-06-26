@@ -15,6 +15,15 @@ public class NotificationsItem{
 	private String post_type;
 	private String category;
 	private String event_time;
+	private String post_image_url;
+
+	public String getPost_image_url() {
+		return post_image_url;
+	}
+
+	public void setPost_image_url(String post_image_url) {
+		this.post_image_url = post_image_url;
+	}
 
 	public void setDate(String date){
 		this.date = date;
@@ -146,6 +155,7 @@ public class NotificationsItem{
 			",post_type = '" + post_type + '\'' +
 			",category = '" + category + '\'' + 
 			",event_time = '" + event_time + '\'' +
+			",post_image_url = '" + post_image_url + '\'' +
 			"}";
 		}
 }

@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,15 +97,15 @@ public class LatestProductFragment extends Fragment {
             mPos = bundle.getInt(ArticleParams.POSITION);
             mProductPostItem = IProductPresenter.getProduct(mPos);
 
-            if(!isLast) {
-                mTagItemView.setVisibility(View.VISIBLE);
-                mViewAll.setVisibility(View.GONE);
-                setContent();
-            }
-            else {
+            // if(!isLast) {
+            mTagItemView.setVisibility(View.VISIBLE);
+            // mViewAll.setVisibility(View.GONE);
+            setContent();
+            //}
+           /* else {
                 mTagItemView.setVisibility(View.GONE);
                 mViewAll.setVisibility(View.VISIBLE);
-            }
+            }*/
         }
         return view;
     }
@@ -135,7 +137,13 @@ public class LatestProductFragment extends Fragment {
 
             if (price != null) {
                 String postQuantity = mProductPostItem.getPost_quantity();
-                String rs = getContext().getString(R.string.rs);
+                String rs = mProductPostItem.getPost_currency();
+                if(rs == null){
+                    rs = "";
+                }
+                Spanned spanned = Html.fromHtml(rs) ;
+                rs = spanned.toString();
+
                 price = HealthHuntUtility.addSeparator(price);
                 rs = rs + " " + price + "/" + postQuantity;
                 mProductPrice.setText(rs);
@@ -183,7 +191,11 @@ public class LatestProductFragment extends Fragment {
 
     @OnClick(R.id.latest_product_item_view)
     void onArticleClick(){
-        openFullView();
+        if (HealthHuntUtility.checkInternetConnection(getContext())) {
+            openFullView();
+        } else {
+            IProductPresenter.showAlert(getString(R.string.please_check_internet_connectivity_status));
+        }
     }
 
     @OnClick(R.id.last_page_view_all)
@@ -199,24 +211,29 @@ public class LatestProductFragment extends Fragment {
         intent.putExtra(ArticleParams.ID, String.valueOf(mProductPostItem.getMedia_id()));
         intent.putExtra(ArticleParams.POST_TYPE, ArticleParams.PRODUCT);
         startActivity(intent);*/
-
         Bundle bundle = new Bundle();
         bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.PRODUCT);
         bundle.putString(ArticleParams.ID, String.valueOf(mProductPostItem.getProduct_id()));
         IProductPresenter.loadFragment(FullProductFragment.class.getSimpleName(), bundle);
+
     }
 
     @OnClick(R.id.product_bookmark)
     void onBookMark(){
-        String id = String.valueOf(mProductPostItem.getProduct_id());
-        CurrentUser currentUser = mProductPostItem.getCurrent_user();
-        if(currentUser != null) {
-            if(!currentUser.isBookmarked()){
-                IProductPresenter.bookmark(id, ArticleParams.LATEST_PRODUCTS);
+        if (HealthHuntUtility.checkInternetConnection(getContext())) {
+            String id = String.valueOf(mProductPostItem.getProduct_id());
+            CurrentUser currentUser = mProductPostItem.getCurrent_user();
+            if(currentUser != null) {
+                if(!currentUser.isBookmarked()){
+                    IProductPresenter.bookmark(id, ArticleParams.LATEST_PRODUCTS);
+                }
+                else {
+                    IProductPresenter.unBookmark(id, ArticleParams.LATEST_PRODUCTS);
+                }
             }
-            else {
-                IProductPresenter.unBookmark(id, ArticleParams.LATEST_PRODUCTS);
-            }
+
+        } else {
+            IProductPresenter.showAlert(getString(R.string.please_check_internet_connectivity_status));
         }
     }
 

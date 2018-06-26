@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     android:background="@mipmap/ic_article_bg">
 
     <RelativeLayout
@@ -9,19 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:background="@drawable/top_products"
         >
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_alignParentTop="true">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/product_image"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_gravity="left"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
                 android:scaleType="centerCrop"/>
 
             <ImageView
@@ -42,8 +40,9 @@
 
             <TextView
                 android:id="@+id/latest_product_name"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/price_view"
                 android:fontFamily="@string/font_family_regular"
                 android:gravity="left|center"
                 android:text="Cookies"
@@ -51,7 +50,7 @@
                 android:textSize="12sp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:maxLength="25"
+                android:paddingEnd="16dp"
                 android:maxLines="1"
                 android:ellipsize="end"/>
 
@@ -71,7 +70,7 @@
                     android:gravity="right|center"
                     android:textColor="@color/hh_green_light2"
                     android:textSize="12sp"
-                    android:maxLength="10"
+                    android:ellipsize="end"
                     android:maxLines="1"/>
 
                 <TextView
@@ -82,7 +81,7 @@
                     android:gravity="right|center"
                     android:textColor="@color/hh_green_light2"
                     android:textSize="12sp"
-                    android:maxLength="10"
+                    android:ellipsize="end"
                     android:maxLines="1"/>
             </LinearLayout>
 
@@ -110,6 +109,7 @@
         android:fontFamily="@string/font_family_medium"
         android:textColor="@color/hh_text_color"
         android:gravity="center"
+        android:visibility="gone"
         android:layout_centerInParent="true"
         android:textAllCaps="true"/>
 </RelativeLayout>

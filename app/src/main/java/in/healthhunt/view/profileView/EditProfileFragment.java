@@ -163,8 +163,11 @@ public class EditProfileFragment extends Fragment implements IEditProfileView{
 
         if(mProfileUrl != null && !mProfileUrl.toString().isEmpty()) {
             String decodeUrl = convertToBase64();
+            decodeUrl = "data:image/jpeg;base64," + decodeUrl;
             Log.i("PATHTAG", " decodeUrl " + decodeUrl);
+
             userRequest.setRfile1(decodeUrl);
+            userRequest.setRfile2(decodeUrl);
         }
         userRequest.setDescription(mBio.getText().toString());
 
@@ -235,6 +238,11 @@ public class EditProfileFragment extends Fragment implements IEditProfileView{
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
+    @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
     /*private void updateUserInfo(User user) {
         User savedUser = User.getCurrentUser();
         String tagList = savedUser.getTagList();
@@ -253,7 +261,7 @@ public class EditProfileFragment extends Fragment implements IEditProfileView{
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mProfileUrl);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
 
             byte[] byteArrayImage = baos.toByteArray();
 

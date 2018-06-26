@@ -15,7 +15,6 @@ import in.healthhunt.view.homeScreenView.myFeedView.IView;
 public interface IMyHuntsView extends IView {
     RecyclerView.ViewHolder createViewHolder(View view);
     void updateAdapter();
-    void showAlert(String msg);
     int getType();
     void loadFragment(String fragmentName, Bundle bundle);
     void updateSavedArticle(ArticlePostItem articlePostItem);

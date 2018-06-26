@@ -96,7 +96,9 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
         switch (type) {
             case ArticleParams.LATEST_ARTICLES:
 
-                map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
+                //map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
+                map.put(ArticleParams.ORDER, ArticleParams.DESC);
+                map.put(ArticleParams.ORDER_BY, ArticleParams.DATE/*ArticleParams.ID*/);
                 map.put(filter, ArticleParams.POST_FORMAT_IMAGE);
                 map.put(ArticleParams.OFFSET, String.valueOf(0));
                 map.put(ArticleParams.LIMIT, String.valueOf(limit));
@@ -143,6 +145,7 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
                 map.put(ArticleParams.TAGS, tags);
                 map.put(ArticleParams.OFFSET, String.valueOf(0));
                 map.put(ArticleParams.LIMIT, String.valueOf(limit));
+                map.put(filter, ArticleParams.POST_FORMAT_IMAGE);
                 map.put(ArticleParams.APP, String.valueOf(1));
 
                 if(categories != null && !categories.isEmpty() && !categories.contains("1")) {  // 1 For ALL
@@ -156,7 +159,10 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
             case ArticleParams.LATEST_PRODUCTS:
                 map.put(ArticleParams.TYPE, ArticleParams.MARKET);
                 map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
-                map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
+                map.put(ArticleParams.ORDER, ArticleParams.DESC);
+                map.put(ArticleParams.ORDER_BY, ArticleParams.DATE/*ArticleParams.ID*/);
+
+                //map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
                 map.put(ArticleParams.APP, String.valueOf(1));
                 map.put(ArticleParams.OFFSET, String.valueOf(0));
                 map.put(ArticleParams.LIMIT, String.valueOf(limit));
@@ -296,7 +302,18 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
     }
 
     @Override
+    public void onBookMarkError(RestError errorInfo) {
+        IViewAll.hideProgress();
+        if(errorInfo != null){
+            IViewAll.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onError(RestError errorInfo) {
         IViewAll.hideProgress();
+        if(errorInfo != null){
+            IViewAll.showAlert(errorInfo.getMessage());
+        }
     }
 }

@@ -17,6 +17,16 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="onBoardingTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/hh_green_light2</item>
+        <item name="colorPrimaryDark">@color/hh_green_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
     <style name="FullyTranslucent11" parent="android:Theme.Translucent.NoTitleBar">
         <item name="android:progressBarStyle">@style/InvisibleProgress</item>
     </style>

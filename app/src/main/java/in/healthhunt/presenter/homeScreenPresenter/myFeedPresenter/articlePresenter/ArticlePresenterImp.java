@@ -4,12 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import framework.retrofit.RestError;
+import in.healthhunt.R;
 import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.articles.bookmarkResponse.BookMarkData;
@@ -83,6 +83,11 @@ public class ArticlePresenterImp implements IArticlePresenter, IBookMarkInteract
     @Override
     public void updateBottomNavigation() {
         IArticleView.updateBottomNavigation();
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IArticleView.showAlert(msg);
     }
 
     @Override
@@ -187,12 +192,12 @@ public class ArticlePresenterImp implements IArticlePresenter, IBookMarkInteract
     }
 
     @Override
-    public void onError(RestError errorInfo) {
+    public void onBookMarkError(RestError errorInfo) {
         IArticleView.hideProgress();
-        String msg = "Error";
+        String msg = mContext.getString(R.string.server_error);
         if(errorInfo != null) {
             msg = errorInfo.getMessage();
+            IArticleView.showAlert(msg);
         }
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 }

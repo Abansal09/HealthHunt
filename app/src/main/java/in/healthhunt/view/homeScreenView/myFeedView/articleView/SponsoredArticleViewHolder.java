@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -34,6 +35,10 @@ public class SponsoredArticleViewHolder extends RecyclerView.ViewHolder implemen
 
     @BindView(R.id.sponsored_recycler_list)
     public RecyclerView mSponsoredViewer;
+
+    @BindView(R.id.sponsored_view)
+    LinearLayout mView;
+
 
     private IArticlePresenter IArticlePresenter;
     private in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView IMyFeedView;
@@ -104,6 +109,11 @@ public class SponsoredArticleViewHolder extends RecyclerView.ViewHolder implemen
     }
 
     @Override
+    public void showAlert(String msg) {
+        IMyFeedView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IMyFeedView.updateBottomNavigation();
     }
@@ -142,5 +152,13 @@ public class SponsoredArticleViewHolder extends RecyclerView.ViewHolder implemen
         if(mSponsoredViewer != null && mSponsoredViewer.getAdapter() != null){
             mSponsoredViewer.getAdapter().notifyDataSetChanged();
         }
+    }
+
+    public void hideView(){
+        mView.setVisibility(View.GONE);
+    }
+
+    public void showView(){
+        mView.setVisibility(View.VISIBLE);
     }
 }

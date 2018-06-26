@@ -83,6 +83,11 @@ public class WebinarsArticleViewHolder extends RecyclerView.ViewHolder implement
     }
 
     @Override
+    public void showAlert(String msg) {
+
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IMyFeedView.updateBottomNavigation();
     }

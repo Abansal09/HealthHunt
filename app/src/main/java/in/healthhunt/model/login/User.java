@@ -65,14 +65,19 @@ public class User extends Model{
 	@Column(name = "username")
 	private String username;
 
+/*
 	@Column(name = "bio")   //not coming from  server
 	private String bio;
+*/
 
 	@Column(name = "tags")  //not coming from  server
 	private String tagList;
 
 	@Column(name = "currentLogin")  //not coming from  server
 	private boolean currentLogin;
+
+	@Column(name = "continueList")  //not coming from  server
+	private String continueList;
 
 
 	/*public void setCapabilities(Capabilities capabilities){
@@ -83,6 +88,15 @@ public class User extends Model{
 		return capabilities;
 	}
 */
+
+	public String getContinueList() {
+		return continueList;
+	}
+
+	public void setContinueList(String continueList) {
+		this.continueList = continueList;
+	}
+
 	public boolean isCurrentLogin() {
 		return currentLogin;
 	}
@@ -99,14 +113,14 @@ public class User extends Model{
 		this.tagList = tagList;
 	}
 
-	public String getBio() {
+	/*public String getBio() {
 		return bio;
 	}
 
 	public void setBio(String bio) {
 		this.bio = bio;
 	}
-
+*/
 	public void setUser_image(String user_image){
 		this.user_image = user_image;
 	}

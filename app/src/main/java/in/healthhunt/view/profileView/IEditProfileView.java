@@ -8,4 +8,5 @@ public interface IEditProfileView {
     void showProgress();
     void hideProgress();
     void updateUserInfo();
+    void showAlert(String msg);
 }

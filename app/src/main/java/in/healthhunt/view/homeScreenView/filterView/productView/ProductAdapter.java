@@ -87,15 +87,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         @OnClick(R.id.filter_item_view)
         void onClick(View view) {
             if(mClickListener != null) {
+
                 DataItem id = mFilterList.get(getAdapterPosition());
                 String strID = id.getTerm_id();
 
-                if(!IFilterPresenter.isProductContain(strID)){
+                List<String> itemList = IFilterPresenter.getProductList();
+                if(itemList != null){
+                    itemList.clear();
+                }
+                IFilterPresenter.addProduct(strID);
+
+                /*if(!IFilterPresenter.isProductContain(strID)){
                     IFilterPresenter.addProduct(strID);
                 }
                 else {
                     IFilterPresenter.removeProduct(strID);
-                }
+                }*/
                 mClickListener.ItemClicked();
                 notifyDataChanged();
             }

@@ -84,6 +84,7 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
 
     @Override
     public int getCount() {
+        Log.i("TAGCOUNT", " Count " + IMyFeedPresenter.getArticlesType().size());
         return IMyFeedPresenter.getArticlesType().size();
     }
 
@@ -98,6 +99,7 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
 
             case ArticleParams.CONTINUE_ARTICLES:
                 viewHolder = new ContinueArticleViewHolder(view, mFragmentManager, this, type);
+                // ((ContinueArticleViewHolder)viewHolder).mContinueViewer.setRecycledViewPool(mPool);
                 break;
 
             case ArticleParams.TRENDING_ARTICLES:
@@ -160,6 +162,11 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
     }
 
     @Override
+    public List<ArticlePostItem> getContinueArticles() {
+        return IMyFeedPresenter.getContinueArticles();
+    }
+
+    @Override
     public List<ProductPostItem> getTopProductArticles() {
         return IMyFeedPresenter.getTopProducts();
     }
@@ -173,9 +180,10 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
     public void updateAdapter() {
         if(mFeedAdapter != null) {
             mFeedAdapter.notifyDataSetChanged();
-            int count = mFeedViewer.getChildCount();
+            /*int count = mFeedViewer.getChildCount();
             for(int i=0; i<count; i++) {
                 RecyclerView.ViewHolder viewHolder = mFeedViewer.getChildViewHolder(mFeedViewer.getChildAt(i));
+
                 if(viewHolder instanceof ArticleViewHolder) {
                     ((ArticleViewHolder) viewHolder).notifyDataChanged();
                 }
@@ -194,7 +202,10 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
                 else if(viewHolder instanceof LatestProductViewHolder) {
                     ((LatestProductViewHolder) viewHolder).notifyDataChanged();
                 }
-            }
+                else if(viewHolder instanceof LatestProductViewHolder) {
+                    ((LatestProductViewHolder) viewHolder).notifyDataChanged();
+                }
+            }*/
             updateVisibility();
         }
 
@@ -220,7 +231,7 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
     }
 
     @Override
-    public void showAlert(String msg) {
+    public void showHomeAlert(String msg) {
         IHomeView.showHomeAlert(msg);
     }
 
@@ -267,6 +278,11 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
     @Override
     public void hideProgress() {
         IHomeView.hideProgress();
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
     }
 
     @Override
@@ -318,8 +334,48 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
     }
 
     @Override
+    public void addContinueArticle(ArticlePostItem postItem, boolean needToAdd) {
+
+        // List<ArticlePostItem> articlePostItemList = IMyFeedPresenter.getContinueArticles();
+
+        /*if(articlePostItemList == null || articlePostItemList.isEmpty()){
+            IMyFeedPresenter.addArticleType(1, ArticleParams.CONTINUE_ARTICLES);
+            //mFeedAdapter.addItem(1);
+        }*/
+
+        if(!needToAdd){
+            IMyFeedPresenter.removeContinueArticle(postItem);
+        }
+        else {
+            removeLastContinueItem();
+            IMyFeedPresenter.addContinueArticle(postItem);
+        }
+
+
+        //updateAdapter();
+    }
+
+    private void removeLastContinueItem(){
+        List<ArticlePostItem> continueList = IMyFeedPresenter.getContinueArticles();
+
+        if(continueList == null){
+            return;
+        }
+
+        int count = continueList.size();
+        if(count > 20){
+            continueList.remove(count - 1); // Removed last item from the list
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -435,6 +491,10 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
                 break;
             }
         }
+    }
+
+    public void updateContinueArticles(){
+        IMyFeedPresenter.updateContinueArticles();
     }
 
     /*private void updateBasedOnTagsAdapter(){

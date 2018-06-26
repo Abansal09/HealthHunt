@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import in.healthhunt.R;
 import in.healthhunt.model.beans.Constants;
+import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.loginPresenter.ILoginPresenter;
 import in.healthhunt.view.socialLogin.GoogleLoginActivity;
 
@@ -57,12 +58,14 @@ public class LoginFragment extends Fragment{
     private ILoginPresenter IPresenter;
     private Unbinder unbinder;
     private int isLoginType;
+    private ILoginView ILoginView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container,  false);
         unbinder = ButterKnife.bind(this, view);
+        ILoginView = (ILoginView) getActivity();
         return view;
     }
 
@@ -76,8 +79,14 @@ public class LoginFragment extends Fragment{
     void onLogin() {
         //clearFocus();
         mLoginView.clearFocus();;
-        isLoginType = LoginActivity.LOGIN_TYPE_NORMAL;
-        IPresenter.validateCredentialsLogIn(mEmail.getText().toString(), mPassword.getText().toString());
+
+        if(HealthHuntUtility.checkInternetConnection(getContext())) {
+            isLoginType = LoginActivity.LOGIN_TYPE_NORMAL;
+            IPresenter.validateCredentialsLogIn(mEmail.getText().toString(), mPassword.getText().toString());
+        }
+        else {
+            ILoginView.showAlert(getString(R.string.please_check_internet_connectivity_status));
+        }
         //startActivity(new Intent(getActivity(), HomeActivity.class));
     }
 
@@ -88,12 +97,24 @@ public class LoginFragment extends Fragment{
 
     @OnClick(R.id.sign_up)
     void onSignUp() {
-        IPresenter.loadFragment(SignUpFragment.class.getSimpleName(), null);
+
+        if(HealthHuntUtility.checkInternetConnection(getContext())) {
+            IPresenter.loadFragment(SignUpFragment.class.getSimpleName(), null);
+        }
+        else {
+            ILoginView.showAlert(getString(R.string.please_check_internet_connectivity_status));
+        }
     }
 
     @OnClick(R.id.forgot_password)
     void onForgotPassword(){
-        IPresenter.forgotPassword(mEmail.getText().toString(), mEmail.getText().toString());
+
+        if(HealthHuntUtility.checkInternetConnection(getContext())) {
+            IPresenter.forgotPassword(mEmail.getText().toString(), mEmail.getText().toString());
+        }
+        else {
+            ILoginView.showAlert(getString(R.string.please_check_internet_connectivity_status));
+        }
         /*Bundle bundle = new Bundle();
         bundle.putString(Constants.EMAIL, mEmail.getText().toString());
         IPresenter.loadFragment(ForgotPasswordFragment.class.getSimpleName(), bundle);*/
@@ -101,16 +122,28 @@ public class LoginFragment extends Fragment{
 
     @OnClick(R.id.facebook)
     void onFacebook() {
-        isLoginType = LoginActivity.LOGIN_TYPE_FACEBOOK;
-        IPresenter.loginFacebook(getContext());
+
+        if(HealthHuntUtility.checkInternetConnection(getContext())) {
+            isLoginType = LoginActivity.LOGIN_TYPE_FACEBOOK;
+            IPresenter.loginFacebook(getContext());
+        }
+        else {
+            ILoginView.showAlert(getString(R.string.please_check_internet_connectivity_status));
+        }
     }
 
     @OnClick(R.id.gmail)
     void onGmail() {
-        isLoginType = LoginActivity.LOGIN_TYPE_GMAIL;
-        Intent intent = new Intent(getContext(), GoogleLoginActivity.class);
-        if(intent != null) {
-            getActivity().startActivityForResult(intent, Constants.GMAIL_REQUEST_CODE);
+
+        if(HealthHuntUtility.checkInternetConnection(getContext())) {
+            isLoginType = LoginActivity.LOGIN_TYPE_GMAIL;
+            Intent intent = new Intent(getContext(), GoogleLoginActivity.class);
+            if (intent != null) {
+                getActivity().startActivityForResult(intent, Constants.GMAIL_REQUEST_CODE);
+            }
+        }
+        else {
+            ILoginView.showAlert(getString(R.string.please_check_internet_connectivity_status));
         }
 
     }

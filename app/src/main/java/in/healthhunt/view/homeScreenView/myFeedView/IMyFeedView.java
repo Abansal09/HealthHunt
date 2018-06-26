@@ -21,14 +21,16 @@ public interface IMyFeedView extends IView {
     List<ArticlePostItem> getTrendingArticles();
     List<ArticlePostItem> getLatestArticles();
     List<ArticlePostItem> getSponsoredArticles();
+    List<ArticlePostItem> getContinueArticles();
     List<ProductPostItem> getTopProductArticles();
     List<ProductPostItem> getLatestProductArticles();
     void updateAdapter();
     void setBottomNavigation();
-    void showAlert(String msg);
+    void showHomeAlert(String msg);
     int getView(int type);
     void loadNonFooterFragment(String fragmentName, Bundle bundle);
     void updateArticleSaved(ArticlePostItem postItem);
     void updateProductSaved(ProductPostItem productPostItem);
     List<String> getCategories();
+    void addContinueArticle(ArticlePostItem postItem, boolean needToAdd);
 }

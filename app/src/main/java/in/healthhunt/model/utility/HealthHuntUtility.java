@@ -1,6 +1,8 @@
 package in.healthhunt.model.utility;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
@@ -15,7 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.TimeZone;
+import java.util.TreeMap;
 
 import in.healthhunt.R;
 import in.healthhunt.model.beans.Constants;
@@ -25,6 +30,16 @@ import in.healthhunt.model.beans.Constants;
  */
 
 public class HealthHuntUtility {
+
+    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+    static {
+        suffixes.put(1_000L, "k");
+        suffixes.put(1_000_000L, "m");
+        suffixes.put(1_000_000_000L, "b");
+        suffixes.put(1_000_000_000_000L, "t");
+        suffixes.put(1_000_000_000_000_000L, "p");
+        suffixes.put(1_000_000_000_000_000_000L, "e");
+    }
 
     public static String getTimeStamp() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -182,5 +197,31 @@ public class HealthHuntUtility {
         Log.i("TAGUTILITY", " Value = " + val);
         String numberAsString = numberFormat.format(Long.parseLong(val));
         return numberAsString;
+    }
+
+    public static String formatNumber(long value) {
+        //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
+        if (value == Long.MIN_VALUE) return formatNumber(Long.MIN_VALUE + 1);
+        if (value < 0) return "-" + formatNumber(-value);
+        if (value < 1000) return Long.toString(value); //deal with easy case
+
+        Map.Entry<Long, String> e = suffixes.floorEntry(value);
+        Long divideBy = e.getKey();
+        String suffix = e.getValue();
+
+        long truncated = value / (divideBy / 10); //the number part of the output times 10
+        boolean hasDecimal = /*truncated < 100 && */(truncated / 10d) != (truncated / 10);
+        return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+    }
+
+
+    public static boolean checkInternetConnection(Context context) {
+        ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService (Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = conMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isAvailable() &&  networkInfo.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -17,6 +17,8 @@ public interface IViewAll {
     RecyclerView.ViewHolder onCreateViewHolder(View view);
     void showProgress();
     void hideProgress();
+    void showAlert(String msg);
+    //void showViewAllAlert(String msg);
     void updateAdapter();
     int getViewLayout();
     int getType();

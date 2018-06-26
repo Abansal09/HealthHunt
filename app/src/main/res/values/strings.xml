@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">HealthHunt</string>
+    <string name="app_name">healthhunt</string>
     <string name="server_client_id">415941616381-aqtf7rcsr1mskdpv57519e440882fcbq.apps.googleusercontent.com</string>
-    <string name="facebook_app_id">2014330465547457</string>
-    <string name="fb_login_protocol_scheme">fb2014330465547457</string>
+    <string name="facebook_app_id">163173841209806</string>
+    <string name="fb_login_protocol_scheme">fb163173841209806</string>
     <string name="youtube_key">AIzaSyAOaVvQF0liphCcch2futZMQvrdVUi-WYQ</string>
     <string name="google_place_key">AIzaSyAOaVvQF0liphCcch2futZMQvrdVUi-WYQ</string>
 
@@ -30,7 +30,8 @@
     <string name="signup_with">Sign Up with</string>
     <string name="receive_product_offer">Receive product offers and discount offers on marketplace</string>
     <string name="terms_and_conditions_part1">By signing up, you agree to</string>
-    <string name="terms_and_conditions_part2"> Terms and Conditions and Privacy Policy </string>
+    <string name="terms_and_conditions_part2"> Terms and Conditions</string>
+    <string name="privacy_policy">Privacy Policy</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="signin">Sign In</string>
     <string name="please_wait">Please Wait</string>
@@ -89,7 +90,7 @@
     <string name="write_comments_here">Write your comment here</string>
     <string name="send">Send</string>
     <string name="update">Update</string>
-    <string name="rs">\u20B9</string>
+   <!-- <string name="rs">\u20B9</string>-->
     <string name="read_time">%s min read</string>
     <string name="close_all">Close all</string>
     <string name="healthhunt_shop_content">Organic food, yoga practitioners, relaxing spa massages, healthy snacking items, reflexology sessions, and much more… you will find all of this at one place – healthhunt shop! Whether you are looking to connect with newer audience or for the latest, healthy products and services – healthhunt shop is for you! View your saved items and collections here!</string>
@@ -131,6 +132,7 @@
     <string name="edit_profile">Edit profile</string>
     <string name="profile">Profile</string>
     <string name="change_photo">Change profile photo</string>
+    <string name="server_error">Server error</string>
 
     <!-- You Tube -->
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
@@ -161,5 +163,12 @@
 
     <string name="added_to_my_hunt">Added to my hunt</string>
     <string name="removed_from_my_hunt">Removed from my hunt</string>
+
+    <string name="card_like">upvoted your card</string>
+    <string name="card_comment">commented on your card</string>
+    <string name="card_share">has shared a card with you</string>
+
+    <string name="please_check_internet_connectivity_status">Please check internet connectivity status.</string>
+    <string name="search_validation">Please enter a keyword to search.</string>
 
 </resources>

@@ -15,6 +15,7 @@ public interface ISearch {
     void showProgress();
     void hideProgress();
     void updateAdapter();
+    void showAlert(String msg);
     int getType();
     void loadFragment(String fragmentName, Bundle bundle);
     void updateArticleSaved(ArticlePostItem postItem);

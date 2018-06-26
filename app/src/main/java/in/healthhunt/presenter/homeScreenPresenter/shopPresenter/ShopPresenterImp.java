@@ -81,6 +81,14 @@ public class ShopPresenterImp implements IShopPresenter, IProductInteractor.OnVi
     }
 
     @Override
+    public void onBookMarkError(RestError errorInfo) {
+        IShopView.hideProgress();
+        if(errorInfo != null){
+            IShopView.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onSuccess(String type, List<DataItem> dataItems) {
         if(type.equals(ArticleParams.PRODUCT_TYPE)){
             mFilterProductItems = dataItems;
@@ -91,8 +99,19 @@ public class ShopPresenterImp implements IShopPresenter, IProductInteractor.OnVi
     }
 
     @Override
+    public void onFilterError(RestError errorInfo) {
+        IShopView.hideProgress();
+        if(errorInfo != null){
+            IShopView.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onError(RestError errorInfo) {
         IShopView.hideProgress();
+        if(errorInfo != null){
+            IShopView.showAlert(errorInfo.getMessage());
+        }
     }
 
     @Override
@@ -122,6 +141,11 @@ public class ShopPresenterImp implements IShopPresenter, IProductInteractor.OnVi
     }
 
     @Override
+    public void showAlert(String msg) {
+        IShopView.showAlert(msg);
+    }
+
+    @Override
     public ShopViewHolder createViewHolder(View view) {
         return IShopView.createViewHolder(view);
     }
@@ -131,7 +155,7 @@ public class ShopPresenterImp implements IShopPresenter, IProductInteractor.OnVi
         IShopView.showProgress();
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-        map.put(ArticleParams.MARKT_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
+        //map.put(ArticleParams.MARKT_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(0));
         map.put(ArticleParams.LIMIT, String.valueOf(30));
@@ -143,8 +167,8 @@ public class ShopPresenterImp implements IShopPresenter, IProductInteractor.OnVi
         IShopView.showProgress();
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-        map.put(ArticleParams.MARKT_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
-       // map.put(ArticleParams.APP, String.valueOf(1));
+        //map.put(ArticleParams.MARKT_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
+        // map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(0));
         map.put(ArticleParams.LIMIT, String.valueOf(30));
 

@@ -39,7 +39,7 @@ public class CommentInteractorImpl implements ICommentInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                finishListener.onError(error);
+                finishListener.onCommentError(error);
             }
         });
     }
@@ -54,7 +54,7 @@ public class CommentInteractorImpl implements ICommentInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                finishListener.onError(error);
+                finishListener.onCommentError(error);
             }
         });
     }
@@ -69,7 +69,7 @@ public class CommentInteractorImpl implements ICommentInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                    finishListener.onError(error);
+                    finishListener.onCommentError(error);
             }
         });
     }
@@ -84,7 +84,7 @@ public class CommentInteractorImpl implements ICommentInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                finishListener.onError(error);
+                finishListener.onCommentError(error);
             }
         });
     }

@@ -10,14 +10,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.healthhunt.R;
+import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.beans.SpaceDecoration;
+import in.healthhunt.model.notification.NotificationsItem;
 import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.notificationPresenter.INotificationPresenter;
 import in.healthhunt.presenter.notificationPresenter.NotificationPresenterImp;
+import in.healthhunt.view.fullView.fullViewFragments.FullArticleFragment;
+import in.healthhunt.view.fullView.fullViewFragments.FullProductFragment;
+import in.healthhunt.view.fullView.fullViewFragments.YoutubeFragment;
 import in.healthhunt.view.homeScreenView.HomeActivity;
 import in.healthhunt.view.homeScreenView.IHomeView;
 
@@ -29,6 +35,9 @@ public class NotificationFragment extends Fragment implements INotificationView,
 
     @BindView(R.id.notification_recycler_list)
     RecyclerView mNotificationViewer;
+
+    @BindView(R.id.no_records)
+    TextView mNoRecords;
 
     private INotificationPresenter INotificationPresenter;
     private IHomeView IHomeView;
@@ -71,6 +80,20 @@ public class NotificationFragment extends Fragment implements INotificationView,
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        IHomeView.hideSearchView();
+        IHomeView.hideNotificationView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        IHomeView.showSearchView();
+        IHomeView.showNotificationView();
+    }
+
+    @Override
     public int getCount() {
         int count = 0;
         if(INotificationPresenter.getNotificationList() != null){
@@ -90,6 +113,11 @@ public class NotificationFragment extends Fragment implements INotificationView,
     }
 
     @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
 
     }
@@ -97,10 +125,66 @@ public class NotificationFragment extends Fragment implements INotificationView,
     @Override
     public void updateAdapter() {
         mNotificationViewer.getAdapter().notifyDataSetChanged();
+        updateVisibility();
+    }
+
+    public void updateVisibility(){
+        int count = INotificationPresenter.getCount();
+        if(count == 0){
+            mNoRecords.setVisibility(View.VISIBLE);
+            mNotificationViewer.setVisibility(View.GONE);
+        }
+        else {
+            mNoRecords.setVisibility(View.GONE);
+            mNotificationViewer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void ItemClicked(View v, int position) {
+        NotificationsItem notificationsItem = INotificationPresenter.getNotification(position);
 
+        if(notificationsItem != null){
+            notificationsItem.setIsViewed(true);
+            String post_id = String.valueOf(notificationsItem.getPost_id());
+            String postType = notificationsItem.getPost_type();
+
+            if(postType != null && postType.equalsIgnoreCase(ArticleParams.POST)){
+                String thumbnailImage = notificationsItem.getVideo_thumbnail_image();
+                if(thumbnailImage == null || thumbnailImage.isEmpty()){
+                    openFullViewArticle(post_id);
+                }
+                else {
+                    openFullViewVideo(post_id);
+                }
+
+            }
+            else {
+                openFullViewProduct(post_id);
+            }
+        }
+        updateAdapter();
+    }
+
+
+    private void openFullViewArticle(String id){
+        Bundle bundle = new Bundle();
+        bundle.putString(ArticleParams.ID, id);
+        bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.ARTICLE);
+        IHomeView.loadNonFooterFragment(FullArticleFragment.class.getSimpleName(), bundle);
+    }
+
+    private void openFullViewVideo(String id){
+        Bundle bundle = new Bundle();
+        bundle.putString(ArticleParams.ID, id);
+        bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.VIDEO);
+        IHomeView.loadNonFooterFragment(YoutubeFragment.class.getSimpleName(), bundle);
+    }
+
+    private void openFullViewProduct(String id){
+        Bundle bundle = new Bundle();
+        bundle.putString(ArticleParams.ID, id);
+        bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.PRODUCT);
+        IHomeView.loadNonFooterFragment(FullProductFragment.class.getSimpleName(), bundle);
     }
 }

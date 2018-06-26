@@ -1,7 +1,6 @@
 package in.healthhunt.presenter.userPresenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import framework.retrofit.RestError;
 import in.healthhunt.model.login.User;
@@ -47,7 +46,9 @@ public class UserPresenterImp implements IUserPresenter, IUserInteractor.OnUserU
     @Override
     public void onError(RestError errorInfo) {
         IEditProfileView.hideProgress();
-        Log.i("TAGERROR", "ERROR " + errorInfo);
+        if(errorInfo != null) {
+            IEditProfileView.showAlert(errorInfo.getMessage());
+        }
     }
 
     @Override
@@ -66,9 +67,11 @@ public class UserPresenterImp implements IUserPresenter, IUserInteractor.OnUserU
     private void updateUserData(User user){
         User savedUser = User.getUser(user.getUserId());
         String tagList = savedUser.getTagList();
+        String continueList = savedUser.getContinueList();
         User.removeUser(savedUser.getUserId());
 
         user.setTagList(tagList);
+        user.setContinueList(continueList);
         user.setCurrentLogin(true);
         user.save();
     }

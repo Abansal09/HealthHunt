@@ -194,6 +194,39 @@ public class ViewAllFragment extends Fragment implements IViewAll, ViewAllAdapte
     }
 
     @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    /*@Override
+    public void showViewAllAlert(String msg) {
+        final Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialog_view);
+        dialog.setCancelable(false);
+        //dialog.
+
+        TextView message = dialog.findViewById(R.id.alert_message);
+        message.setText(msg);
+
+        String str = getResources().getString(R.string.alert);
+        TextView title = dialog.findViewById(R.id.alert_title);
+        title.setText(str);
+
+        Button okButton = dialog.findViewById(R.id.action_button);
+        okButton.setText(android.R.string.ok);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                IHomeView.popTopBackStack();
+            }
+        });
+        dialog.show();
+    }*/
+
+    @Override
     public void updateAdapter() {
         mViewAllViewer.getAdapter().notifyDataSetChanged();
         updateVisibility();

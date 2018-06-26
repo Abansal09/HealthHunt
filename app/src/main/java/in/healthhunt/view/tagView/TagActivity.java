@@ -55,7 +55,7 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
     @BindView(R.id.done)
     public TextView mDone;
 
-    private String[] spinnerItems = {"English", "Hindi", "Punjabi"};
+    private String[] spinnerItems = {"English", "Hindi"};
 
     private ITagPresenter ITagPresenter;
 
@@ -256,8 +256,9 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
         TextView message = dialog.findViewById(R.id.alert_message);
         message.setText(msg);
 
+        String str = getResources().getString(R.string.alert);
         TextView title = dialog.findViewById(R.id.alert_title);
-        title.setVisibility(View.GONE);
+        title.setText(str);
 
         Button okButton = dialog.findViewById(R.id.action_button);
         okButton.setText(android.R.string.ok);

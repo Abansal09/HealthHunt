@@ -39,6 +39,10 @@ public class LatestArticleViewHolder extends RecyclerView.ViewHolder implements 
     @BindView(R.id.latest_article_pager)
     ViewPager mArticlePager;
 
+    @BindView(R.id.latest_view)
+    LinearLayout mView;
+
+
     private IArticlePresenter IArticlePresenter;
     private in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView IMyFeedView;
     private Context mContext;
@@ -98,6 +102,11 @@ public class LatestArticleViewHolder extends RecyclerView.ViewHolder implements 
     }
 
     @Override
+    public void showAlert(String msg) {
+        IMyFeedView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IMyFeedView.updateBottomNavigation();
     }
@@ -110,6 +119,17 @@ public class LatestArticleViewHolder extends RecyclerView.ViewHolder implements 
     @Override
     public void updateAdapter() {
         mArticlePager.getAdapter().notifyDataSetChanged();
+        updateViewAllVisibility();
+    }
+
+    private void updateViewAllVisibility(){
+        int count = IArticlePresenter.getCount();
+        if(count < 5){
+            mViewAll.setVisibility(View.GONE);
+        }
+        else {
+            mViewAll.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -119,17 +139,30 @@ public class LatestArticleViewHolder extends RecyclerView.ViewHolder implements 
 
     @OnClick(R.id.latest_view_all)
     void onViewAll(){
-        openViewAllFragment();
+        if (HealthHuntUtility.checkInternetConnection(mContext)) {
+            openViewAllFragment();
+        } else {
+            showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
+        }
     }
 
     private void openViewAllFragment() {
-        IMyFeedView.updateBottomNavigation();
         Bundle bundle = new Bundle();
         bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.LATEST_ARTICLES);
-        IMyFeedView.onClickViewAll(ViewAllFragment.class.getSimpleName(), bundle);
+        IArticlePresenter.updateBottomNavigation();
+        IArticlePresenter.loadFragment(ViewAllFragment.class.getSimpleName(), bundle);
     }
 
     public void notifyDataChanged() {
         mArticlePager.getAdapter().notifyDataSetChanged();
     }
+
+    public void hideView(){
+        mView.setVisibility(View.GONE);
+    }
+
+    public void showView(){
+        mView.setVisibility(View.VISIBLE);
+    }
+
 }

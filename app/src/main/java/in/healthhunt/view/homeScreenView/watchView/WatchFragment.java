@@ -83,6 +83,11 @@ public class WatchFragment extends Fragment implements IWatchView, WatchAdapter.
     }
 
     @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
+    }
+
+    @Override
     public void updateBottomNavigation() {
         IHomeView.hideBottomNavigationSelection();
     }
@@ -111,11 +116,6 @@ public class WatchFragment extends Fragment implements IWatchView, WatchAdapter.
             mNoRecords.setVisibility(View.GONE);
             mWatchViewer.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void showAlert(String msg) {
-
     }
 
     @Override

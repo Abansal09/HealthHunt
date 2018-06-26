@@ -8,5 +8,6 @@ public interface IView {
     int getCount();
     void showProgress();
     void hideProgress();
+    void showAlert(String msg);
     void updateBottomNavigation();
 }

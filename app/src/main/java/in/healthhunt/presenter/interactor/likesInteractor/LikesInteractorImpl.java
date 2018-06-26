@@ -28,7 +28,7 @@ public class LikesInteractorImpl implements ILikesInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                finishListener.onError(error);
+                finishListener.onLikesError(error);
             }
         });
     }

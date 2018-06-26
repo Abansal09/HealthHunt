@@ -17,7 +17,7 @@ import in.healthhunt.model.comment.CommentsItem;
 public interface ICommentInteractor {
 
     interface OnFinishListener {
-        void onError(RestError errorInfo);
+        void onCommentError(RestError errorInfo);
         void onCommentSuccess(List<CommentsItem> item);
         void onCommentDeleteSuccess(String id);
         void onNewCommentSuccess(CommentData newComment);

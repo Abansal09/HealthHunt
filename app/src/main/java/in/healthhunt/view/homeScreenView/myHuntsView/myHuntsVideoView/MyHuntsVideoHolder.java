@@ -14,6 +14,7 @@ import in.healthhunt.R;
 import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.articles.commonResponse.CurrentUser;
+import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.myHuntPresenter.myHuntsVideoPresenter.IMyHuntsVideoPresenter;
 
 /**
@@ -54,8 +55,13 @@ public class MyHuntsVideoHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.my_hunts_article_item_view)
     void onItemClick(View view) {
-        if(mClickListener != null) {
-            mClickListener.ItemClicked(view, getAdapterPosition());
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            if(mClickListener != null) {
+                mClickListener.ItemClicked(view, getAdapterPosition());
+            }
+        }
+        else {
+            IMyHuntsVideoPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
         }
     }
 
@@ -69,16 +75,21 @@ public class MyHuntsVideoHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.my_hunts_article_bookmark)
     void onBookMark(){
-        ArticlePostItem postsItem = IMyHuntsVideoPresenter.getVideo(getAdapterPosition());
-        String id = String.valueOf(postsItem.getArticle_Id());
-        CurrentUser currentUser = postsItem.getCurrent_user();
-        if(currentUser != null) {
-            if(!currentUser.isBookmarked()){
-                IMyHuntsVideoPresenter.bookmark(id, ArticleParams.VIDEO);
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            ArticlePostItem postsItem = IMyHuntsVideoPresenter.getVideo(getAdapterPosition());
+            String id = String.valueOf(postsItem.getArticle_Id());
+            CurrentUser currentUser = postsItem.getCurrent_user();
+            if(currentUser != null) {
+                if(!currentUser.isBookmarked()){
+                    IMyHuntsVideoPresenter.bookmark(id, ArticleParams.VIDEO);
+                }
+                else {
+                    IMyHuntsVideoPresenter.unBookmark(id, ArticleParams.VIDEO);
+                }
             }
-            else {
-                IMyHuntsVideoPresenter.unBookmark(id, ArticleParams.VIDEO);
-            }
+        }
+        else {
+            IMyHuntsVideoPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
         }
     }
 

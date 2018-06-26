@@ -15,6 +15,7 @@ import in.healthhunt.R;
 import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.commonResponse.CurrentUser;
 import in.healthhunt.model.articles.productResponse.ProductPostItem;
+import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.myHuntPresenter.myHuntsShopPresenter.IMyHuntsProductsPresenter;
 
 /**
@@ -60,8 +61,13 @@ public class MyHuntsShopHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.my_hunts_product_image)
     void onItemClick(View view) {
-        if(mClickListener != null) {
-            mClickListener.ItemClicked(view, getAdapterPosition());
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            if(mClickListener != null) {
+                mClickListener.ItemClicked(view, getAdapterPosition());
+            }
+        }
+        else {
+            IMyHuntsProductsPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
         }
     }
 
@@ -75,16 +81,21 @@ public class MyHuntsShopHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.my_hunts_product_bookmark)
     void onBookMark(){
-        ProductPostItem postsItem = IMyHuntsProductsPresenter.getProduct(getAdapterPosition());
-        String id = String.valueOf(postsItem.getProduct_id());
-        CurrentUser currentUser = postsItem.getCurrent_user();
-        if(currentUser != null) {
-            if(!currentUser.isBookmarked()){
-                IMyHuntsProductsPresenter.bookmark(id, ArticleParams.PRODUCT);
+
+        if(HealthHuntUtility.checkInternetConnection(mContext)) {
+            ProductPostItem postsItem = IMyHuntsProductsPresenter.getProduct(getAdapterPosition());
+            String id = String.valueOf(postsItem.getProduct_id());
+            CurrentUser currentUser = postsItem.getCurrent_user();
+            if (currentUser != null) {
+                if (!currentUser.isBookmarked()) {
+                    IMyHuntsProductsPresenter.bookmark(id, ArticleParams.PRODUCT);
+                } else {
+                    IMyHuntsProductsPresenter.unBookmark(id, ArticleParams.PRODUCT);
+                }
             }
-            else {
-                IMyHuntsProductsPresenter.unBookmark(id, ArticleParams.PRODUCT);
-            }
+        }
+        else {
+            IMyHuntsProductsPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
         }
     }
 }

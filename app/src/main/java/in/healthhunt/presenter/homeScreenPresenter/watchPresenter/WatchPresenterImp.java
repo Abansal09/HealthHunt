@@ -15,6 +15,7 @@ import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.articles.bookmarkResponse.BookMarkData;
 import in.healthhunt.model.articles.bookmarkResponse.BookMarkInfo;
 import in.healthhunt.model.articles.commonResponse.CurrentUser;
+import in.healthhunt.model.login.User;
 import in.healthhunt.presenter.interactor.articleInteractor.ArticleInteractorImpl;
 import in.healthhunt.presenter.interactor.articleInteractor.IArticleInteractor;
 import in.healthhunt.presenter.interactor.bookMarkInteractor.BookMarkInteractorImpl;
@@ -74,6 +75,14 @@ public class WatchPresenterImp implements IWatchPresenter, IArticleInteractor.On
     }
 
     @Override
+    public void onBookMarkError(RestError errorInfo) {
+        IWatchView.hideProgress();
+        if(errorInfo != null) {
+            IWatchView.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onError(RestError errorInfo) {
         IWatchView.hideProgress();
         if(errorInfo != null) {
@@ -108,6 +117,11 @@ public class WatchPresenterImp implements IWatchPresenter, IArticleInteractor.On
     }
 
     @Override
+    public void showAlert(String msg) {
+        IWatchView.showAlert(msg);
+    }
+
+    @Override
     public WatchViewHolder createViewHolder(View view) {
         return IWatchView.createViewHolder(view);
     }
@@ -116,8 +130,12 @@ public class WatchPresenterImp implements IWatchPresenter, IArticleInteractor.On
     public void fetchVideoArticles() {
 
         IWatchView.showProgress();
+        User user = User.getCurrentUser();
+        String tags = user.getTagList();
+
         String filter = ArticleParams.FILTER + "[" + ArticleParams.FORMAT + "]";
         Map<String, String> map = new HashMap<String, String>();
+        map.put(ArticleParams.TAGS, tags);
         map.put(ArticleParams.OFFSET, String.valueOf(0));
         map.put(ArticleParams.LIMIT, String.valueOf(30));
         map.put(filter, ArticleParams.POST_FORMAT_VIDEO);

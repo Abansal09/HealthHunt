@@ -26,7 +26,7 @@ public class FilterInteractorImpl implements IFilterInteractor {
 
             @Override
             public void onFailure(RestError error, String msg) {
-                finishListener.onError(error);
+                finishListener.onFilterError(error);
             }
         });
     }

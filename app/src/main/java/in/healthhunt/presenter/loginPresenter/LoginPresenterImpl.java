@@ -67,7 +67,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
         else if(password.isEmpty()){
             str = mContext.getString(R.string.password_validation_msg);
         }
-        ILoginView.showLoginAlert(str);
+        ILoginView.showAlert(str);
     }
 
 
@@ -81,7 +81,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
             }*/
             if(!email.contains("@") || !email.contains(".")){
                 String str = mContext.getString(R.string.email_validation_msg);
-                ILoginView.showLoginAlert(str);
+                ILoginView.showAlert(str);
                 return;
             }
 
@@ -91,7 +91,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
                 Log.i("TAGLOGIN" , "Index " + index + " size " + size);
                 if(index+2 >= size){
                     String str = mContext.getString(R.string.email_validation_msg);
-                    ILoginView.showLoginAlert(str);
+                    ILoginView.showAlert(str);
                     return;
                 }
 
@@ -117,7 +117,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
                 str = mContext.getString(R.string.password_validation_msg);
             }
 
-            ILoginView.showLoginAlert(str);
+            ILoginView.showAlert(str);
         }
     }
 
@@ -133,7 +133,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
             }
         }
 
-        ILoginView.showLoginAlert(str);
+        ILoginView.showAlert(str);
     }
 
     private boolean validateGoogleServerClientID(Context context) {
@@ -216,11 +216,13 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
         else {
             User savedUser = User.getUser(user.getUserId());
             String tagList = savedUser.getTagList();
+            String continueList = savedUser.getContinueList();
             User.removeUser(savedUser.getUserId());
 
 
 
             user.setTagList(tagList);
+            user.setContinueList(continueList);
             user.setCurrentLogin(true);
             user.save();
 
@@ -282,7 +284,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
         ILoginView.onHideProgress();
         HealthHuntPreference.clear(mContext);
         if(errorInfo != null) {
-            ILoginView.showLoginAlert(errorInfo.getMessage());
+            ILoginView.showAlert(errorInfo.getMessage());
         }
     }
 

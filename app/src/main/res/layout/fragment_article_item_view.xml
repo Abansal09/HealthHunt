@@ -193,6 +193,7 @@
         android:fontFamily="@string/font_family_medium"
         android:textColor="@color/hh_text_color"
         android:gravity="center"
+        android:visibility="gone"
         android:layout_gravity="center"
         android:textAllCaps="true"/>
 

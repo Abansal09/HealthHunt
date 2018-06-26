@@ -13,7 +13,7 @@ import in.healthhunt.model.likes.LikesRequest;
 public interface ILikesInteractor {
 
     interface OnFinishListener {
-        void onError(RestError errorInfo);
+        void onLikesError(RestError errorInfo);
         void onLikesSuccess(LikesInfo likesInfo);
     }
     void updateLikes(Context context, String id, LikesRequest likesRequest, OnFinishListener finishListener);

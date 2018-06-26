@@ -141,11 +141,6 @@ public class MyHuntsVideoFragment extends Fragment implements IMyHuntsView, MyHu
     }
 
     @Override
-    public void showAlert(String msg) {
-
-    }
-
-    @Override
     public int getType() {
         return mNavigationType;
     }
@@ -200,6 +195,11 @@ public class MyHuntsVideoFragment extends Fragment implements IMyHuntsView, MyHu
     @Override
     public void hideProgress() {
         IHomeView.hideProgress();
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
     }
 
     @Override

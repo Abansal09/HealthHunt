@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -160,7 +159,7 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
         mLimit = 10;
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.POST_ID, id);
-        map.put(ArticleParams.ORDER_BY, ArticleParams.ID);
+        map.put(ArticleParams.ORDER_BY, ArticleParams.DATE);
         map.put(ArticleParams.ORDER, ArticleParams.DESC);
         map.put(ArticleParams.OFFSET, String.valueOf(mOffset));
         map.put(ArticleParams.LIMIT, String.valueOf(mLimit));
@@ -346,6 +345,14 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
     }
 
     @Override
+    public void onBookMarkError(RestError errorInfo) {
+        IFullFragment.hideProgress();
+        if(errorInfo != null) {
+            IFullFragment.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
     public void onRelatedSuccess(List<ArticlePostItem> items) {
         mArticleCount--;
         mRelatedArticleItems = items;
@@ -374,7 +381,15 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
     public void onError(RestError errorInfo) {
         IFullFragment.hideProgress();
         if(errorInfo != null) {
-            Toast.makeText(mContext, errorInfo.getMessage(), Toast.LENGTH_SHORT).show();
+            IFullFragment.showAlert(errorInfo.getMessage());
+        }
+    }
+
+    @Override
+    public void onLikesError(RestError errorInfo) {
+        IFullFragment.hideProgress();
+        if(errorInfo != null) {
+            IFullFragment.showAlert(errorInfo.getMessage());
         }
     }
 
@@ -412,6 +427,14 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
 
         IFullFragment.hideProgress();
         IFullFragment.updateLike();
+    }
+
+    @Override
+    public void onCommentError(RestError errorInfo) {
+        IFullFragment.hideProgress();
+        if(errorInfo != null) {
+            IFullFragment.showAlert(errorInfo.getMessage());
+        }
     }
 
     @Override

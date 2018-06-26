@@ -9,7 +9,16 @@ public class UserRequest {
     private String rfile1;
     private String first_name;
     private String description;
+    private String rfile2;
 
+
+    public String getRfile2() {
+        return rfile2;
+    }
+
+    public void setRfile2(String rfile2) {
+        this.rfile2 = rfile2;
+    }
 
     public String getRfile1() {
         return rfile1;

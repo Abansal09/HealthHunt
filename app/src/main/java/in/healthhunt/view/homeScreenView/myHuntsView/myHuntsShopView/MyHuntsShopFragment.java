@@ -141,11 +141,6 @@ public class MyHuntsShopFragment extends Fragment implements IMyHuntsView, MyHun
     }
 
     @Override
-    public void showAlert(String msg) {
-
-    }
-
-    @Override
     public int getType() {
         return mNavigationType;
     }
@@ -196,6 +191,11 @@ public class MyHuntsShopFragment extends Fragment implements IMyHuntsView, MyHun
     @Override
     public void hideProgress() {
         IHomeView.hideProgress();
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IHomeView.showAlert(msg);
     }
 
     @Override

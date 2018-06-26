@@ -12,5 +12,4 @@ import in.healthhunt.view.homeScreenView.myFeedView.IView;
 public interface INotificationView extends IView{
     RecyclerView.ViewHolder onCreateViewHolder(View view);
     void updateAdapter();
-
 }

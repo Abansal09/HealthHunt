@@ -14,6 +14,7 @@ import in.healthhunt.R;
 import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.commonResponse.CurrentUser;
 import in.healthhunt.model.articles.productResponse.ProductPostItem;
+import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.shopPresenter.IShopPresenter;
 
 /**
@@ -28,9 +29,9 @@ public class ShopViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shop_article_bookmark)
     public ImageView mBookMark;
 
-   /* @BindView(R.id.shop_article_content)
-    public TextView mShopContent;
-*/
+    /* @BindView(R.id.shop_article_content)
+     public TextView mShopContent;
+ */
     /*@BindView(R.id.shop_category_image)
     public ImageView mCategoryImage;
 
@@ -74,23 +75,31 @@ public class ShopViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.shop_article_item_view)
     void onItemClick(View view) {
-        if(mClickListener != null) {
-            mClickListener.ItemClicked(view, getAdapterPosition());
+        if (HealthHuntUtility.checkInternetConnection(mContext)) {
+            if(mClickListener != null) {
+                mClickListener.ItemClicked(view, getAdapterPosition());
+            }
+        } else {
+            IShopPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
         }
     }
 
     @OnClick(R.id.shop_article_bookmark)
     void onBookMark(){
-        ProductPostItem postsItem = IShopPresenter.getProduct(getAdapterPosition());
-        String id = String.valueOf(postsItem.getProduct_id());
-        CurrentUser currentUser = postsItem.getCurrent_user();
-        if(currentUser != null) {
-            if(!currentUser.isBookmarked()){
-                IShopPresenter.bookmark(id, ArticleParams.PRODUCT);
+        if (HealthHuntUtility.checkInternetConnection(mContext)) {
+            ProductPostItem postsItem = IShopPresenter.getProduct(getAdapterPosition());
+            String id = String.valueOf(postsItem.getProduct_id());
+            CurrentUser currentUser = postsItem.getCurrent_user();
+            if(currentUser != null) {
+                if(!currentUser.isBookmarked()){
+                    IShopPresenter.bookmark(id, ArticleParams.PRODUCT);
+                }
+                else {
+                    IShopPresenter.unBookmark(id, ArticleParams.PRODUCT);
+                }
             }
-            else {
-                IShopPresenter.unBookmark(id, ArticleParams.PRODUCT);
-            }
+        } else {
+            IShopPresenter.showAlert(mContext.getString(R.string.please_check_internet_connectivity_status));
         }
     }
 }

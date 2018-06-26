@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -35,6 +36,8 @@ public class TopProductViewHolder extends RecyclerView.ViewHolder implements Top
     @BindView(R.id.top_product_recycler_list)
     public RecyclerView mTopProductViewer;
 
+    @BindView(R.id.top_product_view)
+    LinearLayout mView;
 
     private IProductPresenter ITopProductPresenter;
     private in.healthhunt.view.homeScreenView.myFeedView.IMyFeedView IMyFeedView;
@@ -83,6 +86,11 @@ public class TopProductViewHolder extends RecyclerView.ViewHolder implements Top
     @Override
     public void hideProgress() {
         IMyFeedView.hideProgress();
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        IMyFeedView.showAlert(msg);
     }
 
     @Override
@@ -141,5 +149,13 @@ public class TopProductViewHolder extends RecyclerView.ViewHolder implements Top
         if(mTopProductViewer != null && mTopProductViewer.getAdapter() != null){
             mTopProductViewer.getAdapter().notifyDataSetChanged();
         }
+    }
+
+    public void hideView(){
+        mView.setVisibility(View.GONE);
+    }
+
+    public void showView(){
+        mView.setVisibility(View.VISIBLE);
     }
 }
