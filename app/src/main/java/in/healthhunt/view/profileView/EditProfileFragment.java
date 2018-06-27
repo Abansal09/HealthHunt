@@ -106,6 +106,11 @@ public class EditProfileFragment extends Fragment implements IEditProfileView{
         String name = user.getFirst_name();//user.getName();//HealthHuntPrefere
 
         // nce.getString(getContext(), user.getUsername());
+
+        if(name == null || name.isEmpty()){
+            name = user.getName();
+        }
+
         if(name != null) {
             mUserName.setText(name);
         }
@@ -128,11 +133,11 @@ public class EditProfileFragment extends Fragment implements IEditProfileView{
             url = url.replace("\n", "");
             Glide.with(getContext())
                     .load(url)
-                    .bitmapTransform(new CropCircleTransformation(getContext())).placeholder(R.mipmap.avatar)
+                    .bitmapTransform(new CropCircleTransformation(getContext())).placeholder(R.mipmap.default_profile)
                     .into(mProfilePic);
         }
         else {
-            mProfilePic.setImageResource(R.mipmap.avatar);
+            mProfilePic.setImageResource(R.mipmap.default_profile);
         }
 
         //String designation = user.get
@@ -202,7 +207,7 @@ public class EditProfileFragment extends Fragment implements IEditProfileView{
             Uri uri = data.getData();
             if(uri != null && !uri.toString().isEmpty()) {
                 Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getContext())).
-                        placeholder(R.mipmap.avatar).into(mProfilePic);
+                        placeholder(R.mipmap.default_profile).into(mProfilePic);
                 mProfileUrl = uri;
             }
 
@@ -233,7 +238,7 @@ public class EditProfileFragment extends Fragment implements IEditProfileView{
 
     @Override
     public void updateUserInfo() {
-        Toast.makeText(getContext(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.profile_update_msg/*saved*/), Toast.LENGTH_SHORT).show();
         //updateUserInfo(user);
         getActivity().getSupportFragmentManager().popBackStack();
     }

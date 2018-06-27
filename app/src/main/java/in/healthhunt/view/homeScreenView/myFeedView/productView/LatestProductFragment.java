@@ -176,10 +176,10 @@ public class LatestProductFragment extends Fragment {
             }
         }
         if(articleUrl != null) {
-            Glide.with(this).load(articleUrl).placeholder(R.drawable.artical).into(mProductImage);
+            Glide.with(this).load(articleUrl).placeholder(R.mipmap.ic_no_latest_product_image).into(mProductImage);
         }
         else {
-            mProductImage.setImageResource(R.drawable.artical);
+            mProductImage.setImageResource(R.mipmap.ic_no_latest_product_image);
         }
     }
 

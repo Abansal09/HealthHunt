@@ -663,9 +663,9 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         }
 
         if (url != null) {
-            Glide.with(this).load(url).placeholder(R.drawable.top_products).into(mProductImage);
+            Glide.with(this).load(url).placeholder(R.mipmap.ic_no_top_product_image).into(mProductImage);
         } else {
-            mProductImage.setBackgroundResource(R.drawable.artical);
+            mProductImage.setBackgroundResource(R.mipmap.ic_no_top_product_image);
         }
     }
 

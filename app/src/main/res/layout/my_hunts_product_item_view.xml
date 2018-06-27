@@ -19,7 +19,7 @@
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/top_products"/>
+            android:src="@mipmap/ic_no_latest_product_image"/>
 
         <ImageView
             android:id="@+id/my_hunts_product_bookmark"

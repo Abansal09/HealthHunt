@@ -86,6 +86,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.CityVi
         @OnClick(R.id.filter_item_view)
         void onClick(View view) {
             if(mClickListener != null) {
+
+                if(mFilterList.isEmpty()){
+                    Log.i("TAGFLITE", "Filter city is empty");
+                    return;
+                }
+
                 String name = mFilterList.get(getAdapterPosition());
 
                 if(IFilterPresenter.getCity() != null &&
@@ -124,6 +130,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.CityVi
                 if (results != null && results.count > 0) {
                     notifyDataSetChanged();
                 }
+                //notifyDataSetChanged();
             }
         };
 
@@ -131,6 +138,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.CityVi
     }
 
     private void setContent(CityViewHolder holder, int pos) {
+        if(mFilterList.isEmpty()){
+            return;
+        }
+
         String name = mFilterList.get(pos);
         if(name != null) {
             holder.mCityName.setText(name);

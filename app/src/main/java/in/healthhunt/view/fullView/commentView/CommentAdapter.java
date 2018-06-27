@@ -72,7 +72,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
                 String url = author.getUrl();
                 Glide.with(mContext)
                         .load(url)
-                        .bitmapTransform(new CropCircleTransformation(mContext)).placeholder(R.mipmap.avatar)
+                        .bitmapTransform(new CropCircleTransformation(mContext)).placeholder(R.mipmap.default_profile)
                         .into(holder.mUserPic);
 
             }

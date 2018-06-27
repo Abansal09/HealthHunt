@@ -86,10 +86,10 @@ public class ViewAllAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             if(url != null) {
                 Log.i("TAG11", "url " + url);
-                Glide.with(mContext).load(url).placeholder(R.drawable.artical).into(holder.mArticleImage);
+                Glide.with(mContext).load(url).placeholder(R.mipmap.ic_no_my_feed_article_image).into(holder.mArticleImage);
             }
             else {
-                holder.mArticleImage.setImageResource(R.drawable.artical);
+                holder.mArticleImage.setImageResource(R.mipmap.ic_no_my_feed_article_image);
             }
 
 
@@ -227,9 +227,9 @@ public class ViewAllAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             if (url != null) {
                 Log.i("TAG11", "productUrl " + url);
-                Glide.with(mContext).load(url).placeholder(R.drawable.top_products).into(holder.mProductImage);
+                Glide.with(mContext).load(url).placeholder(R.mipmap.ic_no_top_product_image).into(holder.mProductImage);
             } else {
-                holder.mProductImage.setImageResource(R.drawable.top_products);
+                holder.mProductImage.setImageResource(R.mipmap.ic_no_top_product_image);
             }
         }
     }

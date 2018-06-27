@@ -18,7 +18,7 @@
             android:id="@+id/pic"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@mipmap/avatar"
+            android:src="@mipmap/default_profile"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             />

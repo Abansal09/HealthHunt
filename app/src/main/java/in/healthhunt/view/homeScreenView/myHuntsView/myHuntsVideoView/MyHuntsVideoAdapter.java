@@ -68,10 +68,10 @@ public class MyHuntsVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             String url = postsItem.getVideo_thumbnail();
             Log.i("TAG11", "url " + url);
             if(url != null) {
-                Glide.with(mContext).load(url).placeholder(R.drawable.artical).into(holder.mArticleImage);
+                Glide.with(mContext).load(url).placeholder(R.mipmap.ic_no_my_hunts_article_image).into(holder.mArticleImage);
             }
             else {
-                holder.mArticleImage.setImageResource(R.drawable.artical);
+                holder.mArticleImage.setImageResource(R.mipmap.ic_no_my_hunts_article_image);
             }
 
             holder.mPlayIcon.setVisibility(View.VISIBLE);

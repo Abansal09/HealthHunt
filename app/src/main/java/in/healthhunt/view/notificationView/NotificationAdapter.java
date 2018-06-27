@@ -57,7 +57,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 authorUrl = authorUrl.replace("\n", "");
                 Glide.with(mContext)
                         .load(authorUrl)
-                        .bitmapTransform(new CropCircleTransformation(mContext)).placeholder(R.mipmap.avatar)
+                        .bitmapTransform(new CropCircleTransformation(mContext)).placeholder(R.mipmap.default_profile)
                         .into(holder.mPic);
             }
 
@@ -69,9 +69,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(thumbnailImage != null) {
 
                 String postType = notificationsItem.getPost_type();
-                int placeHolder = R.drawable.artical;
+                int placeHolder = R.mipmap.ic_no_my_hunts_article_image;
                 if(postType != null && postType.equalsIgnoreCase(ArticleParams.MARKET)){
-                    placeHolder = R.drawable.top_products;
+                    placeHolder = R.mipmap.ic_no_latest_product_image;
                 }
 
                 Glide.with(mContext)

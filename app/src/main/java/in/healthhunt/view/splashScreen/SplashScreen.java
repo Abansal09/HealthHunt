@@ -37,7 +37,7 @@ public class SplashScreen extends AppCompatActivity {
         ButterKnife.bind(this);
         GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(mSplashView);
 
-        Glide.with(this).load(R.mipmap.splash).into(imageViewTarget);
+        Glide.with(this).load(R.mipmap.ic_splash).into(imageViewTarget);
         new Handler().postDelayed(new Runnable() {
 
             /*

@@ -21,7 +21,7 @@
                 android:id="@+id/shop_article_image"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:src="@drawable/artical"
+                android:src="@mipmap/ic_no_latest_product_image"
                 android:scaleType="centerCrop"
                 android:layout_margin="2dp"/>
 

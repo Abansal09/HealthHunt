@@ -127,6 +127,11 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
 
         User user = User.getCurrentUser();
         String name = user.getFirst_name();//getName();//HealthHuntPreference.getString(getContext(), user.getUsername());
+
+        if(name == null || name.isEmpty()){
+            name = user.getName();
+        }
+
         if(name != null) {
             mUserName.setText(name);
         }
@@ -137,11 +142,11 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
             url = url.replace("\n", "");
             Glide.with(getContext())
                     .load(url)
-                    .bitmapTransform(new CropCircleTransformation(getContext())).placeholder(R.mipmap.avatar)
+                    .bitmapTransform(new CropCircleTransformation(getContext())).placeholder(R.mipmap.default_profile)
                     .into(mProfilePic);
         }
         else {
-            mProfilePic.setImageResource(R.mipmap.avatar);
+            mProfilePic.setImageResource(R.mipmap.default_profile);
         }
 
         //String designation = user.get

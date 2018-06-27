@@ -118,6 +118,9 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     @BindView(R.id.author_publish_date)
     TextView mPublishDate;
 
+    @BindView(R.id.about_view)
+    LinearLayout mAboutView;
+
     @BindView(R.id.detail_text)
     ReadMoreTextView mDetailText;
 
@@ -751,13 +754,17 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     private void setAboutContent(ArticlePostItem articlePost) {
 
         Author author = articlePost.getAuthor();
-        if(author != null){
+        if(author != null && !author.getName().isEmpty()){
+            mAboutView.setVisibility(View.VISIBLE);
             String authorName = author.getName();
             i("TAGNAMNE","NAMe " + authorName);
             mAboutName.setText(authorName);
 
             String info = author.getInfo();
             mDetailText.setText(info);
+        }
+        else {
+            mAboutView.setVisibility(View.GONE);
         }
 
     }
@@ -885,9 +892,9 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
         }
 
         if (url != null) {
-            Glide.with(this).load(url).placeholder(R.drawable.artical).into(mArticleImage);
+            Glide.with(this).load(url).placeholder(R.mipmap.ic_no_article_image).into(mArticleImage);
         } else {
-            mArticleImage.setBackgroundResource(R.drawable.artical);
+            mArticleImage.setBackgroundResource(R.mipmap.ic_no_article_image);
         }
     }
 

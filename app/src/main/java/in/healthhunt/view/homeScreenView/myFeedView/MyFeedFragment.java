@@ -363,7 +363,7 @@ public class MyFeedFragment extends Fragment implements IMyFeedView {
         }
 
         int count = continueList.size();
-        if(count > 20){
+        if(count >= 20){
             continueList.remove(count - 1); // Removed last item from the list
         }
     }

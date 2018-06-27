@@ -70,10 +70,10 @@ public class WatchAdapter extends RecyclerView.Adapter<WatchViewHolder> {
             String url = postsItem.getVideo_thumbnail();
             Log.i("TAG11", "url " + url);
             if(url != null && !url.isEmpty()) {
-                Glide.with(mContext).load(url).placeholder(R.drawable.artical).into(holder.mArticleImage);
+                Glide.with(mContext).load(url).placeholder(R.mipmap.ic_no_my_feed_article_image).into(holder.mArticleImage);
             }
             else {
-                holder.mArticleImage.setImageResource(R.drawable.artical);
+                holder.mArticleImage.setImageResource(R.mipmap.ic_no_my_feed_article_image);
             }
 
 

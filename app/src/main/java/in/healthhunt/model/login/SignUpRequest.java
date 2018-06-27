@@ -11,6 +11,9 @@ public class SignUpRequest {
     @SerializedName("email")
     private String mEmail;
 
+    @SerializedName("first_name")
+    private String mFirstName;
+
     @SerializedName("password")
     private String mPassword;
 
@@ -22,6 +25,14 @@ public class SignUpRequest {
 
     @SerializedName("gender")
     private String mGender;
+
+    public String getmFirstName() {
+        return mFirstName;
+    }
+
+    public void setmFirstName(String mFirstName) {
+        this.mFirstName = mFirstName;
+    }
 
     public String getmEmail() {
         return mEmail;

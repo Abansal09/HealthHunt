@@ -275,10 +275,10 @@ public class ArticleFragment extends Fragment {
             }
         }
         if(articleUrl != null) {
-            Glide.with(this).load(articleUrl).placeholder(R.drawable.artical).into(mArticleImage);
+            Glide.with(this).load(articleUrl).placeholder(R.mipmap.ic_no_my_feed_article_image).into(mArticleImage);
         }
         else {
-            mArticleImage.setImageResource(R.drawable.artical);
+            mArticleImage.setImageResource(R.mipmap.ic_no_my_feed_article_image);
         }
     }
 

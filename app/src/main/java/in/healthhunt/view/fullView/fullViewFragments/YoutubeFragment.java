@@ -102,6 +102,9 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     @BindView(R.id.full_article_content)
     TextView mTitle;
 
+    @BindView(R.id.about_view)
+    LinearLayout mAboutView;
+
     @BindView(R.id.author_pic)
     ImageView mAuthorImage;
 
@@ -836,13 +839,17 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
 
     private void setAboutContent(ArticlePostItem articlePost) {
         Author author = articlePost.getAuthor();
-        if(author != null){
+        if(author != null && !author.getName().isEmpty()){
+            mAboutView.setVisibility(View.VISIBLE);
             String authorName = author.getName();
             Log.i("TAGNAMNE","NAMe " + authorName);
             mAboutName.setText(authorName);
 
             String info = author.getInfo();
             mDetailText.setText(info);
+        }
+        else {
+            mAboutView.setVisibility(View.GONE);
         }
     }
 

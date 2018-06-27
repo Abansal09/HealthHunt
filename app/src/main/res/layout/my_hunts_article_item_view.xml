@@ -22,7 +22,7 @@
                 android:id="@+id/my_hunts_article_image"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:src="@drawable/artical"
+                android:src="@mipmap/ic_no_my_hunts_article_image"
                 android:scaleType="centerCrop"
                 android:layout_margin="1dp"/>
 

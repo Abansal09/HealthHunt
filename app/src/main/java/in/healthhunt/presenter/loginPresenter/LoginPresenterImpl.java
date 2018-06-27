@@ -347,6 +347,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
     private SignUpRequest createSignUpRequest(String username, String gender, String email, String password) {
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setmName(username);
+        signUpRequest.setmFirstName(username);  // Same name added for first_name
         signUpRequest.setmGender(gender);
         signUpRequest.setmEmail(email);
         signUpRequest.setmPassword(password);

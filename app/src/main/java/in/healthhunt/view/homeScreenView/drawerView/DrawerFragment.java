@@ -77,7 +77,11 @@ public class DrawerFragment extends Fragment implements IEditProfileView, Catego
 
         User user = User.getCurrentUser();
         String name = user.getFirst_name();//getName();//HealthHuntPreference.getString(getContext(), user.getUsername());
-        Log.i("TAGUSERNAME", "NAme " + name);
+        Log.i("TAGUSERNAME", "First Name " + name);
+
+        if(name == null || name.isEmpty()){
+            name = user.getName();
+        }
         if(name != null) {
             mUserName.setText(name);
         }
@@ -87,12 +91,12 @@ public class DrawerFragment extends Fragment implements IEditProfileView, Catego
         if(url != null) {
             url = url.replace("\n", "");
             Glide.with(getContext())
-                    .load(url)
-                    .bitmapTransform(new CropCircleTransformation(getContext())).placeholder(R.mipmap.avatar)
+                    .load(url).dontAnimate()
+                    .bitmapTransform(new CropCircleTransformation(getContext())).placeholder(R.mipmap.default_profile)
                     .into(mProfilePic);
         }
         else {
-            mProfilePic.setImageResource(R.mipmap.avatar);
+            mProfilePic.setImageResource(R.mipmap.default_profile);
         }
     }
 

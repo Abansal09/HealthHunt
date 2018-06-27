@@ -82,10 +82,10 @@ public class MyHuntsShopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             if(url != null) {
                 Log.i("TAG11", "url " + url);
-                Glide.with(mContext).load(url).placeholder(R.drawable.artical).into(holder.mProductImage);
+                Glide.with(mContext).load(url).placeholder(R.mipmap.ic_no_latest_product_image).into(holder.mProductImage);
             }
             else {
-                holder.mProductImage.setImageResource(R.drawable.artical);
+                holder.mProductImage.setImageResource(R.mipmap.ic_no_latest_product_image);
             }
 
 

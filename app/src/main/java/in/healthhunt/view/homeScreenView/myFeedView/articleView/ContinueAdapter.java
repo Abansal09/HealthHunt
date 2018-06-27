@@ -96,9 +96,9 @@ public class ContinueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Log.i("TAG11", "url " + url);
                 Glide.with(mContext).load(url).//dontAnimate().
                         // bitmapTransform(new RoundedCornersTransformation( mContext,HealthHuntUtility.dpToPx(2, mContext), 2)).
-                                placeholder(R.drawable.artical).into(holder.mArticleImage);
+                                placeholder(R.mipmap.ic_no_my_feed_article_image).into(holder.mArticleImage);
             } else {
-                holder.mArticleImage.setImageResource(R.drawable.artical);
+                holder.mArticleImage.setImageResource(R.mipmap.ic_no_my_feed_article_image);
             }
 
             Title title = postsItem.getTitle();

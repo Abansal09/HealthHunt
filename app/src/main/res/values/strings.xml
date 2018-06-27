@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">healthhunt</string>
     <string name="server_client_id">415941616381-aqtf7rcsr1mskdpv57519e440882fcbq.apps.googleusercontent.com</string>
-    <string name="facebook_app_id">163173841209806</string>
-    <string name="fb_login_protocol_scheme">fb163173841209806</string>
+    <string name="facebook_app_id">2014330465547457</string>
+    <string name="fb_login_protocol_scheme">fb2014330465547457</string>
     <string name="youtube_key">AIzaSyAOaVvQF0liphCcch2futZMQvrdVUi-WYQ</string>
     <string name="google_place_key">AIzaSyAOaVvQF0liphCcch2futZMQvrdVUi-WYQ</string>
-
     <!-- AIzaSyDFVYeZ2vDLyraV2KcMEsC6THxxFh_2vMI           //youtube key-->
     <!--473972138506-lvt76674edq0is3r38qpbeqt1p82sjs6.apps.googleusercontent.com-->
     <!-- Font family -->
@@ -156,13 +155,13 @@
     <string name="downloaded_successfully">Downloaded successfully"</string>
     <string name="already_downloaded">Already downloaded"</string>
     <string name="tags_saved_successfully">Tags saved successfully</string>
-    <string name="no_records_found">no records found</string>
+    <string name="no_records_found">No more records found.</string>
     <string name="please_enter_comment">Please enter comment</string>
     <string name="free_trial">Free Trial</string>
     <string name="listen">Listen</string>
 
-    <string name="added_to_my_hunt">Added to my hunt</string>
-    <string name="removed_from_my_hunt">Removed from my hunt</string>
+    <string name="added_to_my_hunt">Card added to my hunts</string>
+    <string name="removed_from_my_hunt">Card removed from my hunts</string>
 
     <string name="card_like">upvoted your card</string>
     <string name="card_comment">commented on your card</string>
@@ -170,5 +169,7 @@
 
     <string name="please_check_internet_connectivity_status">Please check internet connectivity status.</string>
     <string name="search_validation">Please enter a keyword to search.</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="profile_update_msg">Profile updated successfully.</string>
 
 </resources>
