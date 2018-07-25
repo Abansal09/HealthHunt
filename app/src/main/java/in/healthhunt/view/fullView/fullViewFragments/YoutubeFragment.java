@@ -130,13 +130,16 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     TextView mCommentCount;
 
     @BindView(R.id.comments_view_all_text)
-    TextView mCommentViewAll;
+    TextView mCommentViewAllText;
 
     @BindView(R.id.comments_view_all_arrow)
     ImageView mCommentArrow;
 
     @BindView(R.id.comment_view)
     LinearLayout mCommentView;
+
+    @BindView(R.id.view_more)
+    LinearLayout mViewMore;
 
     @BindView(R.id.full_article_download)
     ImageView mDownloadView;
@@ -176,6 +179,10 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
 
     @BindView(R.id.overlay_video_view)
     RelativeLayout mOverlayVideoView;
+
+    @BindView(R.id.comments_view_all)
+    LinearLayout mCommentViewAll;
+
 
     private IFullPresenter IFullPresenter;
     private IHomeView IHomeView;
@@ -372,13 +379,17 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
         IHomeView.setStatusBarTranslucent(true);
         IHomeView.hideBottomFooter();
         IHomeView.hideActionBar();
+        IHomeView.hideDrawerMenu();
+
         if(!isDownloaded) {
             IFullPresenter.fetchArticle(mId);
         }
         else {
             fetchVideoFromDataBase(mId);
+            IFullPresenter.fetchComments(mId);  // fetch the comments
         }
         setContent();
+        setCommentAdapter();
         return rootView;
     }
 
@@ -654,6 +665,7 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
     @Override
     public void updateCommentAdapter() {
         mCommentContent.setText("");
+
         CommentAdapter commentAdapter = (CommentAdapter) mCommentViewer.getAdapter();
         if(commentAdapter == null){
             setCommentAdapter();
@@ -662,7 +674,31 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
             commentAdapter.notifyDataSetChanged();
         }
 
-        setCommentContent(IFullPresenter.getArticle());
+        updateViewMoreVisibility();
+
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+        if(postItem != null) {
+            setCommentContent(postItem);
+        }
+    }
+
+    private void updateViewMoreVisibility() {
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+        String commentCount = postItem.getComments();
+        int count = Integer.parseInt(commentCount);
+        int adapterCount = IFullPresenter.getCommentCount();
+        Log.i("TAGCOUNTAD", "count " + count + " adapterCount " + adapterCount);
+
+        if(postItem != null){
+            if(commentCount != null) {
+                if (adapterCount == 0 || adapterCount == count) {
+                    mViewMore.setVisibility(View.GONE);
+                }
+                else {
+                    mViewMore.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override
@@ -736,6 +772,19 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
         IHomeView.updateWatch(articlePostItem);
     }
 
+    @Override
+    public int getTotalCommentCount() {
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+        int count = 0;
+        if(postItem != null){
+            String countStr = postItem.getComments();
+            if(countStr != null){
+                count = Integer.parseInt(countStr);
+            }
+        }
+        return count;
+    }
+
     public void updateLikeIcon(boolean isLike) {
         if(!isLike){
             mLikeImage.setColorFilter(null);
@@ -751,23 +800,25 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
         Log.i("TAGCOMMENT" , " isShown " + mCommentView.isShown());
 
         if(mCommentView.isShown()){
-            mCommentViewAll.setText(R.string.view_all);
+            mCommentViewAllText.setText(R.string.view_all);
             mCommentArrow.setImageResource(R.mipmap.ic_chevron_down);
             mCommentView.setVisibility(View.GONE);
             mCommentViewer.setVisibility(View.GONE);
+            mViewMore.setVisibility(View.GONE);
         }
         else {
-            mCommentViewAll.setText(R.string.close_all);
+            mCommentViewAllText.setText(R.string.close_all);
             mCommentArrow.setImageResource(R.mipmap.ic_chevron_up);
             mCommentView.setVisibility(View.VISIBLE);
             mCommentViewer.setVisibility(View.VISIBLE);
+            updateViewMoreVisibility();
 
-            //CommentAdapter adapter = (CommentAdapter) mCommentViewer.getAdapter();
-            //if(adapter == null) {
-            ArticlePostItem post = IFullPresenter.getArticle();
-            IFullPresenter.fetchComments(String.valueOf(post.getArticle_Id()));
-            mFullViewScroll.fullScroll(View.FOCUS_DOWN);
-            //}
+            /*CommentAdapter adapter = (CommentAdapter) mCommentViewer.getAdapter();
+            if(adapter == null) {
+                ArticlePostItem post = IFullPresenter.getArticle();
+                IFullPresenter.fetchComments(String.valueOf(post.getArticle_Id()));
+                //mFullViewScroll.fullScroll(View.FOCUS_DOWN);
+            }*/
         }
     }
 
@@ -823,6 +874,12 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
         IFullPresenter.updateLike(String.valueOf(id));
     }
 
+    @OnClick(R.id.view_more)
+    void onViewMore(){
+        onLoadMoreComments();
+    }
+
+
     private void setCommentContent(ArticlePostItem articlePost) {
         String commentCount = articlePost.getComments();
         if(commentCount != null){
@@ -830,16 +887,19 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
             if(count > 0){
                 commentCount = HealthHuntUtility.formatNumber(count);
                 mCommentCount.setText(commentCount);
+                mCommentViewAll.setVisibility(View.VISIBLE);
             }
             else {
                 mCommentCount.setText("");
+                mCommentViewAll.setVisibility(View.GONE);
             }
         }
     }
 
     private void setAboutContent(ArticlePostItem articlePost) {
+
         Author author = articlePost.getAuthor();
-        if(author != null && !author.getName().isEmpty()){
+        if(author != null && !author.getInfo().isEmpty()){
             mAboutView.setVisibility(View.VISIBLE);
             String authorName = author.getName();
             Log.i("TAGNAMNE","NAMe " + authorName);
@@ -1288,6 +1348,10 @@ public class YoutubeFragment extends Fragment implements IFullFragment , Comment
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null);
     }
 
+    private void onLoadMoreComments() {
+        ArticlePostItem post = IFullPresenter.getArticle();
+        IFullPresenter.fetchMoreComments(post.getArticle_Id());
+    }
 
     private class FetchVideoTask extends AsyncTask<Void, Void, ArticlePostItem> {
 

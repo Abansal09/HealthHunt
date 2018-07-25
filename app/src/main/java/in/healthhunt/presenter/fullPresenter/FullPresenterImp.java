@@ -156,7 +156,29 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
     public void fetchComments(String id) {
         IFullFragment.showProgress();
         mOffset = 0;
-        mLimit = 10;
+        mLimit = 5;
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(ArticleParams.POST_ID, id);
+        map.put(ArticleParams.ORDER_BY, ArticleParams.DATE);
+        map.put(ArticleParams.ORDER, ArticleParams.DESC);
+        map.put(ArticleParams.OFFSET, String.valueOf(mOffset));
+        map.put(ArticleParams.LIMIT, String.valueOf(mLimit));
+        ICommentInteractor.fetchComments(mContext, map, this);
+    }
+
+    @Override
+    public void fetchMoreComments(String id) {
+        // IFullFragment.showProgress();
+        int count = IFullFragment.getTotalCommentCount();
+        if(count < mOffset){
+            return;
+        }
+
+        IFullFragment.showProgress();
+        mOffset = mOffset + 5;
+
+        Log.i("TAGMORE", "offset " + mOffset + " limit " + mLimit);
+
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.POST_ID, id);
         map.put(ArticleParams.ORDER_BY, ArticleParams.DATE);
@@ -189,7 +211,6 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
         CommentRequest request = new CommentRequest();
         request.setPost_id(post_id);
         request.setContent(content);
-        Log.i("TAGPOSTID", " ID " + post_id + " content " + content);
         ICommentInteractor.addNewComment(mContext, request, this);
     }
 
@@ -440,9 +461,15 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
     @Override
     public void onCommentSuccess(List<CommentsItem> item) {
         IFullFragment.hideProgress();
-        mCommentsItems = item;
-        mOffset = mLimit;
-        mLimit+=10;
+
+        if(mCommentsItems == null) {
+            mCommentsItems = item;
+        }
+        else {
+            mCommentsItems.addAll(item);
+        }
+        /*mOffset = mLimit;
+        mLimit+=10;*/
         IFullFragment.updateCommentAdapter();
     }
 
@@ -460,7 +487,6 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
                         int com = Integer.parseInt(comments);
                         com--;
                         mArticlePost.setComments(String.valueOf(com));
-
                         break;
 
                     case ArticleParams.PRODUCT:
@@ -468,7 +494,6 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
                         int proCom = Integer.parseInt(comments);
                         proCom--;
                         mProductPost.setComments(String.valueOf(proCom));
-
                         break;
                 }
                 break;
@@ -524,14 +549,16 @@ public class FullPresenterImp implements IFullPresenter, IArticleInteractor.OnFu
 
     private void updateArticleInfo(){
         if(mArticleCount == 0){
-            IFullFragment.hideProgress();
+            fetchComments(getArticle().getArticle_Id());
+            //IFullFragment.hideProgress();
             IFullFragment.setContent();
         }
     }
 
     private void updateProductInfo(){
         if(mProductCount == 0){
-            IFullFragment.hideProgress();
+            //IFullFragment.hideProgress();
+            fetchComments(getProduct().getProduct_id());
             IFullFragment.setContent();
         }
     }

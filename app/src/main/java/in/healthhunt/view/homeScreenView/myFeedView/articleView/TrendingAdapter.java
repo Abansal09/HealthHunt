@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -63,20 +62,22 @@ public class TrendingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         ArticlePostItem postsItem = IArticlePresenter.getArticle(pos);
         if(postsItem != null) {
-            String url = postsItem.getVideo_thumbnail();
 
-            if(url == null || url.isEmpty()) {
+            String url = null;
+            String format = postsItem.getFormat();
+            if(format != null && format.equalsIgnoreCase(ArticleParams.IMAGE_FORMAT)) {
                 List<MediaItem> mediaItems = postsItem.getMedia();
                 if (mediaItems != null && !mediaItems.isEmpty()) {
                     MediaItem media = mediaItems.get(0);
-                    if ("image".equals(media.getMedia_type())) {
+                    if (ArticleParams.IMAGE_FORMAT.equals(media.getMedia_type())) {
                         url = media.getUrl();
 
                     }
                 }
                 holder.mPlayImage.setVisibility(View.GONE);
             }
-            else {
+            else if(format != null && format.equalsIgnoreCase(ArticleParams.VIDEO_FORMAT)){
+                url = postsItem.getVideo_thumbnail();
                 holder.mPlayImage.setVisibility(View.VISIBLE);
             }
 
@@ -178,9 +179,6 @@ public class TrendingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class TrendingItemViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.article_item_view)
-        RelativeLayout mArticleView;
-
         @BindView(R.id.article_image)
         ImageView mArticleImage;
 
@@ -245,9 +243,9 @@ public class TrendingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 CurrentUser currentUser = postsItem.getCurrent_user();
                 if (currentUser != null) {
                     if (!currentUser.isBookmarked()) {
-                        IArticlePresenter.bookmark(id, ArticleParams.TRENDING_ARTICLES);
+                        IArticlePresenter.bookmark(id, ArticleParams.IT_S_VIRAL_ARTICLES);
                     } else {
-                        IArticlePresenter.unBookmark(id, ArticleParams.TRENDING_ARTICLES);
+                        IArticlePresenter.unBookmark(id, ArticleParams.IT_S_VIRAL_ARTICLES);
                     }
                 }
             } else {

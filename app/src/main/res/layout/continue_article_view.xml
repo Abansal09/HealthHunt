@@ -6,11 +6,11 @@
     android:background="@android:color/white">
 
 
-    <View
+   <!-- <View
         android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:background="@color/hh_background_light"/>
-
+        android:layout_height="8dp"
+        android:background="@color/hh_background_light2"/>
+-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -55,6 +55,6 @@
         android:layout_height="wrap_content"
         android:scrollbars="none"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="8dp"/>
 
 </LinearLayout>

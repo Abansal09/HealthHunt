@@ -36,7 +36,7 @@
             android:text="@string/healthhunt"
             android:textColor="@color/hh_green_light"
             android:textSize="32sp"
-            android:fontFamily="@string/font_family_light"
+            android:fontFamily="@string/font_family_regular"
             android:paddingStart="13dp"
             android:layout_gravity="center"
             android:gravity="bottom"

@@ -141,8 +141,8 @@ public class TrendingArticleViewHolder extends RecyclerView.ViewHolder implement
 
             Bundle bundle = new Bundle();
             bundle.putString(ArticleParams.ID, String.valueOf(postsItem.getArticle_Id()));
-            String url = postsItem.getVideo_thumbnail();
-            if(url == null || url.isEmpty()) {
+            String format = postsItem.getFormat();
+            if(format != null && format.equalsIgnoreCase(ArticleParams.IMAGE_FORMAT)) {
                 bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.ARTICLE);
                 IArticlePresenter.loadFragment(FullArticleFragment.class.getSimpleName(), bundle);
             }

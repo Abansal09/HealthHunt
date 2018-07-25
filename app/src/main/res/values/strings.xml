@@ -12,7 +12,6 @@
     <string name="font_family_light">sans-serif-light</string>
     <string name="font_family_medium">sans-serif-medium</string>
     <string name="font_family_regular">sans-serif</string>
-
     <!-- Login and sign up screen string values -->
 
     <string name="skip">Skip</string>
@@ -28,8 +27,8 @@
     <string name="signup">Sign Up</string>
     <string name="signup_with">Sign Up with</string>
     <string name="receive_product_offer">Receive product offers and discount offers on marketplace</string>
-    <string name="terms_and_conditions_part1">By signing up, you agree to</string>
-    <string name="terms_and_conditions_part2"> Terms and Conditions</string>
+    <string name="terms_and_conditions_details">By signing up, you agree to Terms and Conditions and Privacy Policy</string>
+    <!--<string name="terms_and_conditions_part2"> Terms and Conditions</string>-->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="signin">Sign In</string>
@@ -44,6 +43,7 @@
     <string name="username_validation_msg">Please enter Username(First name or Last name)</string>
     <string name="username">Username</string>
     <string name="gender">Gender</string>
+    <string name="password_limit">Password must be of minimum 8 characters</string>
 
 
 
@@ -71,8 +71,8 @@
     <!-- Home Screen -->
 
     <string name="view_all">View all</string>
-    <string name="my_feed">My feed</string>
-    <string name="my_hunts">My hunts</string>
+    <string name="my_feed">My Feed</string>
+    <string name="my_hunts">My Hunts</string>
     <string name="watch">Watch</string>
     <string name="shop">Shop</string>
     <string name="choose_category">Choose categories to show</string>
@@ -89,15 +89,16 @@
     <string name="write_comments_here">Write your comment here</string>
     <string name="send">Send</string>
     <string name="update">Update</string>
-   <!-- <string name="rs">\u20B9</string>-->
+    <!-- <string name="rs">\u20B9</string>-->
     <string name="read_time">%s min read</string>
     <string name="close_all">Close all</string>
-    <string name="healthhunt_shop_content">Organic food, yoga practitioners, relaxing spa massages, healthy snacking items, reflexology sessions, and much more… you will find all of this at one place – healthhunt shop! Whether you are looking to connect with newer audience or for the latest, healthy products and services – healthhunt shop is for you! View your saved items and collections here!</string>
-    <string name="healthhunt_my_hunts_content">My hunts let you view your saved and received cards</string>
+    <string name="healthhunt_shop_content">All things good, under one roof! Organic food, yoga practitioners, relaxing spa massages, healthy snacking items, reflexology sessions, and many more…everything a wellness enthusiast can ask for, can be found at one place – healthhunt shop!</string>
+    <string name="healthhunt_my_hunts_content">Cards You\'ve Saved And Received, Under one tab.</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="buy">Buy</string>
 
+    <string name="browser">Browser</string>
     <string name="share">Share</string>
     <string name="download_this_article">Download this article</string>
     <string name="download_this_product">Download this product</string>
@@ -127,7 +128,7 @@
     <string name="downloaded">Downloaded</string>
     <string name="articles">Articles</string>
     <string name="videos">Videos</string>
-    <string name="questions">Questions</string>
+    <string name="consult_an_expert">Consult An Expert</string>
     <string name="edit_profile">Edit profile</string>
     <string name="profile">Profile</string>
     <string name="change_photo">Change profile photo</string>
@@ -144,18 +145,18 @@
     <string name="logout">Log Out</string>
     <string name="tags">Tags</string>
     <string name="options">Options</string>
-    <string name="selected_tags">Selected tags</string>
+    <string name="help_us_match_your_taste">Help Us Match Your Taste</string>
     <string name="cancel">Cancel</string>
     <string name="delete_message">Do you want to delete?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="search">Search</string>
-    <string name="search_result">Search result</string>
+    <string name="look_what_you_discovered">Look What You Discovered</string>
     <string name="share_successfully">Shared successfully</string>
     <string name="downloaded_successfully">Downloaded successfully"</string>
     <string name="already_downloaded">Already downloaded"</string>
     <string name="tags_saved_successfully">Tags saved successfully</string>
-    <string name="no_records_found">No more records found.</string>
+    <string name="no_records_found">Oops! We couldn\'t find any results.</string>
     <string name="please_enter_comment">Please enter comment</string>
     <string name="free_trial">Free Trial</string>
     <string name="listen">Listen</string>
@@ -171,5 +172,98 @@
     <string name="search_validation">Please enter a keyword to search.</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
     <string name="profile_update_msg">Profile updated successfully.</string>
+    <string name="view_more">View More</string>
+
+
+    <string name="settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="push_notification">Push notifications</string>
+    <string name="email_notification">Email notifications</string>
+    <string name="about_us">About us</string>
+    <string name="what_we_de">What we do</string>
+    <string name="health_council">Health council</string>
+    <string name="collaborate_withus">Collaborate with us</string>
+    <string name="legal_other">Legal/others</string>
+    <string name="media_coverages">Media coverages</string>
+
+    <string name="prescribed_for_you">Prescribed for you</string>
+    <string name="continue_reading">Continue reading</string>
+    <string name="its_viral">It\'s Viral!</string>
+    <string name="sponsored">Sponsored</string>
+    <string name="holy_grails">Holy Grails</string>
+    <string name="read_fresh">Read Fresh</string>
+    <string name="webinars">Webinars</string>
+    <string name="check_out_the_newbies">Check Out The Newbies</string>
+
+
+    <string name="corporate_wellness">Corporate wellness</string>
+    <string name="corporate_wellness_details">Are you a business/institution looking to bring some health and wellness into your team?
+
+\n \nA healthy lifestyle, including fitness, proper nutrition, and a healthy work-life balance, is essential for an individual to perform well in any area of life. However, with the hectic pace of life today, it is easy to forget to take care of oneself. Overwhelming stress, a sedentary routine, and poor lifestyle choices restrain optimum performance at work. Employees are availing their sick leaves more than ever, and productivity is going down. If left unchecked, not only is the health of the employees at stake, but also the health of the company.
+
+\n \nWe at healthhunt have the perfect tool to help you get started. Contact us at <a href = "info@healthhunt.in">info@healthhunt.in</a> for more details.</string>
+
+
+    <string name="schools_and_colleges">Schools and colleges</string>
+    <string name="schools_and_colleges_details">We at healthhunt believe that the health and wellness revolution should begin right from childhood. If good habits are inculcated from the start, our children will grow up to be healthy adults. Our aim is to make healthy living a part of everyone’s lifestyle, both of parents as well as of students. In today’s fast-paced world, stress is a major contributor to being unhealthy and diseased. Apart from that, poor eating habits, the lack of time and motivation to exercise, and emotional issues are wreaking havoc. Even young children are not spared from these toxic problems. This is the reason that we are inviting schools and colleges to join our #healthrevolution.
+
+\n \nIt’s as easy as 1-2-3 to be a part of this beautiful and essential change. Once you register with us, you can choose your categories, and we will provide to you content pertaining to the same. This content can be provided to the parents of the children studying in your school via your website, handouts, or any other way of dissemination that you see fit.
+
+\n \nEmail us today to get started <a href = "info@healthhunt.in">info@healthhunt.in</a> </string>
+
+
+    <string name="daily_wellbeing">Daily wellbeing</string>
+    <string name="daily_wellbeing_details">To help you be the best you can, health-wise, we bring to you daily doses of wellbeing, in the form of our varied, credible, and easily actionable content. Our tips and remedies are easy to implement, and will lead you down the path of good health. We believe that health is holistic, and not just physical – it is also mental, sexual, emotional, spiritual, and social. Content based on that is designed to help you achieve your goal of living a balanced, healthy lifestyle – day in and day out.</string>
+
+
+
+    <string name="advertise_with_us">Advertise with us</string>
+    <string name="advertise_with_us_details">Please contact us at <a href = "sales@healthhunt.in"></a>sales@healthhunt.in to learn more about our advertising opportunities.</string>
+
+    <string name="promote_your_brand">Promote your brand</string>
+    <string name="promote_your_brand_details">Are you a brand providing health and wellness products or services? We at healthhunt will market your unique wellness product/service. Contact us at <a href = "market@healthhunt.in">market@healthhunt.in</a> for more details.</string>
+
+    <string name="careers">Careers</string>
+    <string name="careers_details">Please contact us at <a href = "careers@healthhunt.in">careers@healthhunt.in</a></string>
+
+    <string name="contact_us">Contact us</string>
+    <string name="contact_us_details">We’d love to hear from you! Send us a mail at <a href = "info@healthhunt.in">info@healthhunt.in</a></string>
+
+    <string name="contribute">Contribute</string>
+    <string name="contribute_details">Are you a snappy writer who can make eating celery sound like fun? Our community of writers consists of individuals who can inspire people to live, love, and think health. Areas of focus include Nutrition, Fitness, Organic Beauty and Lifestyle, Mental Wellbeing, and Love. Send in your details and samples of previous work to <a href = "submit@healthhunt.in">submit@healthhunt.in</a></string>
+
+    <string name="quality_content_guidelines">Quality Content Guidelines</string>
+
+
+    <string name="our_story">Our story</string>
+    <string name="our_story_details">Healthhunt aims to #disrupt the understanding of daily wellbeing across Asia. 25% of Indians may die at the age of 70, on account of an unhealthy lifestyle. Daily wellbeing, mindfulness, and self care should begin at a very early age in life, and not when diseases and lifestyle issues kick in. healthhunt is Asia\'s first fully integrated mind-body wellness platform. Being a content-led marketplace with a wide listing of health and wellness experts, as well as service providers, makes us a one stop shop.
+We are fully committed to generating awareness through short-formatted and actionable content, which is very easy to apply to your day-to-day life. Taking into account each person’s holistic needs, we are committed to aiding you organically through this process.
+
+We believe that the human body is most perfectly designed by nature. If well maintained, it is capable of miraculous expressions. Therefore, a healthy, disease-free life is your natural right. The key is to provide yourself with just a little care, by making conscious lifestyle choices daily.
+
+We encourage you to join our wellness revolution, and carry yourselves and your loved ones into uncompromising health.
+Because, ultimately…It’s your body. It matters. </string>
+
+
+    <string name="our_team">Our team</string>
+
+    <string name="events">Events</string>
+    <string name="events_details">Good news! We are organising a massive event called the “Future of Wellness” this year and we’ve got something for everyone. For more information, click here.</string>
+
+    <string name="blog_network">Blog network</string>
+    <string name="blog_network_details">Are you a fitness, health and wellness, food, organic beauty, or love, relationships, and parenting blogger looking for exciting opportunities?</string>
+
+    
+    <string name="what_is_it">What is it?</string>
+    <string name="what_is_it_details">Are you a business/institution looking to bring some health and wellness into your team?
+
+\n \nA healthy lifestyle, including fitness, proper nutrition, and a healthy work-life balance, is essential for an individual to perform well in any area of life. However, with the hectic pace of life today, it is easy to forget to take care of oneself. Overwhelming stress, a sedentary routine, and poor lifestyle choices restrain optimum performance at work. Employees are availing their sick leaves more than ever, and productivity is going down. If left unchecked, not only is the health of the employees at stake, but also the health of the company.
+
+\n \inWe at healthhunt have the perfect tool to help you get started. Contact us at <a href = "info@healthhunt.in">info@healthhunt.in</a> for more details.</string>
+
+
+    <string name="health_council_team">Health council team</string>
+
+    <string name="explore">Explore</string>
 
 </resources>

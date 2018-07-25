@@ -9,17 +9,21 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -29,12 +33,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import in.healthhunt.R;
+import in.healthhunt.model.beans.Constants;
 import in.healthhunt.model.tags.TagItem;
-import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.tagPresenter.ITagPresenter;
 import in.healthhunt.presenter.tagPresenter.TagPresenterImp;
 import in.healthhunt.view.BaseActivity;
-import in.healthhunt.view.onBoardingView.OnBoardingActivity;
+import in.healthhunt.view.homeScreenView.HomeActivity;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -46,14 +50,27 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
     @BindView(R.id.spinner)
     public Spinner mSpinner;
 
+    /* @BindView(R.id.search_view)
+     public AutoCompleteTextView mSearchView;
+ */
+    /*@BindView(R.id.cross)
+    public ImageView mCross;
+*/
+    @BindView(R.id.done)
+    public TextView mDone;
+
+    @BindView(R.id.select_all_checkbox)
+    public CheckBox mSelectAll;
+
+    @BindView(R.id.image_view_flipper)
+    ViewFlipper mViewFlipper;
+
     @BindView(R.id.search_view)
     public AutoCompleteTextView mSearchView;
 
     @BindView(R.id.cross)
     public ImageView mCross;
 
-    @BindView(R.id.done)
-    public TextView mDone;
 
     private String[] spinnerItems = {"English", "Hindi"};
 
@@ -71,13 +88,43 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
         addSpinnerAdapter();
         ITagPresenter = new TagPresenterImp(getApplicationContext(), this);
         ITagPresenter.loadFragment(TagFragment.class.getSimpleName(), null);
-        setSearchAdapter();
         //addTagAdapter();
         //mTagPresenterImp.fetchTags();
+
+        addSliderShow();
+        setSearchAdapter();
     }
+
+    private void addSliderShow() {
+
+        mViewFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+        mViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
+
+        if(!mViewFlipper.isFlipping()){
+            mViewFlipper.setAutoStart(true);
+            mViewFlipper.setFlipInterval(Constants.FLIP_DURATION);
+            mViewFlipper.startFlipping();
+        }
+
+        mViewFlipper.getInAnimation().setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+    }
+
 
     private void addSpinnerAdapter() {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_text_item, spinnerItems);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_drop_down_item);
+        //arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(arrayAdapter);
     }
 
@@ -110,7 +157,8 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
             currentUser.save();
         }*/
 
-        Intent intent = new Intent(getApplicationContext(), OnBoardingActivity.class);
+        //Intent intent = new Intent(getApplicationContext(), OnBoardingActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
         finish();
     }
@@ -141,13 +189,14 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
         }*/
 
         //  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.popup_window_item, searchList);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-        width = width - HealthHuntUtility.dpToPx(18, getApplicationContext());
-        mSearchView.setDropDownWidth(width);
-        mSearchView.setDropDownHorizontalOffset(HealthHuntUtility.dpToPx(1, getApplicationContext()));
-        mSearchView.setDropDownVerticalOffset(HealthHuntUtility.dpToPx(1, getApplicationContext()));
+
+       // DisplayMetrics displayMetrics = new DisplayMetrics();
+       // getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        //int width = displayMetrics.widthPixels;
+        //width = width - HealthHuntUtility.dpToPx(18, getApplicationContext());
+        //mSearchView.setDropDownWidth(width);
+        //mSearchView.setDropDownHorizontalOffset(HealthHuntUtility.dpToPx(1, getApplicationContext()));
+        //mSearchView.setDropDownVerticalOffset(HealthHuntUtility.dpToPx(1, getApplicationContext()));
 
         final TagSearchAdapter tagSearchAdapter = new TagSearchAdapter(getApplicationContext(), R.layout.popup_window_item, ITagPresenter);
         mSearchView.setAdapter(tagSearchAdapter);
@@ -180,7 +229,6 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
 
-                //String selectedText = mSearchView.getText().toString();
                 TagItem fullTagItem = (TagItem) tagSearchAdapter.getTagItem(pos);
 
                 boolean isPressed = fullTagItem.isPressed();
@@ -188,24 +236,6 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
                     fullTagItem.setPressed(true);
                     ITagPresenter.addTag(fullTagItem);
                 }
-                /*else {
-                    ITagPresenter.removeTag(fullTagItem);
-                }*/
-
-                /*for(TagItem fullTagItem: ITagPresenter.getTagList()){
-                    if(fullTagItem.getName().equalsIgnoreCase(selectedText)){
-                        fullTagItem.setPressed(!fullTagItem.isPressed());
-
-                        boolean isPressed = fullTagItem.isPressed();
-                        if(isPressed){
-                            ITagPresenter.addTag(fullTagItem);
-                        }
-                        else {
-                            ITagPresenter.removeTag(fullTagItem);
-                        }
-                        break;
-                    }
-                }*/
                 updateAdapter();
                 updateSelectAll();
 
@@ -223,10 +253,10 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
         }
 
         if(totalCount == prevCount){
-            mTagFragment.updateCheckBox(true);
+            /*mTagFragment.*/updateCheckBox(true);
         }
         else {
-            mTagFragment.updateCheckBox(false);
+            /*mTagFragment.*/updateCheckBox(false);
         }
     }
 
@@ -315,5 +345,33 @@ public class TagActivity extends BaseActivity implements ITagView, TagAdapter.On
     @OnClick(R.id.cross)
     void onCross(){
         mSearchView.setText("");
+    }
+
+    @OnClick(R.id.select_all_checkbox)
+    void onClickCheckBox(){
+        boolean isSelect = mSelectAll.isChecked();
+        Log.i("TAGTAGISSELCT", "ISELCXT "  + isSelect);
+        //TagAdapter tagAdapter = (TagAdapter) mTagFragment.getAdapter();
+        if(isSelect){
+            ITagPresenter.selectAll();
+            mTagFragment.setSelectAll(true);
+            //tagAdapter.setSelectAll(true);
+            //mSelectAll.setChecked(true);
+        }
+        else {
+            ITagPresenter.unSelectAll();
+            mTagFragment.setSelectAll(false);
+            //tagAdapter.setSelectAll(false);
+            //mSelectAll.setChecked(false);
+        }
+    }
+
+    void updateCheckBox(boolean isCheck){
+        if(isCheck){
+            mSelectAll.setChecked(true);
+        }
+        else {
+            mSelectAll.setChecked(false);
+        }
     }
 }

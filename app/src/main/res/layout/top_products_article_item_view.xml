@@ -56,6 +56,7 @@
                 android:textColor="@color/hh_edittext_text_color"
                 android:textSize="16sp"
                 android:maxLines="1"
+                android:text="kjhkhjhkj"
                 android:ellipsize="end"/>
 
             <TextView
@@ -67,6 +68,7 @@
                 android:textColor="@color/hh_text_color"
                 android:textSize="14sp"
                 android:maxLines="1"
+                android:text="gjhgjhgjh"
                 android:ellipsize="end"/>
 
         </LinearLayout>
@@ -87,6 +89,7 @@
                 android:textColor="@color/hh_green_light2"
                 android:textSize="16sp"
                 android:ellipsize="end"
+                android:text="khgjgghj"
                 android:maxLines="1"/>
 
             <TextView
@@ -99,6 +102,7 @@
                 android:textColor="@color/hh_green_light2"
                 android:textSize="16sp"
                 android:ellipsize="end"
+                android:text="khgghghj"
                 android:maxLines="1"/>
         </LinearLayout>
 

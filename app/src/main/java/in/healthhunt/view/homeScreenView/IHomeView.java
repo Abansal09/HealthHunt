@@ -56,8 +56,8 @@ public interface IHomeView {
     List<String> getCategories();
     void updateCategoryList();
 
-    void hideSearchView();
-    void showSearchView();
+    //void hideSearchView();
+    //void showSearchView();
     void hideNotificationView();
     void showNotificationView();
 

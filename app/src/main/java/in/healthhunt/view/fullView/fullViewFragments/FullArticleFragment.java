@@ -86,7 +86,7 @@ import static android.util.Log.i;
  */
 
 public class FullArticleFragment extends Fragment implements IFullFragment, CommentAdapter.ClickListener,
-        RelatedArticlesAdapter.ClickListener, RelatedProductAdapter.ClickListener, TextToSpeech.OnInitListener {
+        RelatedArticlesAdapter.ClickListener, RelatedProductAdapter.ClickListener, TextToSpeech.OnInitListener{
 
     @BindView(R.id.full_article_read_time)
     TextView mReadTime;
@@ -133,11 +133,14 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     @BindView(R.id.full_article_hash_tags)
     TextView mHashTags;
 
+    @BindView(R.id.view_more)
+    LinearLayout mViewMore;
+
     @BindView(R.id.comment_count)
     TextView mCommentCount;
 
     @BindView(R.id.comments_view_all_text)
-    TextView mCommentViewAll;
+    TextView mCommentViewAllText;
 
     @BindView(R.id.comments_view_all_arrow)
     ImageView mCommentArrow;
@@ -183,6 +186,9 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
 
     @BindView(R.id.listen_view)
     LinearLayout mListenView;
+
+    @BindView(R.id.comments_view_all)
+    LinearLayout mCommentViewAll;
 
     private IFullPresenter IFullPresenter;
     private IHomeView IHomeView;
@@ -342,13 +348,18 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
         IHomeView.setStatusBarTranslucent(true);
         IHomeView.hideBottomFooter();
         IHomeView.hideActionBar();
+        IHomeView.hideDrawerMenu();
+
         if(!isDownloaded) {
             IFullPresenter.fetchArticle(mId);
         }
         else {
             fetchArticleFromDataBase(mId);
+            IFullPresenter.fetchComments(mId);  // fetch the comments
+
         }
         setContent();
+        setCommentAdapter();
         //mCommentContent.setOnFocusChangeListener(focusListener);
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -453,7 +464,6 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
 
 
         if (articlePost != null) {
-            IHomeView.addContinueArticle(articlePost, true);
             setTopImageContent(articlePost);
             setArticleContent(articlePost);
             setAboutContent(articlePost);
@@ -569,6 +579,7 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     @Override
     public void updateCommentAdapter() {
         mCommentContent.setText("");
+
         CommentAdapter commentAdapter = (CommentAdapter) mCommentViewer.getAdapter();
         if(commentAdapter == null){
             setCommentAdapter();
@@ -576,8 +587,28 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
         else {
             commentAdapter.notifyDataSetChanged();
         }
+        updateViewMoreVisibility();
 
-        setCommentContent(IFullPresenter.getArticle());
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+        if(postItem != null) {
+            setCommentContent(postItem);
+        }
+    }
+
+    private void updateViewMoreVisibility() {
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+        if(postItem != null){
+            String commentCount = postItem.getComments();
+            if(commentCount != null) {
+                int count = Integer.parseInt(commentCount);
+                int adapterCount = IFullPresenter.getCommentCount();
+                if (adapterCount == 0 || adapterCount == count) {
+                    mViewMore.setVisibility(View.GONE);
+                } else {
+                    mViewMore.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override
@@ -648,6 +679,19 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
 
     }
 
+    @Override
+    public int getTotalCommentCount() {
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+        int count = 0;
+        if(postItem != null){
+            String countStr = postItem.getComments();
+            if(countStr != null){
+                count = Integer.parseInt(countStr);
+            }
+        }
+        return count;
+    }
+
     public void updateLikeIcon(boolean isLike) {
         if(!isLike){
             mLikeImage.setColorFilter(null);
@@ -663,23 +707,26 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
         i("TAGCOMMENT" , " isShown " + mCommentView.isShown());
 
         if(mCommentView.isShown()){
-            mCommentViewAll.setText(R.string.view_all);
+            mCommentViewAllText.setText(R.string.view_all);
             mCommentArrow.setImageResource(R.mipmap.ic_chevron_down);
             mCommentView.setVisibility(View.GONE);
             mCommentViewer.setVisibility(View.GONE);
+            mViewMore.setVisibility(View.GONE);
         }
         else {
-            mCommentViewAll.setText(R.string.close_all);
+            mCommentViewAllText.setText(R.string.close_all);
             mCommentArrow.setImageResource(R.mipmap.ic_chevron_up);
             mCommentView.setVisibility(View.VISIBLE);
             mCommentViewer.setVisibility(View.VISIBLE);
+            updateViewMoreVisibility();
+            //mViewMore.setVisibility(View.VISIBLE);
 
-            // CommentAdapter adapter = (CommentAdapter) mCommentViewer.getAdapter();
-            //if(adapter == null) {
-            ArticlePostItem post = IFullPresenter.getArticle();
-            IFullPresenter.fetchComments(String.valueOf(post.getArticle_Id()));
-            mFullViewScroll.fullScroll(View.FOCUS_DOWN);
-            //}
+            /*CommentAdapter adapter = (CommentAdapter) mCommentViewer.getAdapter();
+            if(adapter == null) {
+                ArticlePostItem post = IFullPresenter.getArticle();
+                IFullPresenter.fetchComments(String.valueOf(post.getArticle_Id()));
+                //mFullViewScroll.fullScroll(View.FOCUS_DOWN);
+            }*/
         }
     }
 
@@ -737,6 +784,11 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
         IFullPresenter.updateLike(String.valueOf(id));
     }
 
+    @OnClick(R.id.view_more)
+    void onViewMore(){
+        onLoadMoreComments();
+    }
+
     private void setCommentContent(ArticlePostItem articlePost) {
         String commentCount = articlePost.getComments();
         if(commentCount != null){
@@ -744,9 +796,11 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
             if(count > 0){
                 commentCount = HealthHuntUtility.formatNumber(count);
                 mCommentCount.setText(commentCount);
+                mCommentViewAll.setVisibility(View.VISIBLE);
             }
             else {
                 mCommentCount.setText("");
+                mCommentViewAll.setVisibility(View.GONE);
             }
         }
     }
@@ -754,7 +808,7 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
     private void setAboutContent(ArticlePostItem articlePost) {
 
         Author author = articlePost.getAuthor();
-        if(author != null && !author.getName().isEmpty()){
+        if(author != null && !author.getInfo().isEmpty()){
             mAboutView.setVisibility(View.VISIBLE);
             String authorName = author.getName();
             i("TAGNAMNE","NAMe " + authorName);
@@ -1227,6 +1281,11 @@ public class FullArticleFragment extends Fragment implements IFullFragment, Comm
 
     private void addSpeakText(String text){
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null);
+    }
+
+    private void onLoadMoreComments() {
+        ArticlePostItem post = IFullPresenter.getArticle();
+        IFullPresenter.fetchMoreComments(post.getArticle_Id());
     }
 
     private class FetchArticlesTask extends AsyncTask<Void, Void, ArticlePostItem> {

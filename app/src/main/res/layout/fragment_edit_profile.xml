@@ -1,56 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <!--<FrameLayout
+        android:id="@+id/child_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/hh_background_light">
+        android:visibility="gone"
+        android:layout_gravity="center">
+    </FrameLayout>-->
 
-
-        <include layout="@layout/profile_info"></include>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:layout_height="match_parent"
+            android:background="@color/hh_background_light">
 
-            <TextView
-                android:id="@+id/tags"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:fontFamily="@string/font_family_regular"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:textColor="@color/hh_edittext_text_color"
-                android:layout_gravity="center"
-                android:background="@android:color/white"
-                android:text="@string/tags"
-                android:layout_weight="1"/>
 
-            <View
-                android:layout_width="1dp"
+            <include layout="@layout/profile_info"></include>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/hh_line_color">
-            </View>
+                android:weightSum="2">
 
-            <TextView
-                android:id="@+id/options"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:fontFamily="@string/font_family_regular"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:textColor="@color/hh_text_color"
-                android:layout_gravity="center"
-                android:background="@color/hh_background_light"
-                android:text="@string/options"
-                android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/tags"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:fontFamily="@string/font_family_regular"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:textColor="@color/hh_edittext_text_color"
+                    android:layout_gravity="center"
+                    android:background="@color/hh_background_light2"
+                    android:text="@string/tags"
+                    android:layout_weight="1"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/hh_line_color">
+                </View>
+
+                <TextView
+                    android:id="@+id/options"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:fontFamily="@string/font_family_regular"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:textColor="@color/hh_text_color"
+                    android:layout_gravity="center"
+                    android:background="@android:color/white"
+                    android:text="@string/options"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <include layout="@layout/edit_profile_tag_view"/>
+            <include layout="@layout/options_view"
+                android:visibility="gone"/>
         </LinearLayout>
-        <include layout="@layout/edit_profile_tag_view"/>
-
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

@@ -222,10 +222,10 @@ public class TopProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 CurrentUser currentUser = postsItem.getCurrent_user();
                 if(currentUser != null) {
                     if(!currentUser.isBookmarked()){
-                        IProductPresenter.bookmark(id, ArticleParams.TOP_PRODUCTS);
+                        IProductPresenter.bookmark(id, ArticleParams.HOLY_GRAILS);
                     }
                     else {
-                        IProductPresenter.unBookmark(id, ArticleParams.TOP_PRODUCTS);
+                        IProductPresenter.unBookmark(id, ArticleParams.HOLY_GRAILS);
                     }
                 }
 

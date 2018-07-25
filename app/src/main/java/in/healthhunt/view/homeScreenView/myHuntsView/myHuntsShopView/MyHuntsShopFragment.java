@@ -37,9 +37,7 @@ import in.healthhunt.model.articles.commonResponse.MediaItem;
 import in.healthhunt.model.articles.commonResponse.TagsItem;
 import in.healthhunt.model.articles.productResponse.ProductPostItem;
 import in.healthhunt.model.beans.Constants;
-import in.healthhunt.model.beans.SpaceDecoration;
 import in.healthhunt.model.login.User;
-import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.myHuntPresenter.myHuntsShopPresenter.IMyHuntsProductsPresenter;
 import in.healthhunt.presenter.homeScreenPresenter.myHuntPresenter.myHuntsShopPresenter.MyHuntsShopPresenterImp;
 import in.healthhunt.view.fullView.fullViewFragments.FullProductFragment;
@@ -283,7 +281,7 @@ public class MyHuntsShopFragment extends Fragment implements IMyHuntsView, MyHun
         adapter.setClickListener(this);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         mProductViewer.setLayoutManager(layoutManager);
-        mProductViewer.addItemDecoration(new SpaceDecoration(HealthHuntUtility.dpToPx(8, getContext()), SpaceDecoration.GRID));
+       // mProductViewer.addItemDecoration(new SpaceDecoration(HealthHuntUtility.dpToPx(8, getContext()), SpaceDecoration.GRID));
         mProductViewer.setAdapter(adapter);
     }
 

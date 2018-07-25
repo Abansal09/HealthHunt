@@ -78,8 +78,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
             }
 
             String date = commentsItem.getDate();
+            //Log.i("TAGDATEDATE", "Date " + date);
+            date = HealthHuntUtility.getLocalTime(date);
+            //Log.i("TAGDATEDATE", "Date Local " + date);
             if(date != null) {
-                date = HealthHuntUtility.getDateWithFormat(date);
+
+                long milli = HealthHuntUtility.getDateInMilliSeconds(date);
+                date = HealthHuntUtility.getTimeAgo(milli, mContext);
+                if(date == null || date.isEmpty()){
+                    date = commentsItem.getDate();
+                    date = HealthHuntUtility.getDateWithFormat(date);
+                }
             }
             holder.mCommentDate.setText(date);
 
@@ -117,6 +126,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
                 }
 
                 Log.i("TAGCOMMENT", "comment ID " + commentsItem.getId());
+                if(str != null){
+                    str = str.trim();
+                }
                 holder.mCommentText.setText(str);
                 if(mEditCommentId > 0 && mEditCommentId == commentsItem.getId()) {
                     /*holder.mCommentText.setVisibility(View.VISIBLE);
@@ -145,6 +157,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
     @Override
     public int getItemCount() {
         return IFullPresenter.getCommentCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public void setClickListener(ClickListener clickListener) {

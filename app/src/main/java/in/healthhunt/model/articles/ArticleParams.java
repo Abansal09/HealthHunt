@@ -12,29 +12,29 @@ public interface ArticleParams {
     int LATEST_VIEW_ALL_TYPE = 1;
     int LATEST_PRODUCT_VIEW_ALL_TYPE = 2;
 
-    int BASED_ON_TAGS = 1001;
+    int PRESCRIBED_FOR_YOU = 1001;
     int CONTINUE_ARTICLES = 1002;
-    int TRENDING_ARTICLES = 1003;
+    int IT_S_VIRAL_ARTICLES = 1003;
     int SPONSORED_ARTICLES = 1004;
-    int TOP_PRODUCTS = 1005;
-    int LATEST_ARTICLES = 1006;
+    int HOLY_GRAILS = 1005;
+    int READ_FRESH_ARTICLES = 1006;
     int WEBINARS_ARTICLES = 1007;
-    int LATEST_PRODUCTS = 1008;
+    int CHECK_OUT_THE_NEWBIES_PRODUCTS = 1008;
     int RELATED_PRODUCTS = 1009;
     int RELATED_ARTICLES = 1010;
 
     String ARTICLE_TYPE = "article_type";
 
-    String TEXT_BASED_ON_TAGS = "Based on tags";
+   /* String TEXT_PRESCRIBED_FOR_YOU = "Prescribed for you";
     String TEXT_CONTINUE_ARTICLES = "Continue reading";
-    String TEXT_TRENDING_ARTICLES = "Trending";
+    String TEXT_IT_S_VIRAL = "It's Viral!";
     String TEXT_SPONSORED_ARTICLES = "Sponsored";
-    String TEXT_TOP_PRODUCTS_ARTICLES = "Top products";
-    String TEXT_LATEST_ARTICLES = "Latest articles";
+    String TEXT_HOLY_GRAILS = "Holy Grails";
+    String TEXT_READ_FRESH = "Read Fresh";
     String TEXT_WEBINARS_ARTICLES = "Webinars";
-    String TEXT_LATEST_PRODUCTS_ARTICLES = "Latest products";
+    String TEXT_CHECK_OUT_THE_NEWBIES = "Check Out The Newbies";
     String TEXT_RELATED_ARTICLES = "Related articles";
-    String TEXT_RELATED_PRODUCTS = "Related products";
+    String TEXT_RELATED_PRODUCTS = "Related products";*/
 
 
     String TAGS = "tags";
@@ -58,7 +58,7 @@ public interface ArticleParams {
     String POST_FORMAT_VIDEO = "post-format-video";
     String TYPE = "type";
     String MARKET = "market";
-    String MARKT_TYPE = "markt_type";
+    String MARKET_TYPE = "market_type";
     String PRODUCT_NAME = "product_name";
     String PRODUCT_TYPE = "product_type";
     String PRODUCT_PRICE = "product_price";
@@ -94,6 +94,8 @@ public interface ArticleParams {
     String DATE = "date";
     String POST = "post";
     String INCLUDE = "include";
+    String IMAGE_FORMAT = "image";
+    String VIDEO_FORMAT = "video";
 
     String PRODUCT_TYPE_ID = "productType";
     String BRAND = "brand";

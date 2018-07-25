@@ -85,7 +85,7 @@ public class MyHuntFragment extends Fragment {
         adapter.addFragment(new MyHuntsArticleFragment(), getString(R.string.articles));
         adapter.addFragment(new MyHuntsVideoFragment(), getString(R.string.videos));
         adapter.addFragment(new MyHuntsShopFragment(), getString(R.string.shop));
-        adapter.addFragment(new MyHuntsQuesFragment(), getString(R.string.questions));
+        adapter.addFragment(new MyHuntsQuesFragment(), getString(R.string.consult_an_expert));
         mHuntPager.setOffscreenPageLimit(5);
         mHuntPager.setAdapter(adapter);
     }

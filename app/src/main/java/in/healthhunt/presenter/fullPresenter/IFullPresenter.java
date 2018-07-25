@@ -25,6 +25,7 @@ public interface IFullPresenter {
     CommentViewHolder createViewHolder(View view);
     int getCommentCount();
     void fetchComments(String id);
+    void fetchMoreComments(String id);
     List<CommentsItem> getComments();
     CommentsItem getComment(int pos);
     void  deleteComment(String id);

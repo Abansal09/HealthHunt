@@ -1,6 +1,7 @@
 package in.healthhunt.view.loginView;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.text.Spannable;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,9 @@ import in.healthhunt.presenter.loginPresenter.ILoginPresenter;
 import in.healthhunt.presenter.loginPresenter.LoginPresenterImpl;
 import in.healthhunt.view.BaseActivity;
 import in.healthhunt.view.homeScreenView.HomeActivity;
+import in.healthhunt.view.privacyPolicy.PrivacyPolicy;
 import in.healthhunt.view.tagView.TagActivity;
+import in.healthhunt.view.termAndConditions.TermsAndConditions;
 import io.fabric.sdk.android.Fabric;
 
 import static in.healthhunt.view.socialLogin.GoogleLoginActivity.GOOGLE_LOGIN_RESPONSE_OK;
@@ -74,14 +78,20 @@ public class LoginActivity extends BaseActivity implements ILoginView{
 
     }
 
-    private void loadFragment(Fragment fragment, String tag) {
+    private void showFragment(Fragment fragment, String tag) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.frame, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        if(ForgotPasswordFragment.class.getSimpleName().equals(tag)) { // Needed when user press the back button on forgot password screen
-            fragmentTransaction.addToBackStack(tag);
-        }
+        fragmentTransaction.commit();
+    }
+
+    private void showBackStackFragment(Fragment fragment, String tag) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.frame, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.addToBackStack(tag);
         fragmentTransaction.commit();
     }
 
@@ -126,7 +136,7 @@ public class LoginActivity extends BaseActivity implements ILoginView{
     }
 
     @Override
-    public void showFragment(String tag, Bundle bundle) {
+    public void loadFragment(String tag, Bundle bundle) {
         Fragment fragment = null;//fragmentMap.get(tag);
 
         if(fragment == null) {
@@ -134,13 +144,29 @@ public class LoginActivity extends BaseActivity implements ILoginView{
                 fragment = new LoginFragment();
             } else if (tag != null && tag.equals(SignUpFragment.class.getSimpleName())) {
                 fragment = new SignUpFragment();
-            } else if (tag != null && tag.equals(ForgotPasswordFragment.class.getSimpleName())) {
-                fragment = new ForgotPasswordFragment();
             }
             //fragmentMap.put(tag, fragment);
         }
+
         fragment.setArguments(bundle);
-        loadFragment(fragment, tag);
+        showFragment(fragment, tag);
+    }
+
+    @Override
+    public void loadBackStackFragment(String tag, Bundle bundle) {
+        Fragment fragment = null;
+        if (tag != null && tag.equals(ForgotPasswordFragment.class.getSimpleName())) {
+            fragment = new ForgotPasswordFragment();
+        }
+        else if (tag != null && tag.equals(TermsAndConditions.class.getSimpleName())) {
+            fragment = new TermsAndConditions();
+        }
+        else if (tag != null && tag.equals(PrivacyPolicy.class.getSimpleName())) {
+            fragment = new PrivacyPolicy();
+        }
+
+        fragment.setArguments(bundle);
+        showBackStackFragment(fragment, tag);
     }
 
     @Override
@@ -250,6 +276,14 @@ public class LoginActivity extends BaseActivity implements ILoginView{
         finish();
     }
 
+    public void hideKeyboardIfOpen() {
+        View view = findViewById(android.R.id.content);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(view != null){
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
     private View getAlertView() {
         return getLayoutInflater().inflate(R.layout.alertdialog_view, null, false);
     }
@@ -282,4 +316,20 @@ public class LoginActivity extends BaseActivity implements ILoginView{
         }
         return false;
     }
+
+    /*@Override
+    public void onBackPressed() {
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame);
+        if(fragment instanceof SignUpFragment){
+            SignUpFragment signUpFragment = (SignUpFragment) fragment;
+            boolean isBack = signUpFragment.onBackPressed();
+            if(isBack){
+                return;
+            }
+        }
+
+
+        super.onBackPressed();
+    }*/
 }

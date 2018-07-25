@@ -3,13 +3,11 @@ package in.healthhunt.view.tagView;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -30,18 +28,21 @@ public class TagViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.tag_image)
     public ImageView mTagImage;
 
-    @BindView(R.id.plus)
-    public ImageView mPlus;
-
-    @BindView(R.id.check)
+    /*  @BindView(R.id.plus)
+      public ImageView mPlus;
+  */
+  /*  @BindView(R.id.check)
     public ImageView mCheck;
-
+*/
     @BindView(R.id.tag)
     public TextView mTag;
 
-    @BindView(R.id.tag_view)
-    RelativeLayout mTagView;
+    @BindView(R.id.tag_details)
+    LinearLayout mTagBGView;
 
+    /*  @BindView(R.id.tag_view)
+      RelativeLayout mTagView;
+  */
     private int mViewHolderPos;
 
     private Context mContext;
@@ -71,30 +72,30 @@ public class TagViewHolder extends RecyclerView.ViewHolder {
         boolean isPressed = tagItem.isPressed();
 
         if(isPressed){
-            mTagView.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.ic_check_bg));
+            mTagBGView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.tag_item_bg_green));
             mTagImage.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
-            mTag.setTextColor(Color.WHITE);
-            mPlus.setVisibility(View.GONE);
-            mCheck.setVisibility(View.VISIBLE);
+            //mTag.setTextColor(Color.WHITE);
+            // mPlus.setVisibility(View.GONE);
+            //mCheck.setVisibility(View.VISIBLE);
 
-            Drawable mDrawable = ContextCompat.getDrawable(mContext, R.mipmap.ic_check);
-            mDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP));
-            mCheck.setBackground(mDrawable);
+            //Drawable mDrawable = ContextCompat.getDrawable(mContext, R.mipmap.ic_check);
+            //mDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP));
+            //Check.setBackground(mDrawable);
         }
         else {
-            mTagView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.tag_item_bg));
+            mTagBGView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.tag_item_bg_white));
             mTagImage.setColorFilter(ContextCompat.getColor(mContext, R.color.hh_green_light2), PorterDuff.Mode.SRC_ATOP);
 
-            mTag.setTextColor(ContextCompat.getColor(mContext, R.color.hh_green_light2));
-            mCheck.setVisibility(View.GONE);
-            mPlus.setVisibility(View.VISIBLE);
+            // mTag.setTextColor(ContextCompat.getColor(mContext, R.color.hh_green_light2));
+            //mCheck.setVisibility(View.GONE);
+            //mPlus.setVisibility(View.VISIBLE);
 
-            Drawable mDrawable = ContextCompat.getDrawable(mContext, R.mipmap.ic_plus);
-            mDrawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(mContext, R.color.hh_grey_dark1), PorterDuff.Mode.SRC_ATOP));
-            mPlus.setBackground(mDrawable);
+            //Drawable mDrawable = ContextCompat.getDrawable(mContext, R.mipmap.ic_plus);
+            //mDrawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(mContext, R.color.hh_grey_dark1), PorterDuff.Mode.SRC_ATOP));
+            //mPlus.setBackground(mDrawable);
         }
-        mTagView.setPressed(!isPressed);
+        //mTagView.setPressed(!isPressed);
     }
 
     private void updateSelection(TagItem tagItem) {

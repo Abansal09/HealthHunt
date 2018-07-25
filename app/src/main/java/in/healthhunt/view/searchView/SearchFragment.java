@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -43,6 +44,12 @@ public class SearchFragment extends Fragment implements SearchAdapter.ClickListe
     @BindView(R.id.no_records)
     TextView mNoRecords;
 
+    @BindView(R.id.view_all_slider_viewer)
+    FrameLayout mSlider;
+
+    @BindView(R.id.view_all_header)
+    TextView mHeader;
+
     private ISearchPresenter ISearchPresenter;
     private IHomeView IHomeView;
 
@@ -69,12 +76,15 @@ public class SearchFragment extends Fragment implements SearchAdapter.ClickListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_all, container, false);
         ButterKnife.bind(this, view);
+        mSlider.setVisibility(View.GONE);
+        mHeader.setVisibility(View.GONE);
+
         IHomeView.setStatusBarTranslucent(false);
         IHomeView.hideBottomNavigationSelection();
         IHomeView.hideDrawerMenu();
         IHomeView.showBottomFooter();
         IHomeView.showActionBar();
-        IHomeView.updateTitle(getString(R.string.search_result));
+        IHomeView.updateTitle(getString(R.string.look_what_you_discovered));
         setAdapter();
         updateVisibility();
         return view;
@@ -154,8 +164,8 @@ public class SearchFragment extends Fragment implements SearchAdapter.ClickListe
         Bundle bundle = new Bundle();
         bundle.putString(ArticleParams.ID, id);
 
-        String url = postItem.getVideo_thumbnail();
-        if(url == null || url.isEmpty()) {
+        String format = postItem.getFormat();
+        if(format != null && format.equalsIgnoreCase(ArticleParams.IMAGE_FORMAT)) {
             bundle.putInt(ArticleParams.POST_TYPE, ArticleParams.ARTICLE);
             ISearchPresenter.loadFragment(FullArticleFragment.class.getSimpleName(), bundle);
         }
@@ -166,6 +176,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.ClickListe
     }
 
     public void updateData(String searchStr){
+        IHomeView.showActionBar();
         ISearchPresenter.searchArticles(searchStr);
     }
 

@@ -98,10 +98,10 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
 
         List<String> categories = IMyFeedView.getCategories();
         if(categories != null && !categories.isEmpty() && !categories.contains("1")) {  // 1 For ALL
-            IArticleInteractor.fetchArticlesCategory(mContext, ArticleParams.BASED_ON_TAGS, map, categories,this);
+            IArticleInteractor.fetchArticlesCategory(mContext, ArticleParams.PRESCRIBED_FOR_YOU, map, categories,this);
         }
         else {
-            IArticleInteractor.fetchArticle(mContext, ArticleParams.BASED_ON_TAGS, map, this);
+            IArticleInteractor.fetchArticle(mContext, ArticleParams.PRESCRIBED_FOR_YOU, map, this);
         }
     }
 
@@ -111,6 +111,8 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.INCLUDE, continueList);
+        map.put(ArticleParams.OFFSET, String.valueOf(0));
+        map.put(ArticleParams.LIMIT, String.valueOf(20));
         IArticleInteractor.fetchArticle(mContext, ArticleParams.CONTINUE_ARTICLES, map, this);
 
     }
@@ -159,7 +161,7 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(offset));
         map.put(ArticleParams.LIMIT, String.valueOf(limit));
-        IArticleInteractor.fetchArticle(mContext, ArticleParams.TRENDING_ARTICLES, map, this);
+        IArticleInteractor.fetchArticle(mContext, ArticleParams.IT_S_VIRAL_ARTICLES, map, this);
     }
 
     @Override
@@ -183,10 +185,10 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
 
         List<String> categories = IMyFeedView.getCategories();
         if(categories != null && !categories.isEmpty() && !categories.contains("1")) {  // 1 For ALL
-            IArticleInteractor.fetchArticlesCategory(mContext, ArticleParams.LATEST_ARTICLES, map, categories, this);
+            IArticleInteractor.fetchArticlesCategory(mContext, ArticleParams.READ_FRESH_ARTICLES, map, categories, this);
         }
         else {
-            IArticleInteractor.fetchArticle(mContext, ArticleParams.LATEST_ARTICLES, map, this);
+            IArticleInteractor.fetchArticle(mContext, ArticleParams.READ_FRESH_ARTICLES, map, this);
         }
     }
 
@@ -216,11 +218,11 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
 
         Map<String, String> map = new HashMap<String, String>();
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-        map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
+        map.put(ArticleParams.MARKET_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(offset));
         map.put(ArticleParams.LIMIT, String.valueOf(limit));
-        IProductInteractor.fetchProduct(mContext, ArticleParams.TOP_PRODUCTS, map, this);
+        IProductInteractor.fetchProduct(mContext, ArticleParams.HOLY_GRAILS, map, this);
 
     }
 
@@ -238,10 +240,11 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
         map.put(ArticleParams.OFFSET, String.valueOf(offset));
         map.put(ArticleParams.LIMIT, String.valueOf(limit));
         map.put(ArticleParams.ORDER, ArticleParams.DESC);
+        map.put(ArticleParams.MARKET_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
         map.put(ArticleParams.ORDER_BY, ArticleParams.DATE/*ArticleParams.ID*/);
 
         //map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
-        IProductInteractor.fetchProduct(mContext, ArticleParams.LATEST_PRODUCTS, map, this);
+        IProductInteractor.fetchProduct(mContext, ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS, map, this);
 
     }
 
@@ -353,17 +356,17 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     public void onArticleSuccess(List<ArticlePostItem> items, int type) {
         Log.i("TAGARTICLES" , "article type " + type);
         switch (type) {
-            case ArticleParams.BASED_ON_TAGS:
+            case ArticleParams.PRESCRIBED_FOR_YOU:
                 mTagArticles = items;
                 fetchCount--;
                 break;
 
-            case ArticleParams.TRENDING_ARTICLES:
+            case ArticleParams.IT_S_VIRAL_ARTICLES:
                 mTrendingArticles = items;
                 fetchCount--;
                 break;
 
-            case ArticleParams.LATEST_ARTICLES:
+            case ArticleParams.READ_FRESH_ARTICLES:
                 mLatestArticles = items;
                 fetchCount--;
                 break;
@@ -375,6 +378,16 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
 
             case ArticleParams.CONTINUE_ARTICLES:
                 mContinueArticles = items;
+                /*List<ArticlePostItem> articlePostItems = mContinueArticles;
+                String contineList = "";
+                if(articlePostItems != null){
+                    for(ArticlePostItem postItem1: articlePostItems) {
+                        contineList = contineList + postItem1.getArticle_Id() + ",";
+                    }
+                }
+
+                //User user = User.getCurrentUser();
+                Log.i("TAGCONTINUE", " My Feed List " + contineList);*/
                 fetchCount--;
                 break;
         }
@@ -390,11 +403,11 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
     public void onProductSuccess(List<ProductPostItem> items, int type) {
         Log.i("TAGARTICLES" , "product type " + type);
         switch (type) {
-            case ArticleParams.TOP_PRODUCTS:
+            case ArticleParams.HOLY_GRAILS:
                 mTopProduct = items;
                 fetchCount--;
                 break;
-            case ArticleParams.LATEST_PRODUCTS:
+            case ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS:
                 mLatestProduct = items;
                 fetchCount--;
                 break;
@@ -445,7 +458,7 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
         int index = 0;
 
         if(mTagArticles != null && !mTagArticles.isEmpty()){
-            mArticlesType.put(index, ArticleParams.BASED_ON_TAGS);
+            mArticlesType.put(index, ArticleParams.PRESCRIBED_FOR_YOU);
             index++;
         }
 
@@ -459,7 +472,7 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
         }
 
         if(mTrendingArticles != null && !mTrendingArticles.isEmpty()){
-            mArticlesType.put(index, ArticleParams.TRENDING_ARTICLES);
+            mArticlesType.put(index, ArticleParams.IT_S_VIRAL_ARTICLES);
             index++;
         }
 
@@ -469,17 +482,17 @@ public class MyFeedPresenterImp implements IMyFeedPresenter, IArticleInteractor.
         }
 
         if(mTopProduct != null && !mTopProduct.isEmpty()){
-            mArticlesType.put(index, ArticleParams.TOP_PRODUCTS);
+            mArticlesType.put(index, ArticleParams.HOLY_GRAILS);
             index++;
         }
 
         if(mLatestArticles != null && !mLatestArticles.isEmpty()){
-            mArticlesType.put(index, ArticleParams.LATEST_ARTICLES);
+            mArticlesType.put(index, ArticleParams.READ_FRESH_ARTICLES);
             index++;
         }
 
         if(mLatestProduct != null && !mLatestProduct.isEmpty()){
-            mArticlesType.put(index, ArticleParams.LATEST_PRODUCTS);
+            mArticlesType.put(index, ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS);
             index++;
         }
     }

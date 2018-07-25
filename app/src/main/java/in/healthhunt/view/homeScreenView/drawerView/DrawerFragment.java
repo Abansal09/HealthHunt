@@ -147,17 +147,30 @@ public class DrawerFragment extends Fragment implements IEditProfileView, Catego
         }
     }
 
-    @OnClick(R.id.edit_profile)
+    /*@OnClick(R.id.edit_profile)
     void onEdit(){
         IHomeView.closeDrawer();
 
-        final Handler handler = new Handler();
+        *//*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {*//*
+                IHomePresenter.loadNonFooterFragment(ProfileFragment.class.getSimpleName(), null);
+         //   }
+       // }, 100);
+    }*/
+
+
+    @OnClick(R.id.drawer_profile_view)
+    void onDrawerProfile(){
+        IHomeView.closeDrawer();
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 IHomePresenter.loadNonFooterFragment(ProfileFragment.class.getSimpleName(), null);
             }
-        }, 100);
+        });
     }
 
     @Override

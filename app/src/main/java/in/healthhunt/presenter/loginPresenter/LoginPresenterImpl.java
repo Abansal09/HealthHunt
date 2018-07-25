@@ -10,7 +10,6 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
-import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -97,6 +96,15 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
 
             }
 
+            int passCount = password.length();
+            if(passCount < 8 /*|| passCount > 20*/){
+                String str = mContext.getString(R.string.password_limit);
+                ILoginView.showAlert(str);
+                return;
+            }
+
+
+
             if(gender == null || gender.isEmpty()) {
                 gender = "Not specified";
             }
@@ -150,7 +158,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
 
     @Override
     public void loadFragment(String tag, Bundle bundle) {
-        ILoginView.showFragment(tag, bundle);
+        ILoginView.loadFragment(tag, bundle);
     }
 
     @Override
@@ -169,14 +177,14 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
         HealthHuntPreference.putString(mContext, Constants.SOCIAL_LOGIN, Constants.FACEBOOK);
         ILoginView.onShowProgress();
 
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        /*AccessToken accessToken = AccessToken.getCurrentAccessToken();
         String token;
         if(accessToken != null && accessToken.getToken() != null) {
             token = accessToken.getToken();
             LoginRequest loginRequest = createLoginRequest(null, null, "facebook", token);
             ILoginInteractor.login(mContext, loginRequest, LoginPresenterImpl.this);
         }
-        else {
+        else */{
             ILoginInteractor.loginWithFacebook(context, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
@@ -291,7 +299,7 @@ public class LoginPresenterImpl implements ILoginPresenter, ILoginInteractor.OnL
     @Override
     public void onNewUserSuccess(HHResponse<UserData> user) {
         ILoginView.onHideProgress();
-       // storeUserInfo(user.getData().getUser());
+        // storeUserInfo(user.getData().getUser());
         ILoginView.showSignUpSuccessAlert(user.getMessage());
     }
 

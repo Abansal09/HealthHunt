@@ -58,14 +58,14 @@ public class ViewAllAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (mType) {
-            case ArticleParams.BASED_ON_TAGS:
-            case ArticleParams.LATEST_ARTICLES:
+            case ArticleParams.PRESCRIBED_FOR_YOU:
+            case ArticleParams.READ_FRESH_ARTICLES:
             case ArticleParams.RELATED_ARTICLES:
                 ArticlePostItem tagsItem = IViewAllPresenter.getArticle(position);
                 setArticleContent(((ViewAllArticleHolder) holder), tagsItem);
                 break;
 
-            case ArticleParams.LATEST_PRODUCTS:
+            case ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS:
             case ArticleParams.RELATED_PRODUCTS:
                 ProductPostItem postItem =  IViewAllPresenter.getProduct(position);
                 setProductContent(((ViewAllProductHolder) holder), postItem);
@@ -86,7 +86,7 @@ public class ViewAllAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             if(url != null) {
                 Log.i("TAG11", "url " + url);
-                Glide.with(mContext).load(url).placeholder(R.mipmap.ic_no_my_feed_article_image).into(holder.mArticleImage);
+                Glide.with(mContext).load(url).dontAnimate().placeholder(R.mipmap.ic_no_my_feed_article_image).into(holder.mArticleImage);
             }
             else {
                 holder.mArticleImage.setImageResource(R.mipmap.ic_no_my_feed_article_image);
@@ -227,7 +227,7 @@ public class ViewAllAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             if (url != null) {
                 Log.i("TAG11", "productUrl " + url);
-                Glide.with(mContext).load(url).placeholder(R.mipmap.ic_no_top_product_image).into(holder.mProductImage);
+                Glide.with(mContext).load(url).dontAnimate().placeholder(R.mipmap.ic_no_top_product_image).into(holder.mProductImage);
             } else {
                 holder.mProductImage.setImageResource(R.mipmap.ic_no_top_product_image);
             }

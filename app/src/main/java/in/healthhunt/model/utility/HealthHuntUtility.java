@@ -32,6 +32,7 @@ import in.healthhunt.model.beans.Constants;
 public class HealthHuntUtility {
 
     private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+
     static {
         suffixes.put(1_000L, "k");
         suffixes.put(1_000_000L, "m");
@@ -40,6 +41,13 @@ public class HealthHuntUtility {
         suffixes.put(1_000_000_000_000_000L, "p");
         suffixes.put(1_000_000_000_000_000_000L, "e");
     }
+
+    private static final long SECOND_MILLIS = 1000;
+    private static final long MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    private static final long HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    private static final long DAY_MILLIS = 24 * HOUR_MILLIS;
+    private static final long MONTH_MILLIS = 30 * DAY_MILLIS;
+
 
     public static String getTimeStamp() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -96,10 +104,8 @@ public class HealthHuntUtility {
     }
 
     //Convert dp into device specific pixels
-    public static int dpToPx(int dp, Context context)
-    {
-        if(context != null)
-        {
+    public static int dpToPx(int dp, Context context) {
+        if (context != null) {
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
             //float logicalDensity = metrics.density;
             return (int) Math.ceil(dp * displayMetrics.density);
@@ -109,10 +115,8 @@ public class HealthHuntUtility {
     }
 
     //Convert device pixels into device independent units
-    public static int pxToDp(int px, Context context)
-    {
-        if(context != null)
-        {
+    public static int pxToDp(int px, Context context) {
+        if (context != null) {
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
             return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         }
@@ -120,75 +124,80 @@ public class HealthHuntUtility {
     }
 
     public static String getDateWithFormat(String strDate) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        try {
-            Log.i("TAGPARSE", " date " + strDate);
-            Date date = format.parse(strDate);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            format = new SimpleDateFormat("d MMM yyyy");
-            String currentDate = format.format(calendar.getTime());
-            Log.i("TAG12222", "cure " + currentDate);
-            return currentDate;
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(strDate != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            try {
+                Log.i("TAGPARSE", " date " + strDate);
+                Date date = format.parse(strDate);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                format = new SimpleDateFormat("d MMM yyyy");
+                String currentDate = format.format(calendar.getTime());
+                Log.i("TAG12222", "cure " + currentDate);
+                return currentDate;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
 
-    public static int getCategoryIcon(String categoryName){
+    public static long getDateInMilliSeconds(String strDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        try {
+            Log.i("TAGPARSE", " date " + strDate);
+            Date date = format.parse(strDate);
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getCategoryIcon(String categoryName) {
 
         int res = 0;
-        if(categoryName != null){
+        if (categoryName != null) {
 
-            if(categoryName.equalsIgnoreCase(Constants.NUTRITION)){
+            if (categoryName.equalsIgnoreCase(Constants.NUTRITION)) {
                 res = R.mipmap.ic_nutrition_icon;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.FITNESS)){
+            } else if (categoryName.equalsIgnoreCase(Constants.FITNESS)) {
                 res = R.mipmap.ic_fitness;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.ORGANIC_BEAUTY)){
+            } else if (categoryName.equalsIgnoreCase(Constants.ORGANIC_BEAUTY)) {
                 res = R.mipmap.ic_organic_beauty;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.MENTAL_WELLBEING)){
+            } else if (categoryName.equalsIgnoreCase(Constants.MENTAL_WELLBEING)) {
                 res = R.mipmap.ic_mental_well;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.LOVE)){
+            } else if (categoryName.equalsIgnoreCase(Constants.LOVE)) {
                 res = R.mipmap.ic_love_icon;
-            }
-            else {
+            } else {
                 res = R.mipmap.ic_all;
             }
         }
         return res;
     }
 
-    public static int getCategoryColor(String categoryName){
+    public static int getCategoryColor(String categoryName) {
 
         int color = R.color.hh_green_light2;
-        if(categoryName != null){
+        if (categoryName != null) {
 
-            if(categoryName.equalsIgnoreCase(Constants.NUTRITION)){
+            if (categoryName.equalsIgnoreCase(Constants.NUTRITION)) {
                 color = R.color.hh_orange_light;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.FITNESS)){
+            } else if (categoryName.equalsIgnoreCase(Constants.FITNESS)) {
                 color = R.color.hh_blue_light;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.ORGANIC_BEAUTY)){
+            } else if (categoryName.equalsIgnoreCase(Constants.ORGANIC_BEAUTY)) {
                 color = R.color.hh_green_light2;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.MENTAL_WELLBEING)){
+            } else if (categoryName.equalsIgnoreCase(Constants.MENTAL_WELLBEING)) {
                 color = R.color.hh_yello_light;
-            }
-            else if(categoryName.equalsIgnoreCase(Constants.LOVE)){
+            } else if (categoryName.equalsIgnoreCase(Constants.LOVE)) {
                 color = R.color.hh_red_light;
             }
         }
         return color;
     }
 
-    public static String addSeparator(String val){
-        if(val == null || val.isEmpty()){
+    public static String addSeparator(String val) {
+        if (val == null || val.isEmpty()) {
             Log.i("TAGUTILITY", " addSeparetor = " + val);
             return val;
         }
@@ -216,12 +225,64 @@ public class HealthHuntUtility {
 
 
     public static boolean checkInternetConnection(Context context) {
-        ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService (Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = conMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isAvailable() &&  networkInfo.isConnected()) {
+        if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) {
             return true;
         } else {
             return false;
         }
     }
+
+    public static String getTimeAgo(long time, Context ctx) {
+
+        long now = System.currentTimeMillis();
+        if (time > now || time <= 0) {
+            return null;
+        }
+
+        if (time < 1000000000000L) {
+            // if timestamp given in seconds, convert to millis
+            time *= 1000;
+        }
+
+        // TODO: localize
+        final long diff = now - time;
+        if (diff < MINUTE_MILLIS) {
+            return "Just now";
+        } else if (diff < 2 * MINUTE_MILLIS) {
+            return "1 Mins ago";
+        } else if (diff < 50 * MINUTE_MILLIS) {
+            return diff / MINUTE_MILLIS + " Mins ago";
+        } /*else if (diff < 90 * MINUTE_MILLIS) {
+            return " Hour ago";
+        } */ else if (diff < 24 * HOUR_MILLIS) {
+            return diff / HOUR_MILLIS + " Hours ago";
+        } /*else if (diff < 48 * HOUR_MILLIS) {
+            return "yesterday";
+        } */ else if (diff < 30 * DAY_MILLIS) {
+            return diff / DAY_MILLIS + " Days ago";
+        } else if(diff < 12 * MONTH_MILLIS){
+            return diff / MONTH_MILLIS + " Months ago";
+        }
+        return null;
+    }
+
+    public static String getLocalTime(String serverDate) {
+        String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+        String strDate = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+            TimeZone utcZone = TimeZone.getTimeZone("UTC");
+            sdf.setTimeZone(utcZone);// Set UTC time zone
+            Date myDate = sdf.parse(serverDate);
+            sdf.setTimeZone(TimeZone.getDefault());// Set device time zone
+            strDate = sdf.format(myDate);
+            return strDate;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strDate;
+    }
+
 }

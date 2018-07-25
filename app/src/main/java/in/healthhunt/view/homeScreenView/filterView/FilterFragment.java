@@ -162,7 +162,7 @@ public class FilterFragment extends Fragment implements IFilterView, ProductAdap
         IHomeView.hideKeyboardIfOpen();
         IHomeView.showActionBar();
         IHomeView.hideDrawerMenu();
-        IHomeView.hideSearchView();
+       // IHomeView.hideSearchView();
         IHomeView.updateTitle(getString(R.string.filter));
         mProductSearch.setHint(R.string.search_by_product_type);
         mBrandSearch.setHint(R.string.search_by_brand_name);

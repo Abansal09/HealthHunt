@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -172,7 +172,7 @@ public class RelatedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public class RelatedArticleViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.article_item_view)
-        RelativeLayout mArticleView;
+        LinearLayout mArticleView;
 
         @BindView(R.id.article_image)
         ImageView mArticleImage;

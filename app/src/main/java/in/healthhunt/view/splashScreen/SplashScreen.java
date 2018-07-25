@@ -14,7 +14,10 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.healthhunt.R;
+import in.healthhunt.model.beans.Constants;
+import in.healthhunt.model.preference.HealthHuntPreference;
 import in.healthhunt.view.loginView.LoginActivity;
+import in.healthhunt.view.onBoardingView.OnBoardingActivity;
 
 /**
  * Created by abhishekkumar on 6/23/18.
@@ -49,13 +52,24 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+                //Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+                Intent intent = null;
+                if(!isNeedOnBoardingScreen()) {
+                    intent = new Intent(SplashScreen.this, OnBoardingActivity.class);
+                }
+                else {
+                    intent = new Intent(SplashScreen.this, LoginActivity.class);
+                }
                 startActivity(intent);
 
                 // close this activity
                 finish();
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    public boolean isNeedOnBoardingScreen(){
+        return HealthHuntPreference.getBoolean(getApplicationContext(), Constants.IS_ON_BOARDING_SCREEN_KEY);
     }
 
 

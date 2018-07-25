@@ -95,11 +95,14 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
     @BindView(R.id.full_product_description)
     TextView mContent;
 
+    @BindView(R.id.view_more)
+    LinearLayout mViewMore;
+
     @BindView(R.id.comment_count)
     TextView mCommentCount;
 
     @BindView(R.id.comments_view_all_text)
-    TextView mCommentViewAll;
+    TextView mCommentViewAllText;
 
     @BindView(R.id.comments_view_all_arrow)
     ImageView mCommentArrow;
@@ -155,6 +158,20 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
     @BindView(R.id.about_name)
     TextView mAboutName;
 
+    @BindView(R.id.about_view)
+    LinearLayout mAboutView;
+
+    @BindView(R.id.location_view)
+    LinearLayout mLocationView;
+
+    @BindView(R.id.location)
+    TextView mLocation;
+
+    @BindView(R.id.location_image)
+    ImageView mLocationImage;
+
+    @BindView(R.id.comments_view_all)
+    LinearLayout mCommentViewAll;
 
     private IFullPresenter IFullPresenter;
     private IHomeView IHomeView;
@@ -191,11 +208,14 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         IHomeView.setStatusBarTranslucent(true);
         IHomeView.hideBottomFooter();
         IHomeView.hideActionBar();
+        IHomeView.hideDrawerMenu();
+
         if(!isDownloaded) {
             IFullPresenter.fetchProduct(mId);
         }
         else {
             fetchProductFromDataBase(mId);
+            IFullPresenter.fetchComments(String.valueOf(mId));  // fetch the comments
         }
         setContent();
         return view;
@@ -265,6 +285,7 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         if (productPost != null) {
             setTopImageContent(productPost);
             setProductContent(productPost);
+            setLocationInfo(productPost);
             setEmailInfo(productPost);
             setBuyInfo(productPost);
             setAboutContent(productPost);
@@ -337,6 +358,7 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
     @Override
     public void updateCommentAdapter() {
         mCommentContent.setText("");
+
         CommentAdapter commentAdapter = (CommentAdapter) mCommentViewer.getAdapter();
         if(commentAdapter == null){
             setCommentAdapter();
@@ -344,8 +366,27 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         else {
             commentAdapter.notifyDataSetChanged();
         }
-
+        updateViewMoreVisibility();
         setCommentContent(IFullPresenter.getProduct());
+    }
+
+    private void updateViewMoreVisibility() {
+        ProductPostItem postItem = IFullPresenter.getProduct();
+        String commentCount = postItem.getComments();
+        int count = Integer.parseInt(commentCount);
+        int adapterCount = IFullPresenter.getCommentCount();
+        Log.i("TAGCOUNTAD", "count " + count + " adapterCount " + adapterCount);
+
+        if(postItem != null){
+            if(commentCount != null) {
+                if(adapterCount == 0 || adapterCount == count){
+                    mViewMore.setVisibility(View.GONE);
+                }
+                else {
+                    mViewMore.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override
@@ -414,6 +455,19 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
 
     }
 
+    @Override
+    public int getTotalCommentCount() {
+        ProductPostItem postItem = IFullPresenter.getProduct();
+        int count = 0;
+        if(postItem != null){
+            String countStr = postItem.getComments();
+            if(countStr != null){
+                count = Integer.parseInt(countStr);
+            }
+        }
+        return count;
+    }
+
     @OnClick(R.id.buy)
     void onBuy(){
         buyProduct();
@@ -434,23 +488,25 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         Log.i("TAGCOMMENT" , " isShown " + mCommentView.isShown());
 
         if(mCommentView.isShown()){
-            mCommentViewAll.setText(R.string.view_all);
+            mCommentViewAllText.setText(R.string.view_all);
             mCommentArrow.setImageResource(R.mipmap.ic_chevron_down);
             mCommentView.setVisibility(View.GONE);
             mCommentViewer.setVisibility(View.GONE);
+            mViewMore.setVisibility(View.GONE);
         }
         else {
-            mCommentViewAll.setText(R.string.close_all);
+            mCommentViewAllText.setText(R.string.close_all);
             mCommentArrow.setImageResource(R.mipmap.ic_chevron_up);
             mCommentView.setVisibility(View.VISIBLE);
             mCommentViewer.setVisibility(View.VISIBLE);
+            updateViewMoreVisibility();
 
-            // CommentAdapter adapter = (CommentAdapter) mCommentViewer.getAdapter();
-            //if(adapter == null) {
-            ProductPostItem post = IFullPresenter.getProduct();
-            IFullPresenter.fetchComments(String.valueOf(post.getProduct_id()));
-            mFullViewScroll.fullScroll(View.FOCUS_DOWN);
-            // }
+            /*CommentAdapter adapter = (CommentAdapter) mCommentViewer.getAdapter();
+            if(adapter == null) {
+                ProductPostItem post = IFullPresenter.getProduct();
+                IFullPresenter.fetchComments(String.valueOf(post.getProduct_id()));
+                //mFullViewScroll.fullScroll(View.FOCUS_DOWN);
+            }*/
         }
     }
 
@@ -507,6 +563,11 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
         IFullPresenter.updateLike(String.valueOf(id));
     }
 
+    @OnClick(R.id.view_more)
+    void onViewMore(){
+        onLoadMoreComments();
+    }
+
     private void setCommentContent(ProductPostItem productPost) {
         String commentCount = productPost .getComments();
         if(commentCount != null){
@@ -514,22 +575,28 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
             if(count > 0){
                 commentCount = HealthHuntUtility.formatNumber(count);
                 mCommentCount.setText(commentCount);
+                mCommentViewAll.setVisibility(View.VISIBLE);
             }
             else {
                 mCommentCount.setText("");
+                mCommentViewAll.setVisibility(View.GONE);
             }
         }
     }
 
     private void setAboutContent(ProductPostItem productPost) {
         Author author = productPost.getAuthor();
-        if(author != null){
+        if(author != null && !author.getInfo().isEmpty()){
+            mAboutView.setVisibility(View.VISIBLE);
             String authorName = author.getName();
             Log.i("TAGNAMNE","NAMe " + authorName);
             mAboutName.setText(authorName);
 
             String info = author.getInfo();
             mDetailText.setText(info);
+        }
+        else {
+            mAboutView.setVisibility(View.GONE);
         }
 
     }
@@ -595,6 +662,21 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
             postUnit.trim();
             mBuyProductUnit.setText(postUnit);
         }*/
+    }
+
+    private void setLocationInfo(ProductPostItem productPost) {
+        String location = productPost.getPost_location();
+        if(location != null && !location.isEmpty()) {
+            mLocationView.setVisibility(View.VISIBLE);
+            mLocationImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.hh_grey_dark), PorterDuff.Mode.SRC_IN);
+            if(location.contains("-")){
+                location = location.replaceAll("-",", ");
+            }
+            mLocation.setText(location);
+        }
+        else {
+            mLocationView.setVisibility(View.GONE);
+        }
     }
 
     private void setEmailInfo(ProductPostItem productPost) {
@@ -982,6 +1064,11 @@ public class FullProductFragment extends Fragment implements IFullFragment, Comm
 
     private void addSpeakText(String text){
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null);
+    }
+
+    private void onLoadMoreComments() {
+        ProductPostItem post = IFullPresenter.getProduct();
+        IFullPresenter.fetchMoreComments(post.getProduct_id());
     }
 
     private class FetchProductsTask extends AsyncTask<Void, Void, ProductPostItem> {

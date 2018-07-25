@@ -171,8 +171,8 @@ public class ContinueArticleViewHolder extends RecyclerView.ViewHolder implement
     public void ItemClicked(View v, int position) {
         ArticlePostItem postItem = IArticlePresenter.getArticle(position);
 
-        String thumbnailImage = postItem.getVideo_thumbnail();
-        if(thumbnailImage == null || thumbnailImage.isEmpty()){
+        String format = postItem.getFormat();
+        if(format != null && format.equalsIgnoreCase(ArticleParams.IMAGE_FORMAT)){
             openFullViewArticle(postItem.getArticle_Id());
         }
         else {

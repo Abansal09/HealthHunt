@@ -6,46 +6,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/profile_pic_view"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/drawer_profile_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="19dp">
-        <ImageView
-            android:id="@+id/profile_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout
+            android:id="@+id/profile_pic_view"
+            android:layout_width="64dp"
+            android:layout_height="64dp">
+            <ImageView
+                android:id="@+id/profile_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:fontFamily="@string/font_family_medium"
+            android:textSize="14sp"
+            android:gravity="left|center"
+            android:textColor="@android:color/white"
             />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/profile_name"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:fontFamily="@string/font_family_medium"
-        android:textSize="14sp"
-        android:gravity="left|center"
-        android:textColor="@android:color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_pic_view"
-        />
-
     <!-- android:maxLength="40"-->
 
-    <TextView
+    <!--<TextView
         android:id="@+id/edit_profile"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@string/font_family_regular"
+        android:fontFamily="@font/hh_font_book"
         android:textSize="14sp"
         android:gravity="left|center"
         android:textColor="@color/hh_edit_profile_text"
@@ -55,7 +59,7 @@
         android:text="@string/edit_profile"
         android:maxLines="1"
         android:ellipsize="end"
-        />
+        />-->
 
 
 

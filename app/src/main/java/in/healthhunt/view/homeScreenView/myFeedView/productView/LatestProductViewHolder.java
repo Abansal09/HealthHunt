@@ -60,7 +60,7 @@ public class LatestProductViewHolder extends RecyclerView.ViewHolder implements 
     }
 
     private void setAdapter() {
-        LatestProductAdapter productAdapter = new LatestProductAdapter(mFragmentManager,  IProductPresenter, ArticleParams.LATEST_PRODUCTS);
+        LatestProductAdapter productAdapter = new LatestProductAdapter(mFragmentManager,  IProductPresenter, ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS);
         mLatestArticlePager.setAdapter(productAdapter);
         mLatestArticlePager.setClipToPadding(false);
         mLatestArticlePager.setPadding(0, 0, HealthHuntUtility.dpToPx(100, mContext),0);
@@ -170,7 +170,7 @@ public class LatestProductViewHolder extends RecyclerView.ViewHolder implements 
 
     private void openViewAllFragment() {
         Bundle bundle = new Bundle();
-        bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.LATEST_PRODUCTS);
+        bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS);
         IProductPresenter.updateBottomNavigation();
         IProductPresenter.loadFragment(ViewAllFragment.class.getSimpleName(), bundle);
     }

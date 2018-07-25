@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <ViewFlipper
+            android:id="@+id/image_view_flipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/image_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_1"
+                android:scaleType="centerCrop"/>
+            <ImageView
+                android:id="@+id/image_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_2"
+                android:scaleType="centerCrop"/>
+            <ImageView
+                android:id="@+id/image_three"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_3"
+                android:scaleType="centerCrop"/>
+            <ImageView
+                android:id="@+id/image_four"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_4"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/image_five"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_5"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/image_six"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_6"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/image_sevan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_7"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/image_eight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_8"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/image_nine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_9"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/image_ten"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_10"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/image_elevan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/images_11"
+                android:scaleType="centerCrop"/>
+        </ViewFlipper>
+    </LinearLayout>
+
+    <include layout="@layout/edit_search_viewer"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_gravity="center"/>
+
+    <!-- <RelativeLayout
+         android:id="@+id/search_open_view"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:background="@drawable/home_search_view_bg"
+         android:layout_marginStart="48dp"
+         android:layout_marginEnd="48dp">
+
+         <EditText
+             android:id="@+id/edtSearch"
+             android:layout_width="match_parent"
+             android:layout_height="48dp"
+             android:inputType="text"
+             android:imeOptions="actionSearch"
+             android:background="@android:color/transparent"
+             android:textCursorDrawable="@drawable/edit_cursor_color_white"
+             android:layout_gravity="center"
+             android:hint="@string/explore"
+             android:layout_alignParentLeft="true"
+             android:layout_centerInParent="true"
+             android:layout_toStartOf="@id/cross"
+             android:paddingStart="16dp"
+             android:paddingEnd="16dp"
+             android:drawablePadding="8dp"
+             android:drawableLeft="@mipmap/ic_search"
+             android:textColorHint="@color/hh_text_color"/>
+
+         <ImageView
+             android:id="@+id/cross"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@mipmap/ic_cross"
+             android:layout_marginStart="16dp"
+             android:layout_marginEnd="16dp"
+             android:layout_centerInParent="true"
+             android:visibility="gone"
+             android:layout_alignParentRight="true" />
+
+     </RelativeLayout>-->
+
+</FrameLayout>

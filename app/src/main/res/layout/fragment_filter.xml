@@ -87,6 +87,8 @@
                     android:textSize="16sp"
                     android:hint="@string/search_by_tags"
                     android:fontFamily="@string/font_family_regular"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/hh_grey_dark"/>
 
                 <ImageView
@@ -201,6 +203,8 @@
                     android:textSize="16sp"
                     android:hint="@string/search_by_tags"
                     android:fontFamily="@string/font_family_regular"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
                     android:textColor="@color/hh_grey_dark"/>
 
                 <ImageView
@@ -316,6 +320,8 @@
                     android:textSize="16sp"
                     android:hint="@string/enter_the_city"
                     android:fontFamily="@string/font_family_regular"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
                     android:textColor="@color/hh_grey_dark"/>
 
                 <ImageView

@@ -368,6 +368,19 @@ public class FullVideoActivity extends YouTubeBaseActivity implements IFullFragm
 
     }
 
+    @Override
+    public int getTotalCommentCount() {
+        ArticlePostItem postItem = IFullPresenter.getArticle();
+        int count = 0;
+        if(postItem != null){
+            String countStr = postItem.getComments();
+            if(countStr != null){
+                count = Integer.parseInt(countStr);
+            }
+        }
+        return count;
+    }
+
     @OnClick(R.id.full_article_bookmark)
     void onBookMark(){
         CurrentUser currentUser = null;

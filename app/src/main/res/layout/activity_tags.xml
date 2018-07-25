@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/hh_background_light2">
 
     <include
         layout="@layout/tag_activity_top_view"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="182dp"
+        android:id="@+id/slider_viewer"
+        layout="@layout/tag_slider_search_view" >
+
+    </include>
 
 
     <View
@@ -16,40 +25,60 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="1dp"
-        android:background="@android:color/white">
+        android:layout_margin="14dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="24dp"
+            android:gravity="center"
             android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_at_least_5_tags"
+                android:textSize="13dp"
+                android:fontFamily="@string/font_family_medium"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/hh_text_color7"/>
+
+
+
+            <LinearLayout
+                android:id="@+id/select_all_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="5dp"
+                >
+
+                <CheckBox
+                    android:id="@+id/select_all_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/select_at_least_5_tags"
-                    android:textSize="16dp"
-                    android:fontFamily="@string/font_family_regular"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:text="@string/select_all"
+                    android:textSize="13dp"
                     android:gravity="center"
-                    android:textColor="@color/hh_text_color_primary"/>
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/font_family_medium"
+                    android:textColor="@color/hh_text_color7"/>
+
             </LinearLayout>
-
-            <include layout="@layout/search_viewer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"/>
-
         </LinearLayout>
+
+        <!--<include layout="@layout/search_viewer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>-->
 
         <FrameLayout
             android:id="@+id/tag_frame"

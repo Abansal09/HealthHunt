@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    >
+
+    <ImageView
+        android:id="@+id/article_image"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:src="@mipmap/images_1"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        />
+
+   <!-- <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:src="@drawable/article_image_bg"
+
+        />-->
+
+    <ImageView
+        android:id="@+id/article_bookmark"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|right"
+        android:scaleType="center"
+        android:src="@mipmap/ic_bookmark" />
+
+</FrameLayout>

@@ -14,10 +14,10 @@
 
         <include layout="@layout/full_video_item_image_view" />
         <include layout="@layout/full_article_view_content_item"/>
-        <include layout="@layout/related_article_view"/>
-        <include layout="@layout/related_products_article_view"/>
         <include layout="@layout/full_article_about_view"/>
         <include layout="@layout/full_article_comment_view" />
+        <include layout="@layout/related_article_view"/>
+        <include layout="@layout/related_products_article_view"/>
         <!--<include layout="@layout/listen_view"/>-->
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

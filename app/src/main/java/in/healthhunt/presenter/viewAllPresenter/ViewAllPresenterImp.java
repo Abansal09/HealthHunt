@@ -56,15 +56,15 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
     public int getCount(int type) {
         int count = 0;
         switch (type){
-            case ArticleParams.BASED_ON_TAGS:
-            case ArticleParams.LATEST_ARTICLES:
+            case ArticleParams.PRESCRIBED_FOR_YOU:
+            case ArticleParams.READ_FRESH_ARTICLES:
             case ArticleParams.RELATED_ARTICLES:
                 if(mArticlePosts != null) {
                     count = mArticlePosts.size();
                 }
                 break;
 
-            case ArticleParams.LATEST_PRODUCTS:
+            case ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS:
             case ArticleParams.RELATED_PRODUCTS:
                 if(mProductPosts != null) {
                     count = mProductPosts.size();
@@ -94,7 +94,7 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
         List<String> categories = IViewAll.getCategories();
 
         switch (type) {
-            case ArticleParams.LATEST_ARTICLES:
+            case ArticleParams.READ_FRESH_ARTICLES:
 
                 //map.put(ArticleParams.SECTION, ArticleParams.LATEST_BY_MONTH);
                 map.put(ArticleParams.ORDER, ArticleParams.DESC);
@@ -130,7 +130,7 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
                 map.put(ArticleParams.LIMIT, String.valueOf(30));
                 IArticleInteractor.fetchAllArticle(mContext, map,this);
                 break;*/
-            case ArticleParams.BASED_ON_TAGS:
+            case ArticleParams.PRESCRIBED_FOR_YOU:
                 /*Set<String> tagIds = HealthHuntPreference.getSet(mContext, Constants.SELECTED_TAGS_KEY);
                 String tags = "";
                 Iterator iterator = tagIds.iterator();
@@ -156,9 +156,9 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
                 }
                 break;
 
-            case ArticleParams.LATEST_PRODUCTS:
+            case ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS:
                 map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-                map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
+                map.put(ArticleParams.MARKET_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
                 map.put(ArticleParams.ORDER, ArticleParams.DESC);
                 map.put(ArticleParams.ORDER_BY, ArticleParams.DATE/*ArticleParams.ID*/);
 
@@ -266,8 +266,8 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
 
         int type = bookMarkInfo.getType();
         switch (type){
-            case ArticleParams.BASED_ON_TAGS:
-            case ArticleParams.LATEST_ARTICLES:
+            case ArticleParams.PRESCRIBED_FOR_YOU:
+            case ArticleParams.READ_FRESH_ARTICLES:
             case ArticleParams.RELATED_ARTICLES:
 
 
@@ -283,7 +283,7 @@ public class ViewAllPresenterImp implements IViewAllPresenter, IArticleInteracto
                 }
                 break;
 
-            case ArticleParams.LATEST_PRODUCTS:
+            case ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS:
             case ArticleParams.RELATED_PRODUCTS:
                 for(ProductPostItem postItem : mProductPosts) {
                     if(bookMarkInfo.getPost_id().equals(postItem.getProduct_id())) {

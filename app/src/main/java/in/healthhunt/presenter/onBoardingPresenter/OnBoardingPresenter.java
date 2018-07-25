@@ -31,6 +31,7 @@ public class OnBoardingPresenter implements IOnBoardingPresenter {
         Fragment fragment = IOnBoardingView.getItem(position);
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.VIEWPAGER_FRAGMENT_NO_KEY, position);
+        bundle.putInt(Constants.VIEWPAGER_PAGE_COUNT, position);
         fragment.setArguments(bundle);
         return fragment;
     }

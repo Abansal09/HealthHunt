@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,9 +29,7 @@ import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.commonResponse.CurrentUser;
 import in.healthhunt.model.articles.productResponse.ProductPostItem;
 import in.healthhunt.model.beans.Constants;
-import in.healthhunt.model.beans.SpaceDecoration;
 import in.healthhunt.model.preference.HealthHuntPreference;
-import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.shopPresenter.IShopPresenter;
 import in.healthhunt.presenter.homeScreenPresenter.shopPresenter.ShopPresenterImp;
 import in.healthhunt.view.fullView.fullViewFragments.FullProductFragment;
@@ -58,21 +57,21 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
     @BindView(R.id.suggestion_content)
     TextView mSuggestionContent;
 
-    @BindView(R.id.filter_button)
+    /*@BindView(R.id.filter_button)
     Button mFilterButton;
-
-    @BindView(R.id.filter_view)
+*/
+    /*@BindView(R.id.filter_view)
     LinearLayout mFilterView;
-
-    @BindView(R.id.suggestion_view)
+*/
+    @BindView(R.id.shop_view)
     LinearLayout mSuggestionView;
 
     @BindView(R.id.no_records)
     TextView mNoRecords;
 
-   /* @BindView(R.id.shop_view)
-    LinearLayout mShopView;
-*/
+    /* @BindView(R.id.shop_view)
+     LinearLayout mShopView;
+ */
     private IHomeView IHomeView;
     private Map<Integer, List<String>> mFilterData;
 
@@ -83,6 +82,7 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
         super.onCreate(savedInstanceState);
         IShopPresenter = new ShopPresenterImp(getContext(), this);
         IHomeView = (IHomeView) getActivity();
+        setHasOptionsMenu(true);
         IShopPresenter.fetchMarkets();
     }
 
@@ -130,8 +130,10 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
 
     @Override
     public void updateAdapter() {
-        mShopViewer.getAdapter().notifyDataSetChanged();
-        updateVisibility();
+        if(mShopViewer != null && mShopViewer.getAdapter() != null) {
+            mShopViewer.getAdapter().notifyDataSetChanged();
+            updateVisibility();
+        }
     }
 
     public void updateVisibility(){
@@ -189,14 +191,14 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
     void onCrossClick(){
         mSuggestionView.setVisibility(View.GONE);
         HealthHuntPreference.putBoolean(getContext(), Constants.SHOP_FRAGMENT_SUGG_KEY, true);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mFilterButton.getLayoutParams();
+        /*LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mFilterButton.getLayoutParams();
         int margin = HealthHuntUtility.dpToPx(4,getContext());
         params.setMargins(params.getMarginStart(),margin, params.getMarginEnd(), params.bottomMargin - margin);
         mFilterButton.setLayoutParams(params);
-        mFilterView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.hh_green_light2));
+        mFilterView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.hh_green_light2));*/
     }
 
-    @OnClick(R.id.filter_button)
+    //@OnClick(R.id.filter_button)
     void onFilterClick(){
         IHomeView.updateTitle(getString(R.string.filter));
         IHomeView.hideBottomNavigationSelection();
@@ -208,7 +210,7 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
         shopAdapter.setClickListener(this);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         mShopViewer.setLayoutManager(layoutManager);
-        mShopViewer.addItemDecoration(new SpaceDecoration(HealthHuntUtility.dpToPx(8, getContext()), SpaceDecoration.GRID));
+        //mShopViewer.addItemDecoration(new SpaceDecoration(HealthHuntUtility.dpToPx(2, getContext()), SpaceDecoration.GRID));
         mShopViewer.setAdapter(shopAdapter);
     }
 
@@ -249,5 +251,30 @@ public class ShopFragment extends Fragment implements IShopView, ShopAdapter.Cli
             str = getString(R.string.removed_from_my_hunt);//getString(R.string.removed);
         }
         IHomeView.showToast(str);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        if(menu != null){
+            /*MenuItem item =
+                    menu.add(Menu.NONE, R.id.filter_icon, 10, R.string.filter);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            item.setIcon(R.drawable.ic_fitness);*/
+            inflater.inflate(R.menu.filter_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.filter_icon:
+                onFilterClick();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

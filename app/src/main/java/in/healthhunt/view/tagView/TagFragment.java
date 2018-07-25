@@ -6,15 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import in.healthhunt.R;
 import in.healthhunt.model.beans.SpaceDecoration;
 import in.healthhunt.model.utility.HealthHuntUtility;
@@ -28,9 +25,6 @@ public class TagFragment extends Fragment{
 
     @BindView(R.id.tags_recycler_list)
     public RecyclerView mRecyclerView;
-
-    @BindView(R.id.select_all_checkbox)
-    public CheckBox mSelectAll;
 
     private ITagPresenter ITagPresenter;
     private ITagView ITagView;
@@ -54,15 +48,24 @@ public class TagFragment extends Fragment{
 
     private void setAdapter() {
         TagAdapter tagAdapter = new TagAdapter(getContext(), ITagPresenter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.addItemDecoration(new SpaceDecoration(HealthHuntUtility.
-                dpToPx(8, getContext()), SpaceDecoration.GRID));
+                dpToPx(24, getContext()), SpaceDecoration.VERTICAL));
+        /*mRecyclerView.addItemDecoration(new SpaceDecoration(HealthHuntUtility.
+                dpToPx(24, getContext()), SpaceDecoration.GRID));*/
         mRecyclerView.setAdapter(tagAdapter);
     }
 
     public void updateAdapter() {
         mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    public void setSelectAll(boolean isSelectAll){
+        if(mRecyclerView.getAdapter() != null) {
+            TagAdapter tagAdapter = (TagAdapter) mRecyclerView.getAdapter();
+            tagAdapter.setSelectAll(isSelectAll);
+        }
     }
 
     /*@OnClick(R.id.select_all)
@@ -78,30 +81,4 @@ public class TagFragment extends Fragment{
             tagAdapter.setSelectAll(false);
         }
     }*/
-
-    @OnClick(R.id.select_all_checkbox)
-    void onClickCheckBox(){
-        boolean isSelect = mSelectAll.isChecked();
-        Log.i("TAGTAGISSELCT", "ISELCXT "  + isSelect);
-        TagAdapter tagAdapter = (TagAdapter) mRecyclerView.getAdapter();
-        if(isSelect){
-            ITagPresenter.selectAll();
-            tagAdapter.setSelectAll(true);
-            //mSelectAll.setChecked(true);
-        }
-        else {
-            ITagPresenter.unSelectAll();
-            tagAdapter.setSelectAll(false);
-            //mSelectAll.setChecked(false);
-        }
-    }
-
-    void updateCheckBox(boolean isCheck){
-        if(isCheck){
-            mSelectAll.setChecked(true);
-        }
-        else {
-            mSelectAll.setChecked(false);
-        }
-    }
 }

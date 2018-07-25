@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,19 @@ public class LoginFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_login, container,  false);
         unbinder = ButterKnife.bind(this, view);
         ILoginView = (ILoginView) getActivity();
+        addKeyboardDoneListener();
         return view;
+    }
+
+    private void addKeyboardDoneListener() {
+        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                ILoginView.hideKeyboardIfOpen();
+                onLogin();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -78,7 +91,7 @@ public class LoginFragment extends Fragment{
     @OnClick(R.id.login)
     void onLogin() {
         //clearFocus();
-        mLoginView.clearFocus();;
+        //mLoginView.clearFocus();;
 
         if(HealthHuntUtility.checkInternetConnection(getContext())) {
             isLoginType = LoginActivity.LOGIN_TYPE_NORMAL;
@@ -88,11 +101,6 @@ public class LoginFragment extends Fragment{
             ILoginView.showAlert(getString(R.string.please_check_internet_connectivity_status));
         }
         //startActivity(new Intent(getActivity(), HomeActivity.class));
-    }
-
-    private void clearFocus() {
-        mEmail.clearFocus();
-        mPassword.clearFocus();
     }
 
     @OnClick(R.id.sign_up)

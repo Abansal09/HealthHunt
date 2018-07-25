@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -35,7 +34,6 @@ import in.healthhunt.model.articles.commonResponse.Title;
 import in.healthhunt.model.utility.HealthHuntUtility;
 import in.healthhunt.presenter.homeScreenPresenter.myFeedPresenter.articlePresenter.IArticlePresenter;
 import in.healthhunt.view.fullView.fullViewFragments.FullArticleFragment;
-import in.healthhunt.view.viewAll.ViewAllFragment;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
@@ -46,13 +44,9 @@ public class ArticleFragment extends Fragment {
 
     private Unbinder mUnBinder;
 
-
-    @BindView(R.id.tags_article_view_item)
-    RelativeLayout mTagItemView;
-
-    @BindView(R.id.last_page_view_all)
+    /*@BindView(R.id.last_page_view_all)
     TextView mViewAll;
-
+*/
     @BindView(R.id.article_image)
     ImageView mArticleImage;
 
@@ -117,7 +111,7 @@ public class ArticleFragment extends Fragment {
             }
 
             //if(!isLast) {
-            mTagItemView.setVisibility(View.VISIBLE);
+            //mTagItemView.setVisibility(View.VISIBLE);
             // mViewAll.setVisibility(View.GONE);
             setContent();
            /* }
@@ -138,7 +132,7 @@ public class ArticleFragment extends Fragment {
     }
 
 
-    @OnClick(R.id.tags_article_view_item)
+    @OnClick(R.id.article_item)
     void onArticleClick(){
 
         if(HealthHuntUtility.checkInternetConnection(getContext())) {
@@ -149,12 +143,12 @@ public class ArticleFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.last_page_view_all)
+    /*@OnClick(R.id.last_page_view_all)
     void onViewAll(){
         Bundle bundle = new Bundle();
         bundle.putInt(ArticleParams.ARTICLE_TYPE, mType);
         IArticlePresenter.loadFragment(ViewAllFragment.class.getSimpleName(), bundle);
-    }
+    }*/
 
     private void openFullView() {
        /* Intent intent = new Intent(getContext(), FullViewActivity.class);
@@ -275,7 +269,7 @@ public class ArticleFragment extends Fragment {
             }
         }
         if(articleUrl != null) {
-            Glide.with(this).load(articleUrl).placeholder(R.mipmap.ic_no_my_feed_article_image).into(mArticleImage);
+            Glide.with(this).load(articleUrl).dontAnimate().placeholder(R.mipmap.ic_no_my_feed_article_image).into(mArticleImage);
         }
         else {
             mArticleImage.setImageResource(R.mipmap.ic_no_my_feed_article_image);

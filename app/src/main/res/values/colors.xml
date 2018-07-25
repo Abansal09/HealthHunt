@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#F9F9F9</color>  <!-- changed default blue to grey -->
+    <color name="colorPrimaryDark">#61000000</color>  <!-- #F9F9F9 changed default blue to grey -->
     <color name="colorAccent">#9FCD33</color>   <!-- changed color defaiult red to green -->
 
     <color name="hh_green_light">#9DCD33</color>
@@ -17,8 +17,8 @@
     <color name="hh_text_color_primary">#DE000000</color>
     <color name="hh_item_bg_color">#EEEEEE</color>
     <color name="hh_onboarding_swip_text_color">#C7111111</color>
-    <color name="hh_dot_default_color">#80979797</color>
-    <color name="hh_dot_selected_color">#979797</color>
+    <color name="hh_dot_default_color">#98979797</color>  <!--80979797 -->
+    <color name="hh_dot_selected_color">#8A000000</color>   <!-- 979797-->
     <color name="hh_green_light3">#269FCD33</color>
     <color name="hh_blue_light">#8ED6F9</color>
     <color name="hh_background_light">#FAFAFA</color>
@@ -32,4 +32,13 @@
     <color name="hh_orange_light">#FABD75</color>
     <color name="hh_yello_light">#F8DE50</color>
     <color name="hh_green_light4">#1A9FCD33</color>
+
+    <color name="hh_text_color4">#b4b4b4</color>
+    <color name="hh_stroke_color">#112c2c2c</color>
+    <color name="hh_background_light2">#f6f6f6</color>
+    <color name="hh_text_color5">#202020</color>
+    <color name="hh_text_color6">#545454</color>
+    <color name="hh_text_color7">#646464</color>
+    <color name="hh_text_color8">#696969</color>
+
 </resources>

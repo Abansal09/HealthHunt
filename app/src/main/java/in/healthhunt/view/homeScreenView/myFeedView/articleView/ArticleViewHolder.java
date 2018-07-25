@@ -62,10 +62,10 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
     }
 
     private void setAdapter() {
-        mArticleAdapter = new ArticleAdapter(mFragmentManager,  IArticlePresenter, ArticleParams.BASED_ON_TAGS);
+        mArticleAdapter = new ArticleAdapter(mFragmentManager,  IArticlePresenter, ArticleParams.PRESCRIBED_FOR_YOU);
         mArticlePager.setAdapter(mArticleAdapter);
         mArticlePager.setClipToPadding(false);
-        mArticlePager.setPadding(0, 0, HealthHuntUtility.dpToPx(100, mContext),0);
+        mArticlePager.setPadding(0, 0, HealthHuntUtility.dpToPx(150, mContext),0);
         mArticlePager.setPageMargin(HealthHuntUtility.dpToPx(6, mContext));
     }
 
@@ -142,7 +142,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements IArtic
 
     private void openViewAllFragment() {
         Bundle bundle = new Bundle();
-        bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.BASED_ON_TAGS);
+        bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.PRESCRIBED_FOR_YOU);
         IArticlePresenter.updateBottomNavigation();
         IArticlePresenter.loadFragment(ViewAllFragment.class.getSimpleName(), bundle);
     }

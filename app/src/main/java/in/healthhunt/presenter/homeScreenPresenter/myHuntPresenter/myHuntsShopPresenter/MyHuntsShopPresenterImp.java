@@ -315,7 +315,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
         Log.i("TAGFILTER", "filter " + filter);
         // map.put(author, userId);
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-        map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
+        map.put(ArticleParams.MARKET_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
         map.put(filter, ArticleParams.COLLECTION_SAVED);
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(0));
@@ -337,7 +337,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
         Log.i("TAGFILTER", "filter " + filter);
         // map.put(author, userId);
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-        map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
+        map.put(ArticleParams.MARKET_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
         map.put(filter, ArticleParams.COLLECTION_CREATED);
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(0));
@@ -359,7 +359,7 @@ public class MyHuntsShopPresenterImp implements IMyHuntsProductsPresenter, IProd
         Log.i("TAGFILTER", "filter " + filter);
         // map.put(author, userId);
         map.put(ArticleParams.TYPE, ArticleParams.MARKET);
-        map.put(ArticleParams.MARKT_TYPE, String.valueOf(1));
+        map.put(ArticleParams.MARKET_TYPE, String.valueOf(ArticleParams.PRODUCT_SERVICES));
         map.put(filter, ArticleParams.COLLECTION_RECEIVED);
         map.put(ArticleParams.APP, String.valueOf(1));
         map.put(ArticleParams.OFFSET, String.valueOf(0));

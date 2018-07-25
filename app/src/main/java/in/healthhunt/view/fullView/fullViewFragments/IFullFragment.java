@@ -28,5 +28,6 @@ public interface IFullFragment {
     void updateProductSaved(ProductPostItem postItem);
     void updateArticleSaved(ArticlePostItem articlePostItem);
     void updateVideoSaved(ArticlePostItem articlePostItem);
+    int getTotalCommentCount();
 }
 

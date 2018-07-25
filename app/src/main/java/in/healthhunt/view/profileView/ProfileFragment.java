@@ -2,6 +2,7 @@ package in.healthhunt.view.profileView;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,16 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class ProfileFragment extends Fragment implements ITagView, IEditProfileView, TagAdapter.OnClickListener{
 
+
+
+    private final String P_INTEREST_URL = "https://in.pinterest.com/healthhunt0213/";
+    private final String TWEETER_URL = "https://twitter.com/healthhuntIN";
+    private final String FACEBOOK_URL = "https://www.facebook.com/HHunt.in";
+    private final String INSTA_GRAM_URL = "https://www.instagram.com/healthhuntin/?hl=en";
+    private final String YOU_TUBE_URL = "https://www.youtube.com/channel/UCM_h4FbZmWjk5qnhq_3me9w";
+    private final String WHATS_APP_URL = "https://api.whatsapp.com/send?text=https://www.healthhunt.in";
+    private final String LINKED_IN_URL = "https://www.linkedin.com/company/healthhunt/";
+
     @BindView(R.id.tags_recycler_list)
     RecyclerView mTagViewer;
 
@@ -73,7 +85,7 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
     AutoCompleteTextView mSearchView;
 
     @BindView(R.id.select_all_checkbox)
-    public CheckBox mSelectAllCheck;
+    CheckBox mSelectAllCheck;
 
     @BindView(R.id.edit_profile_tag_view_item)
     LinearLayout mTagView;
@@ -84,16 +96,24 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
     @BindView(R.id.options)
     TextView mOptionsButton;
 
+    @BindView(R.id.options_view)
+    ScrollView mOptionView;
+
     @BindView(R.id.change_photo)
     TextView mChangePhoto;
 
     @BindView(R.id.cross)
     ImageView mCross;
 
-
+    /* @BindView(R.id.child_frame_layout)
+     FrameLayout mChildFrame;
+ */
     private IUserPresenter IUserPresenter;
     private ITagPresenter ITagPresenter;
     private IHomeView IHomeView;
+    //private FragmentManager mChildFragmentManager;
+    private boolean IS_TAG_TAB;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +121,8 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
         ITagPresenter = new TagPresenterImp(getContext(), this);
         IUserPresenter = new UserPresenterImp(getContext(), this);
         IHomeView = (HomeActivity)getActivity();
+        IS_TAG_TAB = true;
+        //mChildFragmentManager = getChildFragmentManager();
         IUserPresenter.fetchCurrentUser();
         ITagPresenter.fetchTags();
     }
@@ -114,14 +136,15 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
         IHomeView.updateTitle(getString(R.string.profile));
         IHomeView.hideBottomNavigationSelection();
         IHomeView.hideDrawerMenu();
+        IHomeView.showActionBar();
         mCross.setVisibility(View.GONE);
         setUserInfo();
+        updateTabVisibility();
         // mSelectAll.setVisibility(View.GONE);
         setAdapter();
         setSearchAdapter();
         return view;
     }
-
 
     private void setUserInfo() {
 
@@ -154,7 +177,7 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
 
     private void setAdapter() {
         TagAdapter tagAdapter = new TagAdapter(getContext(), ITagPresenter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2){
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3){
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -162,7 +185,10 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
         };
         mTagViewer.setLayoutManager(gridLayoutManager);
         mTagViewer.addItemDecoration(new SpaceDecoration(HealthHuntUtility.
-                dpToPx(8, getContext()), SpaceDecoration.GRID));
+                dpToPx(24, getContext()), SpaceDecoration.VERTICAL));
+
+        /*mTagViewer.addItemDecoration(new SpaceDecoration(HealthHuntUtility.
+                dpToPx(8, getContext()), SpaceDecoration.GRID));*/
         mTagViewer.setAdapter(tagAdapter);
     }
 
@@ -223,8 +249,33 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
 
     @Override
     public void loadFragment(String fragmentName, Bundle bundle) {
-
     }
+
+    /*private void showChildFragment(Fragment fragment, String tag) {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();//mChildFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.child_frame_layout, fragment);
+        fragmentTransaction.addToBackStack(tag);
+        //getChildFragmentManager().executePendingTransactions();
+        fragmentTransaction.commit();
+    }
+
+    public void loadChildFragment(String fragmentName, Bundle bundle) {
+        mChildFrame.setVisibility(View.VISIBLE);
+        Fragment fragment = null;
+
+        if(fragmentName.equalsIgnoreCase(WhatWeDoFragment.class.getSimpleName())){
+            fragment = new WhatWeDoFragment();
+        }
+        else if(fragmentName.equalsIgnoreCase(CollaborateWithUSFragment.class.getSimpleName())){
+            fragment = new CollaborateWithUSFragment();
+        }
+        else if(fragmentName.equalsIgnoreCase(LegalOtherFragment.class.getSimpleName())){
+            fragment = new LegalOtherFragment();
+        }
+
+        fragment.setArguments(bundle);
+        showChildFragment(fragment, fragmentName);
+    }*/
 
     @Override
     public ITagPresenter getPresenter() {
@@ -256,10 +307,10 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
         IHomeView.updateMyFeed();
     }
 
-    @OnClick(R.id.edit_profile_text)
+    /*@OnClick(R.id.edit_profile_text)
     void onEditProfile(){
         IHomeView.loadNonFooterFragment(EditProfileFragment.class.getSimpleName(), null);
-    }
+    }*/
 
     @OnClick(R.id.logout)
     void onLogout(){
@@ -288,16 +339,30 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
 
     @OnClick(R.id.tags)
     void onTags(){
-        mTagView.setVisibility(View.VISIBLE);
-        mTagsButton.setBackgroundColor(Color.WHITE);
-        mOptionsButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.hh_background_light));
+        IS_TAG_TAB = true;
+        updateTabVisibility();
     }
 
     @OnClick(R.id.options)
     void onOptions(){
-        mOptionsButton.setBackgroundColor(Color.WHITE);
-        mTagsButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.hh_background_light));
-        mTagView.setVisibility(View.GONE);
+        IS_TAG_TAB = false;
+        updateTabVisibility();
+    }
+
+    private void updateTabVisibility(){
+        if(IS_TAG_TAB){
+            mOptionView.setVisibility(View.GONE);
+            mTagView.setVisibility(View.VISIBLE);
+            mOptionsButton.setBackgroundColor(Color.WHITE);
+            mTagsButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.hh_background_light2));
+
+        }
+        else {
+            mTagsButton.setBackgroundColor(Color.WHITE);
+            mOptionsButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.hh_background_light2));
+            mTagView.setVisibility(View.GONE);
+            mOptionView.setVisibility(View.VISIBLE);
+        }
     }
 
     /*private void setSearchAdapter() {
@@ -472,6 +537,11 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
         mSearchView.setText("");
     }
 
+    @OnClick(R.id.edit_profile_icon)
+    void onEditClick(){
+        IHomeView.loadNonFooterFragment(EditProfileFragment.class.getSimpleName(), null);
+    }
+
     @Override
     public void showProgress() {
 
@@ -485,5 +555,113 @@ public class ProfileFragment extends Fragment implements ITagView, IEditProfileV
     @Override
     public void updateUserInfo() {
         setUserInfo();
+    }
+
+    @OnClick(R.id.what_we_de_arrow_view)
+    void onWhatWeDo(){
+        //loadChildFragment(WhatWeDoFragment.class.getSimpleName(), null);
+        IHomeView.loadNonFooterFragment(WhatWeDoFragment.class.getSimpleName(), null);
+    }
+
+    @OnClick(R.id.collaborate_withus_arrow_view)
+    void onCollaborateWithUs(){
+        //loadChildFragment(CollaborateWithUSFragment.class.getSimpleName(), null);
+        IHomeView.loadNonFooterFragment(CollaborateWithUSFragment.class.getSimpleName(), null);
+    }
+
+    @OnClick(R.id.legal_other_arrow_view)
+    void onLegalOthers(){
+        //loadChildFragment(LegalOtherFragment.class.getSimpleName(), null);
+        IHomeView.loadNonFooterFragment(LegalOtherFragment.class.getSimpleName(), null);
+    }
+
+    @OnClick(R.id.about_us_arrow_view)
+    void onAboutUs(){
+        //loadChildFragment(LegalOtherFragment.class.getSimpleName(), null);
+        IHomeView.loadNonFooterFragment(AboutUsFragment.class.getSimpleName(), null);
+    }
+
+    @OnClick(R.id.health_council_arrow_view)
+    void onHealthCouncil(){
+        //loadChildFragment(LegalOtherFragment.class.getSimpleName(), null);
+        IHomeView.loadNonFooterFragment(HealthCouncilFragment.class.getSimpleName(), null);
+    }
+
+    /*public boolean onBackPressed(){
+
+        int count = getFragmentManager().getBackStackEntryCount();
+        Log.i("TAGCOUNTProfile", "Profile Count " + count);
+
+        if(count > 0){
+            if(!isNeedPopBack()) {
+                getFragmentManager().popBackStackImmediate();
+                mChildFrame.setVisibility(View.GONE);
+                IHomeView.updateTitle(getString(R.string.profile));
+            }
+            return true;
+        }
+        return false;
+    }*/
+
+    /*private boolean isNeedPopBack(){
+
+        boolean isBack = false;
+        Fragment fragment = mChildFragmentManager.findFragmentById(R.id.child_frame_layout);
+
+
+        if(fragment instanceof WhatWeDoFragment){
+            WhatWeDoFragment whatWeDoFragment = (WhatWeDoFragment)fragment;
+            isBack = whatWeDoFragment.onBackPressed();
+        }
+        else if(fragment instanceof CollaborateWithUSFragment){
+            CollaborateWithUSFragment collaborateWithUSFragment = (CollaborateWithUSFragment)fragment;
+            isBack = collaborateWithUSFragment.onBackPressed();
+        }
+        else if(fragment instanceof LegalOtherFragment){
+            LegalOtherFragment legalOtherFragment = (LegalOtherFragment)fragment;
+            isBack = legalOtherFragment.onBackPressed();
+        }
+
+        return isBack;
+    }*/
+
+    @OnClick(R.id.pinterest_view)
+    void onPinterest(){
+        openInBrowser(P_INTEREST_URL);
+    }
+
+    @OnClick(R.id.tweeter_view)
+    void onTweeter(){
+        openInBrowser(TWEETER_URL);
+    }
+
+    @OnClick(R.id.facebook_view)
+    void onFacebook(){
+        openInBrowser(FACEBOOK_URL);
+    }
+
+    @OnClick(R.id.insta_view)
+    void onInstagram(){
+        openInBrowser(INSTA_GRAM_URL);
+    }
+
+    @OnClick(R.id.youtube_view)
+    void onYoutube(){
+        openInBrowser(YOU_TUBE_URL);
+    }
+
+    @OnClick(R.id.whatsapp_view)
+    void onWhatsApp(){
+        openInBrowser(WHATS_APP_URL);
+    }
+
+    @OnClick(R.id.linkedin_view)
+    void onLinkedIn(){
+        openInBrowser(LINKED_IN_URL);
+    }
+
+    private void openInBrowser(String str){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(str));
+        startActivity(Intent.createChooser(intent, getString(R.string.browser)));
     }
 }

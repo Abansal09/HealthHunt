@@ -82,14 +82,14 @@ public class NotificationFragment extends Fragment implements INotificationView,
     @Override
     public void onStart() {
         super.onStart();
-        IHomeView.hideSearchView();
+        //IHomeView.hideSearchView();
         IHomeView.hideNotificationView();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        IHomeView.showSearchView();
+       // IHomeView.showSearchView();
         IHomeView.showNotificationView();
     }
 

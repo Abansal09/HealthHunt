@@ -9,11 +9,11 @@
         android:orderInCategory="100"
         />
 
-    <item
+    <!--<item
         android:id="@+id/article_search"
         android:icon="@mipmap/ic_search_white_icon"
         android:title="@string/search"
         android:orderInCategory="200"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" />-->
 
 </menu>

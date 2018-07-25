@@ -4,5 +4,6 @@
     android:shape="ring"
     android:thickness="6dp"
     android:useLevel="false">
+   <!-- <solid android:color="@android:color/black"/>-->
     <solid android:color="@color/hh_dot_selected_color"/>
 </shape>

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import in.healthhunt.R;
+import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.articles.commonResponse.Author;
 import in.healthhunt.model.articles.commonResponse.CategoriesItem;
@@ -56,19 +57,22 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(postsItem != null) {
 
 
-            String url = postsItem.getVideo_thumbnail();
 
-            if(url == null || url.isEmpty()) {
+            String url = null;
+            String format = postsItem.getFormat();
+            if(format != null && format.equalsIgnoreCase(ArticleParams.IMAGE_FORMAT)) {
                 List<MediaItem> mediaItems = postsItem.getMedia();
                 if (mediaItems != null && !mediaItems.isEmpty()) {
                     MediaItem media = mediaItems.get(0);
-                    if ("image".equals(media.getMedia_type())) {
+                    if (ArticleParams.IMAGE_FORMAT.equals(media.getMedia_type())) {
                         url = media.getUrl();
 
                     }
                 }
                 holder.mPlayImage.setVisibility(View.GONE);
-            }else {
+            }
+            else if(format != null && format.equalsIgnoreCase(ArticleParams.VIDEO_FORMAT)) {
+                url = postsItem.getVideo_thumbnail();
                 holder.mPlayImage.setVisibility(View.VISIBLE);
             }
 

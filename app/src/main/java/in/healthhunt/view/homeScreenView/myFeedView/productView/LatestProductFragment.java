@@ -201,7 +201,7 @@ public class LatestProductFragment extends Fragment {
     @OnClick(R.id.last_page_view_all)
     void onViewAll(){
         Bundle bundle = new Bundle();
-        bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.LATEST_PRODUCTS);
+        bundle.putInt(ArticleParams.ARTICLE_TYPE, ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS);
         IProductPresenter.updateBottomNavigation();
         IProductPresenter.loadFragment(ViewAllFragment.class.getSimpleName(), bundle);
     }
@@ -225,10 +225,10 @@ public class LatestProductFragment extends Fragment {
             CurrentUser currentUser = mProductPostItem.getCurrent_user();
             if(currentUser != null) {
                 if(!currentUser.isBookmarked()){
-                    IProductPresenter.bookmark(id, ArticleParams.LATEST_PRODUCTS);
+                    IProductPresenter.bookmark(id, ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS);
                 }
                 else {
-                    IProductPresenter.unBookmark(id, ArticleParams.LATEST_PRODUCTS);
+                    IProductPresenter.unBookmark(id, ArticleParams.CHECK_OUT_THE_NEWBIES_PRODUCTS);
                 }
             }
 

@@ -1,160 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/hh_background"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     tools:context=".view.loginView.LoginActivity">
 
 
-    <include
-        android:id="@+id/sign_up_skip_view"
-        layout="@layout/login_signup_skip_view"></include>
-
-    <ScrollView
+    <!--<FrameLayout
+        android:id="@+id/child_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:layout_marginTop="1dp"
-        android:layout_below="@id/sign_up_skip_view"
-        android:layout_above="@id/bottom_signin_view">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_gravity="center">
+    </FrameLayout>-->
 
-        <LinearLayout
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/hh_background">
+
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@android:color/white"
+            android:layout_above="@id/bottom_signin_view">
 
             <LinearLayout
-                android:id="@+id/login_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="24dp"
-                android:background="@android:color/transparent">
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/signup_with"
-                    android:fontFamily="@string/font_family_regular"
-                    android:textSize="16sp"
-                    android:textColor="@color/hh_text_color"/>
-
-
-                <include layout="@layout/signup_with_facebook_gmail_view"></include>
+                <include
+                    android:id="@+id/sign_up_skip_view"
+                    layout="@layout/login_signup_skip_view"></include>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="left|center">
-
-                    <CheckBox
-                        android:id="@+id/receive_product_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="@string/receive_product_offer"
-                        android:textSize="12sp"
-                        android:fontFamily="@string/font_family_regular"
-                        android:textColor="@color/hh_text_color"/>
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/sign_up"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/hh_green_light2"
-                    android:text="@string/signup"
-                    android:textColor="@android:color/white"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@string/font_family_medium"
-                    android:textSize="14sp"
-                    android:layout_marginStart="95dp"
-                    android:layout_marginEnd="95dp"/>
-
-                <LinearLayout
+                    android:id="@+id/login_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="13dp">
+                    android:layout_marginTop="24dp"
+                    android:background="@android:color/transparent">
+
                     <TextView
-                        android:id="@+id/term_and_conditions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/terms_and_conditions_part1"
-                        android:gravity="center"
-                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:text="@string/signup_with"
                         android:fontFamily="@string/font_family_regular"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:textColor="@color/hh_grey_dark"
-                        />
+                        android:textSize="16sp"
+                        android:textColor="@color/hh_text_color"/>
+
+
+                    <include layout="@layout/signup_with_facebook_gmail_view"></include>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="left|center">
+
+                        <CheckBox
+                            android:id="@+id/receive_product_checkbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/receive_product_offer"
+                            android:textSize="12sp"
+                            android:fontFamily="@string/font_family_regular"
+                            android:textColor="@color/hh_text_color"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/sign_up"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/hh_green_light2"
+                        android:text="@string/signup"
+                        android:textColor="@android:color/white"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@string/font_family_medium"
+                        android:textSize="14sp"
+                        android:layout_marginStart="95dp"
+                        android:layout_marginEnd="95dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="13dp">
+                        <TextView
+                            android:id="@+id/term_and_conditions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/terms_and_conditions_details"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:fontFamily="@string/font_family_regular"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:autoLink="none"
+                            android:textColor="@color/hh_grey_dark"
+                            />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/bottom_signin_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:gravity="bottom"
-        android:background="@android:color/white">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/hh_line_color"></View>
+        </ScrollView>
 
         <LinearLayout
+            android:id="@+id/bottom_signin_view"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom"
+            android:background="@android:color/white">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="3dp"
-                android:gravity="left|center"
-                android:text="@string/already_have_account"
-                android:textSize="14sp"
-                android:fontFamily="@string/font_family_regular"
-                android:textColor="@color/hh_grey_dark"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/hh_line_color"></View>
 
-            <TextView
-                android:id="@+id/sign_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/signin"
-                android:textSize="14sp"
-                android:fontFamily="@string/font_family_regular"
-                android:gravity="left|center"
-                android:textColor="@color/hh_green_light2"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="3dp"
+                    android:gravity="left|center"
+                    android:text="@string/already_have_account"
+                    android:textSize="14sp"
+                    android:fontFamily="@string/font_family_regular"
+                    android:textColor="@color/hh_grey_dark"/>
+
+                <TextView
+                    android:id="@+id/sign_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signin"
+                    android:textSize="14sp"
+                    android:fontFamily="@string/font_family_regular"
+                    android:gravity="left|center"
+                    android:textColor="@color/hh_green_light2"
+                    android:background="?attr/selectableItemBackgroundBorderless"/>
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import in.healthhunt.R;
+import in.healthhunt.model.articles.ArticleParams;
 import in.healthhunt.model.articles.articleResponse.ArticlePostItem;
 import in.healthhunt.model.articles.commonResponse.MediaItem;
 import in.healthhunt.model.articles.commonResponse.Title;
@@ -74,20 +75,21 @@ public class ContinueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 holder.mReadProgressGreenView.setLayoutParams(layoutParams);
             }
 
-            String url = postsItem.getVideo_thumbnail();
-
-            if(url == null || url.isEmpty()) {
+            String url = null;
+            String format = postsItem.getFormat();
+            if(format != null && format.equalsIgnoreCase(ArticleParams.IMAGE_FORMAT)) {
                 List<MediaItem> mediaItems = postsItem.getMedia();
                 if (mediaItems != null && !mediaItems.isEmpty()) {
                     MediaItem media = mediaItems.get(0);
-                    if ("image".equals(media.getMedia_type())) {
+                    if (ArticleParams.IMAGE_FORMAT.equals(media.getMedia_type())) {
                         url = media.getUrl();
 
                     }
                 }
                 holder.mPlayImage.setVisibility(View.GONE);
             }
-            else {
+            else if(format != null && format.equalsIgnoreCase(ArticleParams.VIDEO_FORMAT)) {
+                url = postsItem.getVideo_thumbnail();
                 holder.mPlayImage.setVisibility(View.VISIBLE);
             }
 

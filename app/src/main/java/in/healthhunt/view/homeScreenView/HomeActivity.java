@@ -22,10 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,10 +30,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,9 +68,17 @@ import in.healthhunt.view.homeScreenView.shopView.IShopView;
 import in.healthhunt.view.homeScreenView.shopView.ShopFragment;
 import in.healthhunt.view.homeScreenView.watchView.WatchFragment;
 import in.healthhunt.view.notificationView.NotificationFragment;
+import in.healthhunt.view.privacyPolicy.PrivacyPolicy;
+import in.healthhunt.view.profileView.AboutUsFragment;
+import in.healthhunt.view.profileView.CollaborateWithUSFragment;
 import in.healthhunt.view.profileView.EditProfileFragment;
+import in.healthhunt.view.profileView.HealthCouncilFragment;
+import in.healthhunt.view.profileView.LegalOtherFragment;
 import in.healthhunt.view.profileView.ProfileFragment;
+import in.healthhunt.view.profileView.QualityContentGuidelines;
+import in.healthhunt.view.profileView.WhatWeDoFragment;
 import in.healthhunt.view.searchView.SearchFragment;
+import in.healthhunt.view.termAndConditions.TermsAndConditions;
 import in.healthhunt.view.viewAll.ViewAllFragment;
 import io.fabric.sdk.android.Fabric;
 
@@ -84,7 +87,6 @@ import io.fabric.sdk.android.Fabric;
  */
 
 public class HomeActivity extends BaseActivity implements IHomeView{
-
 
     private IHomePresenter IHomePresenter;
     private Map<String,Fragment> fragmentMap = new HashMap<String, Fragment>();
@@ -122,7 +124,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
 
     private int mCurrentItem;
 
-    private MenuItem mSearchAction;
+    //private MenuItem mSearchAction;
     private MenuItem mNotificationAction;
     public final static int HOME_REQUEST_CODE = 101;
 
@@ -195,6 +197,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                     }
                     updateCategoryIfNeeded();
                     updateMyFeedOfContinue();
+                    //mHomeSlider.setVisibility(View.VISIBLE);
                     //mHorizontalScrollView.setVisibility(View.VISIBLE);
                     //mCategoryViewer.setVisibility(View.VISIBLE);
                 }
@@ -207,6 +210,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                     }
                     mHorizontalScrollView.setVisibility(View.GONE);
                     mCategoryViewer.setVisibility(View.GONE);
+                    //mHomeSlider.setVisibility(View.GONE);
                 }
                 else if(item.getItemId() == R.id.navigation_watch) {
                     showDrawerMenu();
@@ -217,6 +221,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                         IHomePresenter.loadFooterFragment(WatchFragment.class.getSimpleName(), null);
                     }
                     updateCategoryIfNeeded();
+                    //mHomeSlider.setVisibility(View.GONE);
                 }
                 else if(item.getItemId() == R.id.navigation_shop) {
                     mCurrentItem = Constants.FRAGMENT_SHOP;
@@ -227,12 +232,17 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                     }
                     mHorizontalScrollView.setVisibility(View.GONE);
                     mCategoryViewer.setVisibility(View.GONE);
+                    //mHomeSlider.setVisibility(View.GONE);
                 }
                 updateTitleWithFooter(mCurrentItem);
                 updateFragVisible(mCurrentItem);
                 return true;
             }
         });
+
+
+        //addSliderShow();
+        //addSearchViewer();
     }
 
     private void popAllBackStack() {
@@ -247,11 +257,13 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                 ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
+                hideKeyboardIfOpen();
+                showActionBar();
                 if(mDrawerFragment != null){
                     mDrawerFragment.updateUserData();
                     //mDrawerFragment.updateCategory();
                 }
+                super.onDrawerOpened(drawerView);
             }
 
             @Override
@@ -361,13 +373,13 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         actionbar.*/
         //actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);  // to show the drawer
     }
 
     @Override
     public void hideDrawerMenu() {
-        //mNavigationView.setVisibility(View.GONE);
         mDrawerToggle.setDrawerIndicatorEnabled(false);
-
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);  // to hide the drawer
     }
 
     @Override
@@ -444,6 +456,30 @@ public class HomeActivity extends BaseActivity implements IHomeView{
             else if (tag.equals(YoutubeFragment.class.getSimpleName())) {
                 fragment = new YoutubeFragment();
             }
+            else if (tag.equals(WhatWeDoFragment.class.getSimpleName())) {
+                fragment = new WhatWeDoFragment();
+            }
+            else if (tag.equals(CollaborateWithUSFragment.class.getSimpleName())) {
+                fragment = new CollaborateWithUSFragment();
+            }
+            else if (tag.equals(LegalOtherFragment.class.getSimpleName())) {
+                fragment = new LegalOtherFragment();
+            }
+            else if (tag.equals(TermsAndConditions.class.getSimpleName())) {
+                fragment = new TermsAndConditions();
+            }
+            else if (tag.equals(PrivacyPolicy.class.getSimpleName())) {
+                fragment = new PrivacyPolicy();
+            }
+            else if (tag.equals(QualityContentGuidelines.class.getSimpleName())) {
+                fragment = new QualityContentGuidelines();
+            }
+            else if (tag.equals(AboutUsFragment.class.getSimpleName())) {
+                fragment = new AboutUsFragment();
+            }
+            else if (tag.equals(HealthCouncilFragment.class.getSimpleName())) {
+                fragment = new HealthCouncilFragment();
+            }
 
             if (bundle != null && fragment != null) {
                 fragment.setArguments(bundle);
@@ -467,7 +503,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
     public void sendFilterData(Map<Integer, List<String>> map) {
         updateFragVisible(mCurrentItem);
         setBottomNavigation();
-        showSearchView();
+       // showSearchView();
         Fragment fragment = mFragment[mCurrentItem];
         if(mFragment != null && fragment instanceof ShopFragment){
             ((IShopView)fragment).handleFilterData(map);
@@ -539,19 +575,19 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         }
     }
 
-    @Override
+    /*@Override
     public void hideSearchView() {
         if(mSearchAction != null) {
             mSearchAction.setVisible(false);
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void showSearchView() {
         if(mSearchAction != null) {
             mSearchAction.setVisible(true);
         }
-    }
+    }*/
 
     @Override
     public void hideNotificationView() {
@@ -586,7 +622,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(false); //disable a custom view inside the actionbar
         actionBar.setDisplayShowTitleEnabled(true); //show the title in the action bar
-        showSearchView();
+        //showSearchView();
 
         if(mNotificationAction != null) {
             mNotificationAction.setVisible(true);
@@ -773,6 +809,13 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                     return;
                 }
             }
+            /*else if(fragment instanceof ProfileFragment){
+                ProfileFragment profileFragment = (ProfileFragment) fragment;
+                boolean isBack = profileFragment.onBackPressed();
+                if(isBack){
+                    return;
+                }
+            }*/
 
 
             Log.i("TAGCOUNTfragment", "fragment " + fragment);
@@ -916,16 +959,16 @@ public class HomeActivity extends BaseActivity implements IHomeView{
                     showAlert(getString(R.string.please_check_internet_connectivity_status));
                 }
                 return true;
-            case R.id.article_search:
+          /*  case R.id.article_search:
                 handleMenuSearch();
-                return true;
+                return true;*/
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    protected void handleMenuSearch() {
-        hideSearchView();
+    /*protected void handleMenuSearch() {
+        //hideSearchView();
         ActionBar action = getSupportActionBar(); //get the actionbar
 
         action.setDisplayShowCustomEnabled(true); //enable it to display a
@@ -1008,7 +1051,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         //open the keyboard focused in the edtSearch
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtSeach, InputMethodManager.SHOW_IMPLICIT);
-    }
+    }*/
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -1018,7 +1061,7 @@ public class HomeActivity extends BaseActivity implements IHomeView{
         ImageView v = (ImageView) mSearchView.findViewById(searchImgId);
         v.setImageResource(R.mipmap.ic_search_white_icon);
         */
-        mSearchAction = menu.findItem(R.id.article_search);
+        //mSearchAction = menu.findItem(R.id.article_search);
         mNotificationAction = menu.findItem(R.id.notification_id);
         return super.onPrepareOptionsMenu(menu);
     }

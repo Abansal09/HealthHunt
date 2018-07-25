@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/search_open_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/home_search_view_bg">
 
     <EditText
         android:id="@+id/edtSearch"
@@ -11,23 +11,28 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:imeOptions="actionSearch"
+        android:background="@android:color/transparent"
         android:textCursorDrawable="@drawable/edit_cursor_color_white"
         android:layout_gravity="center"
-        android:hint="@string/search"
+        android:hint="@string/explore"
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
         android:layout_toStartOf="@id/cross"
-        android:textColorHint="@android:color/white"/>
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:drawablePadding="8dp"
+        android:drawableLeft="@mipmap/ic_search"
+        android:textColorHint="@color/hh_text_color"/>
 
     <ImageView
         android:id="@+id/cross"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_cross"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_centerInParent="true"
-        android:layout_alignParentRight="true"
-        android:tint="@android:color/white"/>
+        android:visibility="gone"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

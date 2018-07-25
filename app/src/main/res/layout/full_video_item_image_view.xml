@@ -127,8 +127,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:background="@color/hh_green_light3">
+        android:background="@android:color/white">
 
+        <!-- android:background="@color/hh_green_light3"-->
         <ImageView
             android:id="@+id/full_article_category_icon"
             android:layout_width="24dp"

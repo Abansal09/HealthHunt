@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="180dp"
-    android:id="@+id/latest_product_view"
-    android:background="@color/hh_background_light">
+    android:layout_height="164dp"
+    android:layout_marginTop="8dp"
+    android:id="@+id/latest_product_view">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="44dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:weightSum="2">
 
         <TextView
             android:id="@+id/latest_article_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:gravity="left|center"
-            android:layout_gravity="left"
+            android:layout_gravity="left|center"
             android:fontFamily="@string/font_family_medium"
-            android:text="Latest products"
+            android:text="@string/check_out_the_newbies"
             android:layout_weight="1"
-            android:textColor="@color/hh_edittext_text_color"
-            android:paddingTop="24dp"
+            android:textColor="@android:color/black"
             />
 
         <LinearLayout
             android:id="@+id/view_all"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:layout_gravity="right"
-            android:paddingTop="26dp"
+            android:layout_gravity="right|center"
             android:layout_weight="1"
             android:visibility="visible">
 
@@ -40,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/view_all"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 android:fontFamily="@string/font_family_medium"
                 android:textColor="@color/hh_text_color"
                 android:gravity="center"/>

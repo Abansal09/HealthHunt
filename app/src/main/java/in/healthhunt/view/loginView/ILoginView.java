@@ -13,11 +13,13 @@ public interface ILoginView {
     void onHideProgress();
     void onEmailError();
     void onPasswordError();
-    void showFragment(String tag, Bundle bundle);
+    void loadFragment(String tag, Bundle bundle);
+    void loadBackStackFragment(String tag, Bundle bundle);
     void showPasswordChangeAlert(Spannable spannable);
     void showAlert(String msg);
     void showSignUpSuccessAlert(String msg);
     void showToast(String message);
     void startTagActivity();
     void startHomeActivity();
+    void hideKeyboardIfOpen();
 }

@@ -44,8 +44,6 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_marginStart="16dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:layout_marginEnd="16dp">
 
         <EditText
@@ -58,8 +56,8 @@
             android:fontFamily="@string/font_family_regular"
             android:textColorHint="@color/hh_edittext_hint_color"
             android:textColor="@color/hh_edittext_text_color"
-            android:inputType="textVisiblePassword"
-            android:completionThreshold="100"/>
+            android:inputType="text"
+            android:imeOptions="actionNext" />
 
         <EditText
             android:id="@+id/password"
@@ -71,6 +69,8 @@
             android:fontFamily="@string/font_family_regular"
             android:textColorHint="@color/hh_edittext_hint_color"
             android:textColor="@color/hh_edittext_text_color"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             android:password="true" />
 
     </LinearLayout>

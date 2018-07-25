@@ -102,7 +102,6 @@
                 android:fontFamily="@string/font_family_regular"
                 android:gravity="left|center"
                 android:maxLines="3"
-                android:text="HH JJ  vv  nbvbnvbvbv nvn vnvnvn bvnvv  n nn H JJ  vv  nbvbnvbvbv nvn vnvnvn bvnvv  n nn "
                 android:textColor="@color/hh_edittext_text_color"
                 android:textSize="18sp" />
 
